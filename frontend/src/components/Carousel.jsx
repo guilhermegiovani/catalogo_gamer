@@ -1,0 +1,107 @@
+import { useState } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import Button from "./Button"
+import clsx from "clsx"
+
+
+function Carousel({ items }) {
+    let [current, setCurrent] = useState(0)
+
+    let prevSlide = () => {
+        if (current === 0) setCurrent(items.length - 1)
+        else setCurrent(current - 1)
+    }
+
+    let nextSlide = () => {
+        if (current === items.length - 1) setCurrent(0)
+        else setCurrent(current + 1)
+    }
+
+    return (
+        <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
+            <div
+                className={clsx(
+                    "flex transition-transform duration-400 ease-in-out"
+                    // max-w-[700px]
+                )}
+                style={{ transform: `translateX(-${current * 100}%)` }}
+            >
+                {items.map((item, index) => (
+                    <div key={`${item.id} - ${index}`} className={clsx(
+                        "w-full max-h-58",
+                        "landscape:sm:max-h-60 portrait:sm:max-h-90 landscape:md:max-h-100",
+                        "lg:max-h-90",
+                        "flex-shrink-0"
+                        )}>
+                        {items ? (
+                            <img
+                                src={`http://localhost:8000${item.imagem_paisagem}`}
+                                alt={item.nome ?? "imagem_jogo"}
+                                className="w-full h-full object-cover object-top rounded-lg"
+                            />
+
+                        ) : (
+                            <div className="w-full h-full rounded-lg bg-neutral-800" />
+                        )}
+
+
+                    </div>
+                ))}
+
+            </div>
+
+            <div className="absolute inset-0 pointer-events-none">
+                <Button
+                    text={<ChevronLeft className={clsx(
+                        "w-4 h-4",
+                        "landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7",
+                        "portrait:sm:h-6 portrait:sm:w-6"
+                    )} />}
+                    className={clsx(
+                        "pointer-events-auto absolute top-1/2 left-2 -translate-y-1/2",
+                        "bg-black/50 text-white p-1 lg:p-2",
+                        "rounded-full cursor-pointer z-30",
+                        "landscape:md:p-1.5"
+                    )}
+                    handleClick={prevSlide}
+                />
+
+                <Button
+                    text={<ChevronRight className={clsx(
+                        "w-4 h-4",
+                        "landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7",
+                        "portrait:sm:h-6 portrait:sm:w-6"
+                    )} />}
+                    className={clsx(
+                        "pointer-events-auto absolute top-1/2 right-2 -translate-y-1/2",
+                        "bg-black/50 text-white p-1 lg:p-2",
+                        "rounded-full cursor-pointer z-30",
+                        "landscape:md:p-1.5"
+                    )}
+                    handleClick={nextSlide}
+                />
+            </div>
+
+            <div className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3">
+                {items.map((item, i) => (
+                    <div
+                        key={item.id}
+                        className={clsx(
+                            "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10 transition-transform duration-400",
+                            "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
+                            "portrait:sm:w-2 portrait:sm:h-2",
+                            i == current ? "bg-white scale-130" : "bg-gray-500"
+                        )}
+                        onClick={() => {
+                            setCurrent(i)
+                        }}
+                    ></div>
+
+                ))}
+            </div>
+
+        </div>
+    )
+}
+
+export default Carousel
