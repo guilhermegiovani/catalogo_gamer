@@ -66,7 +66,7 @@ import { useAuth } from "../hooks/useAuth"
 import { getFavorites, getReviewsByUser, getUser } from "../services/routes"
 import { useEffect, useState } from "react"
 import { Star } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Input from "../components/Input"
 
 function Profile() {
@@ -165,11 +165,13 @@ function Profile() {
                             <div className="w-24 h-32 bg-gray-700 rounded-lg"></div> */}
                             {favUser.map((fav) => (
                                 <div key={fav.id} className="w-20 sm:w-24 lg:w-30 bg-gray-700 rounded-lg">
-                                    <img
-                                        className=""
-                                        src={`http://localhost:8000${fav.imagem_url}`}
-                                        alt={fav.titulo}
-                                    />
+                                    <Link to={`/reviews/${fav.id}`}>
+                                        <img
+                                            className="hover:scale-[1.04] cursor-pointer transition duration-400"
+                                            src={`http://localhost:8000${fav.imagem_url}`}
+                                            alt={fav.titulo}
+                                        />
+                                    </Link>
                                 </div>
                             ))
 

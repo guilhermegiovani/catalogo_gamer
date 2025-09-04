@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { AuthContext } from "./AuthContext"
 import { deleteFavorites, deleteReviews, getFavorites, getGames, getReviewsAvgs, loginUser, newUser, postFavorites } from "../services/routes"
 import { jwtDecode } from "jwt-decode"
+import toast from "react-hot-toast"
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
@@ -106,7 +107,10 @@ export function AuthProvider({ children }) {
 
             const decoded = jwtDecode(token)
             setRoleUser(decoded.role)
-            console.log(decoded.role)
+            
+
+            // const decodedSen = jwtDecode(dados.senha)
+            // console.log(decodedSen)
 
             const idGame = fav.data.map(fav => fav.id)
             setFavoritesIdGame(idGame)
@@ -123,6 +127,7 @@ export function AuthProvider({ children }) {
                 setFavoritesIdGame([])
             } else {
                 console.log(`Erro ao fazer login: ${err}`)
+                toast.error("Email ou senha inválida! Tente Novamente.")
             }
         }
     }

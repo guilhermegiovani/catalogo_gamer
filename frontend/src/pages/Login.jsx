@@ -49,6 +49,8 @@ function Login() {
                         .then(() => {
                             toast.success("Logado com sucesso!")
                             navigate("/games")
+                        }).catch(() => {
+                            toast.error("Falha ao logar!")
                         })
                 }}
                     className={clsx(

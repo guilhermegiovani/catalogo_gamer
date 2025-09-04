@@ -61,13 +61,13 @@ function EditProfile() {
     }
 
     return (
-        <section>
+        <section className="flex justify-center w-full">
             <Form
                 handleSubmit={(e) => {
                     e.preventDefault()
                 }}
                 className={clsx(
-                    "bg-[#1e1b38]",
+                    "bg-[#1e1b38] flex flex-col",
                     "rounded-2xl shadow-lg p-8 w-full max-w-xl space-y-6",
                     "border border-[#4f46e5]/20"
                 )}
@@ -144,7 +144,7 @@ function EditProfile() {
                         <Button
                             text="Remover imagem"
                             className={clsx(
-                                " w-40 text-white font-semibold py-2 rounded-md mt-4",
+                                "w-40 lg:w-50 text-white lg:text-lg font-semibold py-1.5 lg:py-2 rounded-md mt-4",
                                 "bg-red-700/90",
                                 "hover:brightness-130 transition-all duration-200",
                                 "cursor-pointer"
@@ -187,26 +187,38 @@ function EditProfile() {
                         )}
                     /> */}
 
-                <Button
-                    text="Editar perfil"
-                    className={clsx(
-                        " w-50 text-white font-semibold py-2 rounded-md mt-4",
-                        "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
-                        "hover:brightness-130 transition-all duration-200",
-                        "cursor-pointer"
-                    )}
-                    // type="submit"
-                    handleClick={() => {
-                        handleSubmitEditUser(userId).then(() => {
-                            toast.success("perfil editado com sucesso!")
-                            setImgPerfil(fileImgPerfil.name)
-                            navigate("/profile")
-                        }).catch((err) => {
-                            toast.error("Erro ao editar jogo!")
-                            console.log(err)
-                        })
-                    }}
-                />
+                <div className="w-full flex justify-center gap-5">
+                    <Button
+                        text="Editar perfil"
+                        className={clsx(
+                            "w-40 lg:w-45 xl:w-50 text-white text-sm portrait:sm:text-base lg:text-base xl:text-lg font-semibold py-2 rounded-md mt-4",
+                            "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
+                            "hover:brightness-130 transition-all duration-200",
+                            "cursor-pointer"
+                        )}
+                        // type="submit"
+                        handleClick={() => {
+                            handleSubmitEditUser(userId).then(() => {
+                                toast.success("perfil editado com sucesso!")
+                                setImgPerfil(fileImgPerfil.name)
+                                navigate("/profile")
+                            }).catch((err) => {
+                                toast.error("Erro ao editar jogo!")
+                                console.log(err)
+                            })
+                        }}
+                    />
+                    <Button
+                        text="Cancelar Edição"
+                        className={clsx(
+                            "w-40 lg:w-45 xl:w-50 text-white text-sm portrait:sm:text-base lg:text-base xl:text-lg font-semibold py-2 rounded-md mt-4",
+                            "bg-red-700/90",
+                            "hover:brightness-130 transition-all duration-200",
+                            "cursor-pointer"
+                        )}
+                        handleClick={() => navigate("/profile")}
+                    />
+                </div>
             </Form>
         </section>
     )
