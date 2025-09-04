@@ -103,7 +103,7 @@ function Profile() {
 
                 {/* Cabeçalho */}
                 <div className="flex flex-col items-center space-y-3">
-                    <div className="relative w-32 h-32 rounded-full border-4 border-violet-500 shadow-[0_0_25px_rgba(139,92,246,0.6)] overflow-hidden">
+                    <div className="relative w-28 h-28 lg:w-32 lg:h-32 rounded-full border-4 border-violet-500 shadow-[0_0_25px_rgba(139,92,246,0.6)] overflow-hidden">
                         {/* Aqui entra a imagem do usuário */}
                         <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
                             <img
@@ -121,15 +121,16 @@ function Profile() {
                             handleChange={(e) => handleFileChange(e)}
                         /> */}
                     </div>
-                    <h1 className="text-3xl font-bold">{profileUser.nome}</h1>
-                    <h3 className="text-gray-400 text-lg">{profileUser.apelido}</h3>
+                    <h1 className="text-xl lg:text-3xl font-bold">{profileUser.nome}</h1>
+                    <h3 className="text-gray-400 text-base lg:text-lg">{profileUser.apelido}</h3>
 
                     <Button
                         text="EDITAR PERFIL"
                         className={clsx(
                             "mt-4 px-6 py-2 bg-violet-700 hover:bg-violet-600",
                             "text-white font-medium rounded-xl shadow-lg",
-                            "cursor-pointer transition-all duration-200"
+                            "cursor-pointer transition-all duration-200",
+                            "text-xs lg:text-lg"
                         )}
                         handleClick={() => navigate("/profile/edit")}
                     />
@@ -138,17 +139,17 @@ function Profile() {
                 <article className="space-y-6">
                     {/* Info Básica */}
                     <div className="text-left space-y-6 border-2 border-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.6)] p-4">
-                        <h3 className="text-2xl font-semibold">Info Básica</h3>
+                        <h3 className="text-2xl lg:text-3xl font-semibold">Info Básica</h3>
                         <div className="space-y-3">
-                            <div className="flex justify-between text-gray-300">
+                            <div className="flex justify-between text-gray-300 text-sm lg:text-lg">
                                 <span>Nome:</span>
                                 <span className="font-medium text-white">{profileUser.nome}</span>
                             </div>
-                            <div className="flex justify-between text-gray-300">
+                            <div className="flex justify-between text-gray-300 text-sm lg:text-lg">
                                 <span>Email:</span>
                                 <span className="font-medium text-white">{profileUser.email}</span>
                             </div>
-                            <div className="flex justify-between text-gray-300">
+                            <div className="flex justify-between text-gray-300 text-sm lg:text-lg">
                                 <span>Membro desde</span>
                                 <span className="font-medium text-white">Nov 25, 2021</span>
                             </div>
@@ -156,14 +157,14 @@ function Profile() {
                     </div>
                     {/* Favoritos */}
                     <div className="text-left space-y-4 border-2 border-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.6)] p-5">
-                        <h3 className="text-2xl font-semibold">Meus Favoritos</h3>
-                        <div className="flex gap-4">
+                        <h3 className="text-2xl lg:text-3xl font-semibold">Meus Favoritos</h3>
+                        <div className="flex flex-wrap justify-center gap-4">
                             {/* Exemplo de cards */}
                             {/* <div className="w-24 h-32 bg-gray-700 rounded-lg"></div>
                             <div className="w-24 h-32 bg-gray-700 rounded-lg"></div>
                             <div className="w-24 h-32 bg-gray-700 rounded-lg"></div> */}
                             {favUser.map((fav) => (
-                                <div key={fav.id} className="w-24 bg-gray-700 rounded-lg">
+                                <div key={fav.id} className="w-20 sm:w-24 lg:w-30 bg-gray-700 rounded-lg">
                                     <img
                                         className=""
                                         src={`http://localhost:8000${fav.imagem_url}`}
@@ -178,16 +179,16 @@ function Profile() {
                     {/* Reviews */}
                     <div className="text-left space-y-4 border-2 border-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.6)] p-5">
 
-                        <h3 className="text-2xl font-semibold">Minhas Reviews</h3>
+                        <h3 className="text-2xl lg:text-3xl font-semibold">Minhas Reviews</h3>
 
                         {revUser.map((rev) => (
                             <div key={rev.id} className="bg-[#1c1233] rounded-xl p-4 shadow-md space-y-2">
-                                <p className="text-gray-200 text-lg">{rev.titulo}</p>
-                                <div className="flex gap-1 items-center">
-                                    <Star size={20} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {rev.nota}
+                                <p className="text-gray-200 text-base lg:text-xl">{rev.titulo}</p>
+                                <div className="flex gap-1 items-center text-md lg:text-base">
+                                    <Star size={18} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {rev.nota}
                                 </div>
                                 {/* <div className="flex text-yellow-400">★★★★☆</div> */}
-                                <p className="text-gray-200 text-md">{rev.comentario}</p>
+                                <p className="text-gray-200 text-sm lg:text-base">{rev.comentario}</p>
                             </div>
                         ))
 
