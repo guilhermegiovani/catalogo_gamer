@@ -27,28 +27,14 @@ function App() {
       // "flex justify-center"
     )}>
 
-      {/* Detalhes geométricos */}
-      {/* <div className={clsx(
-        "absolute top-10 left-10 w-16 h-16",
-        "border-2 border-blue-500 rounded-lg opacity-20 rotate-45"
-      )}></div>
-      <div className={clsx(
-        "absolute bottom-20 left-5 w-20 h-20",
-        "border-2 border-cyan-400 rounded-full opacity-20"
-      )}></div>
-      <div className={clsx(
-        "absolute top-1/3 right-10 w-0 h-0",
-        "border-l-[30px] border-l-transparent border-r-[30px] border-r-transparent border-b-[50px] border-b-blue-500 opacity-30"
-      )}></div> */}
-
       {/* Container principal */}
       <section className={clsx(
-        "relative z-10 min-w-screen",
+        "relative z-10 min-w-screen min-h-screen",
         "bg-[#0f0f2b]",
         "px-4 sm:px-6 lg:px-10",
         "py-6",
         "md:shadow-lg border border-[#2d2d5f]",
-        "flex flex-col"
+        "flex flex-col gap-10"
       )}>
 
         {/* Conteúdo da Página aqui */}
@@ -99,6 +85,20 @@ function App() {
           }}
         />
       </section>
+
+      {/* Detalhes geométricos */}
+      {/* <div className={clsx(
+        "absolute top-10 left-10 w-16 h-16",
+        "border-2 border-blue-500 rounded-lg opacity-20 rotate-45"
+      )}></div>
+      <div className={clsx(
+        "absolute bottom-20 left-5 w-20 h-20",
+        "border-2 border-cyan-400 rounded-full opacity-20"
+      )}></div>
+      <div className={clsx(
+        "absolute top-1/3 right-10 w-0 h-0",
+        "border-l-[30px] border-l-transparent border-r-[30px] border-r-transparent border-b-[50px] border-b-blue-500 opacity-30"
+      )}></div> */}
 
     </main>
 

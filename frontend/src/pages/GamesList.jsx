@@ -38,7 +38,7 @@ function GamesList() {
     const avgMap = Object.fromEntries(averages.map(a => [a.gameId, a.nota]))
 
     return (
-        <section className={clsx("px-4 py-10 max-w-6xl mx-auto")}>
+        <section className={clsx("px-4 py-10 max-w-6xl mx-auto min-h-screen")}>
             <h1
                 className={clsx(
                     "text-3xl sm:text-4xl font-semibold text-center mb-10 text-white drop-shadow"

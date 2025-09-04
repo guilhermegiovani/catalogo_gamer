@@ -29,8 +29,8 @@ function Carousel({ items }) {
                 {items.map((item, index) => (
                     <div key={`${item.id} - ${index}`} className={clsx(
                         "w-full max-h-58",
-                        "landscape:sm:max-h-60 portrait:sm:max-h-90 landscape:md:max-h-100",
-                        "lg:max-h-90",
+                        "landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100",
+                        "portrait:sm:max-h-90 ",
                         "flex-shrink-0"
                         )}>
                         {items ? (

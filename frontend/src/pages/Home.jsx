@@ -27,14 +27,17 @@ function Home() {
     return (
         <section className={clsx(
             "grid md:grid-cols-2 gap-15 lg:gap-30",
-            "p-5 items-center justify-around max-w-screen-xl mx-auto"
+            "p-5 justify-around max-w-screen-xl mx-auto flex items-center"
         )}>
-            <div className={clsx("space-y-4 lg:space-y-8 flex flex-col text-center md:text-left")}>
+            <div className={clsx(
+                "space-y-4 lg:space-y-6 xl:space-y-8 text-center md:text-left",
+                "flex flex-col"
+                )}>
                 <h1 className={clsx(
-                    "flex flex-col items-center md:items-start leading-tight w-full",
+                    "flex flex-col items-center md:items-start leading-tight",
                     "font-medium md:text-left text-3xl",
-                    "landscape:sm:text-3xl landscape:lg:text-5xl landscape:xl:text-6xl",
-                    "portrait:sm:text-5xl"
+                    "landscape:sm:text-3xl landscape:lg:text-4xl landscape:xl:text-6xl",
+                    "portrait:sm:text-4xl"
                 )}>
                     <span>DESCUBRA</span>
                     <span className="text-blue-600">JOGOS INCRÍVEIS</span>
@@ -60,7 +63,7 @@ function Home() {
                                 "bg-gradient-to-r from-fuchsia-800 to-violet-700",
                                 "hover:brightness-130 hover:scale-105 active:scale-95 transition-all cursor-pointer",
                                 "text-white text-sm px-6 py-2 lg:text-xl lg:px-10 lg:py-3 rounded-xl",
-                                "portrait:sm:text-xs",
+                                "portrait:sm:text-md",
                                 "font-medium shadow-md w-auto"
                             )}
                             handleClick={() => navigate("/games")}
