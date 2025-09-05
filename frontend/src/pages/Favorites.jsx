@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 // import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid"
 // import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline"
 // import { Star } from "lucide-react"
@@ -11,6 +11,8 @@ import GameCard from "../components/GameCard"
 
 function Favorites() {
     const { favorites, setFavorites, favoritesIdGame, setFavoritesIdGame, avgsFavorites, setAvgsFavorites } = useAuth()
+
+    const [isLoadingFavorite, setIsLoadingFavorite] = useState(true)
 
     useEffect(() => {
         async function fetchFavorites() {
@@ -26,12 +28,22 @@ function Favorites() {
                 
             } catch (err) {
                 console.log(`Erro ao pegar dados: ${err}`)
+            } finally {
+                setIsLoadingFavorite(false)
             }
         }
 
         fetchFavorites()
 
     }, [])
+
+    if (isLoadingFavorite) {
+        return (
+            <section className="w-full flex justify-center items-start min-h-screen">
+                <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            </section>
+        )
+    }
 
     // if(!avgsFavorites) return <p>Carregando...</p>
     const avgsFavMap = Object.fromEntries(avgsFavorites.map(avg => [avg.gameId, avg.nota]))

@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { Star } from "lucide-react"
 import Button from "../components/Button"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid"
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline"
 // import api from "../services/api"
@@ -12,8 +12,9 @@ import GameCard from "../components/GameCard"
 import SearchGame from "../components/SearchGame"
 
 function GamesList() {
-    const { games, setGames, favoritesIdGame, favorites, averages, setAverages, setImgsGames, searchGame, isSearch } = useAuth()
+    const { games, setGames, favoritesIdGame, averages, setAverages, setImgsGames, searchGame, isSearch } = useAuth()
 
+    const [isLoadingGame, setIsLoadingGame] = useState(true)
 
     useEffect(() => {
         async function fetchGames() {
@@ -24,8 +25,13 @@ function GamesList() {
 
                 const resAvg = await getReviewsAvgs()
                 setAverages(resAvg.data)
+
+                await new Promise(resolve => setTimeout(resolve, 500))
+
             } catch (err) {
                 console.log(`Erro ao pegar dados: ${err}`)
+            } finally {
+                setIsLoadingGame(false)
             }
         }
 
@@ -33,9 +39,18 @@ function GamesList() {
 
     }, [])
 
-    if (!games || !favorites) return <p>Carregando...</p>
+    if (isLoadingGame) {
+        return (
+            <section className="w-full flex justify-center items-start min-h-screen">
+                <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            </section>
+        )
+    }
+
+    // if (!games || !favorites) return <p>Carregando...</p>
 
     const avgMap = Object.fromEntries(averages.map(a => [a.gameId, a.nota]))
+
 
     return (
         <section className={clsx("px-4 py-10 max-w-6xl mx-auto min-h-screen")}>
@@ -55,6 +70,12 @@ function GamesList() {
                     // "flex flex-wrap justify-center gap-4"
                 )}
             >
+                {isSearch && searchGame.length === 0 && (
+                    <p className="text-gray-400 text-center col-span-full">
+                        Nenhum jogo encontrado.
+                    </p>
+                )}
+
                 {isSearch !== true ?
                     games.map((game) => (
 

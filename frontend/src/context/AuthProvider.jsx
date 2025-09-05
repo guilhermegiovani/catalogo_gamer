@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
     const [gamesAdmin, setGamesAdmin] = useState([])
     const [imgPerfil, setImgPerfil] = useState(null)
     const [imgsGames, setImgsGames] = useState([])
-    const [searchGame, setSearchGame] = useState(null)
+    const [searchGame, setSearchGame] = useState([])
     const [isSearch, setIsSearch] = useState(false)
 
     const storedToken = localStorage.getItem("token")
@@ -60,15 +60,20 @@ export function AuthProvider({ children }) {
                 const parsedUser = JSON.parse(userActive)
                 setUser(parsedUser)
 
-                if (roleUser === "" && parsedUser.role) {
+                if (!roleUser && parsedUser.role) {
                     setRoleUser(parsedUser.role)
                 }
 
-                const fav = await getFavorites()
-                setFavorites(fav.data)
+                try{
 
-                const idGame = fav.data.map(fav => fav.id)
-                setFavoritesIdGame(idGame)
+                    const fav = await getFavorites()
+                    setFavorites(fav.data)
+    
+                    const idGame = fav.data.map(fav => fav.id)
+                    setFavoritesIdGame(idGame)
+                } catch(err) {
+                    console.log(`Erro ao pegar game e favoritos: ${err}`)
+                }
             }
 
             setIsLoading(false)

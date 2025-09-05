@@ -11,26 +11,20 @@ function SearchGame() {
     const { setSearchGame, setIsSearch } = useAuth()
     const [searchGameInput, setSearchGameInput] = useState("")
 
-    if(searchGameInput) {
-        setIsSearch(true)
-    } else {
-        setIsSearch(false)
-    }
-
     const getSearchGame = async () => {
         try {
             const res = await getGameSearch(searchGameInput)
             setSearchGame(res.data)
-        }catch(err) {
+        } catch (err) {
             console.log(`Erro ao pegar jogos pesquisado: ${err}`)
         }
         // setSearchGame(games.filter((g) => g.titulo.toLowerCase().includes(searchGameInput.toLowerCase())))
     }
 
     useEffect(() => {
-        if(searchGameInput.trim() !== "") {
-            getSearchGame()
+        if (searchGameInput.trim() !== "") {
             setIsSearch(true)
+            getSearchGame()
         } else {
             setIsSearch(false)
         }
@@ -46,7 +40,10 @@ function SearchGame() {
                     setSearchGameInput("")
                 }}
             />
-
+            {/* (e) => {
+                    setSearchGameInput(e.target.value)
+                    // getSearchGame()
+                } */}
             <Input
                 type="text"
                 value={searchGameInput}
