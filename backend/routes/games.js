@@ -1,11 +1,12 @@
 import express from 'express'
-import db from '../db.js'
+import { db, isProd } from '../db.js'
 import authMiddleware from '../middleware/authMiddleware.js'
 import adminMiddleware from '../middleware/adminMiddleware.js'
 import multer from "multer"
 import sharp from "sharp"
 import path from "path"
 import fs from "fs"
+import { queryDB } from '../utils/dbQuery.js'
 
 const router = express.Router()
 
@@ -28,11 +29,11 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
     const { titulo, descricao, genero, plataforma, estudio } = req.body
     let { imagem_url, imagem_paisagem } = req.body
 
-    if(req.files["img-retrato"]) {
+    if (req.files["img-retrato"]) {
         imagem_url = `/uploads/${req.files["img-retrato"][0].filename}`
     }
 
-    if(req.files["img-paisagem"]) {
+    if (req.files["img-paisagem"]) {
         imagem_paisagem = `/uploads/${req.files["img-paisagem"][0].filename}`
     }
 
@@ -47,23 +48,23 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
         return res.status(400).json({ erro: "Preencha todos os campos" })
     }
 
-    const [results] = await db.query(
+    const results = await queryDB(
         "select * from jogos where titulo = ?;",
         [titulo]
     )
 
     if (results.length > 0) return res.status(409).json({ erro: "Jogo já existe!" })
 
-    const [resInsert] = await db.query(
+    const resInsert = await queryDB(
         "insert into jogos(titulo, descricao, genero, plataforma, estudio, imagem_url, imagem_paisagem) values(?, ?, ?, ?, ?, ?, ?);",
         [titulo, descricao, genero, plataforma, estudio, imagem_url, imagem_paisagem]
     )
 
-    if (resInsert.affectedRows > 0) {
+    if (resInsert.length > 0) {
         return res.status(201).json({ message: "Jogo cadastrado com sucesso!", id: resInsert.insertId })
     }
 
-    return res.status(500).json({ erro: "Erro ao cadastrar jogo" })
+    return res.status(500).json({ erro: "Erro ao cadastrar jogo", id: newGameId })
 
 })
 
@@ -90,18 +91,18 @@ router.get("/search", async (req, res) => {
     const whereSQL = conditions.length > 0 ? `where ${conditions.join(' and ')}` : ''
     const query = `select * from jogos ${whereSQL};`
 
-    console.log('SQL:', query)
-    console.log('Values:', values)
+    // console.log('SQL:', query)
+    // console.log('Values:', values)
 
-    const [results] = await db.query(query, values)
-    console.log(results)
+    const results = await queryDB(query, values)
+    // console.log(results)
 
     return res.status(200).json(results)
 
 })
 
 router.get("/", async (req, res) => {
-    const [results] = await db.query("select * from jogos;")
+    const results = await queryDB("select * from jogos;")
 
     if (results.length === 0) return res.status(404).json({ erro: "Nenhum dado encontrado" })
 
@@ -111,7 +112,8 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params
-    const [results] = await db.query(
+
+    const results = await queryDB(
         "select * from jogos where id = ?;",
         [id]
     )
@@ -122,35 +124,22 @@ router.get("/:id", authMiddleware, adminMiddleware, async (req, res) => {
 
 })
 
-
-
-// router.delete("/:id", async (req, res) => {
-//     const {id} = req.params
-//     const [results] = await db.query(
-//         "delete from jogos where id = ?;",
-//         [id]
-//     )
-
-//     if(results.affectedRows === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
-
-//     return res.status(200).json({ message: "Jogo deletado com sucesso!", id: id })
-
-// })
 router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params
-    console.log("Recebi request pra deletar id:", req.params.id)
-    const [results] = await db.query(
+    // console.log("Recebi request pra deletar id:", req.params.id)
+    const results = await queryDB(
         "delete from jogos where id = ?;",
         [id]
     )
 
-    console.log("Resultados do delete:", results)
+    // console.log("Resultados do delete:", results)
 
-    if (results.affectedRows === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
-    console.log(`idGame: ${id}`)
+    if (results.length === 0) {
+        return res.status(404).json({ erro: "Jogo não encontrado!" })
+    }
+    // console.log(`idGame: ${id}`)
 
     return res.status(200).json({ message: "Jogo deletado com sucesso!", id: id })
-
 })
 
 router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
@@ -163,11 +152,11 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     // console.log("FILES:", req.files) 
     // console.log("BODY:", req.body)
 
-    if(req.files["img-retrato"]) {
+    if (req.files["img-retrato"]) {
         req.body.imagem_url = `/uploads/${req.files["img-retrato"][0].filename}`
     }
 
-    if(req.files["img-paisagem"]) {
+    if (req.files["img-paisagem"]) {
         req.body.imagem_paisagem = `/uploads/${req.files["img-paisagem"][0].filename}`
     }
 
@@ -187,10 +176,6 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
         }
     })
 
-    // if(Object.keys(req.body.imagem_url)) {
-    //     console.log(`INCLUIDO: ${req.body.imagem_url}`)
-    // }
-
     const fieldsSQL = keysReqBody.join(", ")
     valuesReqBody.push(id)
 
@@ -198,10 +183,12 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     // console.log(`Campo: ${fieldsSQL}`)
     if (!fieldsSQL) return res.status(400).json({ erro: "Nenhum campo válido para atualizar!" })
 
-    const [results] = await db.query(`update jogos set ${fieldsSQL} where id = ?;`, valuesReqBody)
+    const results = await queryDB(`update jogos set ${fieldsSQL} where id = ?;`, valuesReqBody)
     // console.log(`Jogo editado: ${results[0]}`)
 
-    if (results.affectedRows === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
+    if (results.length === 0) {
+        return res.status(404).json({ erro: "Jogo não encontrado!" })
+    }
 
     return res.status(200).json({ message: "Jogo atualizado com sucesso!", id: id })
 

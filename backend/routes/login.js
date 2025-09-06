@@ -1,8 +1,9 @@
 import express from 'express'
-import db from '../db.js'
+import {db} from '../db.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import dotenv from "dotenv"
+import { queryDB } from '../utils/dbQuery.js'
 
 dotenv.config()
 
@@ -24,7 +25,7 @@ router.post('/', async (req, res) => {
         return res.status(400).json({ erro: "Email inválido" })
     }
 
-    const [results] = await db.query("select id, email, senha, role from usuarios where email = ?;", [email])
+    const results = await queryDB("select id, email, senha, role from usuarios where email = ?;", [email])
     if(results.length === 0) return res.status(404).json({ erro: "Usuário não encontrado" })
 
     const match = await bcrypt.compare(senha, results[0].senha)

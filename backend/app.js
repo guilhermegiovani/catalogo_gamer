@@ -1,5 +1,5 @@
 import express from 'express'
-import db from './db.js'
+import {db} from './db.js'
 import usersRoutes from './routes/users.js'
 import loginRoutes from './routes/login.js'
 import gamesRoutes from './routes/games.js'
@@ -10,9 +10,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const server = express()
+ const port = process.env.PORT || 8000
 
 server.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173'], // só aceita requisições desse endereço
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://catalogo-gamer.vercel.app'], // só aceita requisições desse endereço
   credentials: true
 }))
 
@@ -38,6 +39,6 @@ server.use('/favorites', favoritesRoutes)
 server.use('/reviews', reviewsRoutes)
 server.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
-server.listen(8000, () => {
-  console.log('Servidor rodando em http://localhost:8000')
+server.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`)
 })

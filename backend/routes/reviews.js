@@ -1,6 +1,7 @@
 import express from 'express'
-import db from '../db.js'
+import { db } from '../db.js'
 import authMiddleware from '../middleware/authMiddleware.js'
+import { queryDB } from '../utils/dbQuery.js'
 
 const router = express.Router()
 
@@ -11,10 +12,10 @@ router.post('/', async (req, res) => {
     const { gameId, note, comment } = req.body
     const userId = req.userId
 
-    const [checkGameExists] = await db.query("select * from jogos where id = ?;", [gameId])
+    const checkGameExists = await queryDB("select * from jogos where id = ?;", [gameId])
     if (checkGameExists.length === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
 
-    const [userReviewGame] = await db.query(
+    const userReviewGame = await queryDB(
         "select * from avaliacoes where usuario_id = ? and jogo_id = ?;",
         [userId, gameId]
     )
@@ -23,19 +24,19 @@ router.post('/', async (req, res) => {
 
     if (note < 1 || note > 5) return res.status(400).json({ erro: "A nota deve ser entre 1 e 5!" })
 
-    if (!comment) return res.status(400).json({ erro: "Nenhum comentário foi feito!"})
+    if (!comment) return res.status(400).json({ erro: "Nenhum comentário foi feito!" })
     // console.log("values" + userId, gameId, note, comment)
 
-    const [results] = await db.query(
+    const results = await queryDB(
         "insert into avaliacoes(usuario_id, jogo_id, nota, comentario) values(?, ?, ?, ?);",
         [userId, gameId, note, comment]
     )
 
     // console.log("res:" + results)
 
-    if (results.affectedRows === 0) return res.status(500).json({ erro: "Não foi possível salvar a avaliação!" })
+    if (results.length === 0) return res.status(500).json({ erro: "Não foi possível salvar a avaliação!" })
 
-    const [createdReview] = await db.query(
+    const createdReview = await queryDB(
         `SELECT a.id, a.nota AS note, a.comentario AS comment, a.jogo_id AS gameId,
             u.id AS userId, u.nome AS userName, a.data_avaliacao as data_avaliacao, a.data_edicao as data_edicao
      FROM avaliacoes a
@@ -52,7 +53,7 @@ router.post('/', async (req, res) => {
 router.get('/game/:id', async (req, res) => {
     const { id } = req.params
 
-    const [results] = await db.query(
+    const results = await queryDB(
         "select a.id, u.id as idUser, u.nome, a.nota, a.comentario, data_avaliacao, data_edicao from avaliacoes as a join usuarios as u on a.usuario_id = u.id where a.jogo_id = ?;",
         [id]
     )
@@ -83,7 +84,7 @@ router.get('/game/:id', async (req, res) => {
 
     })
 
-    const [resultsAvgCount] = await db.query("select avg(nota) as notaMedia, count(*) as totAvaliacoes from avaliacoes where jogo_id = ?;", [id])
+    const resultsAvgCount = await queryDB("select avg(nota) as notaMedia, count(*) as totAvaliacoes from avaliacoes where jogo_id = ?;", [id])
 
     if (resultsAvgCount[0].totAvaliacoes === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
 
@@ -97,7 +98,7 @@ router.get('/game/:id', async (req, res) => {
 })
 
 router.get("/averages", async (req, res) => {
-    const [avgGames] = await db.query(
+    const avgGames = await queryDB(
         "select j.id as gameId, coalesce(avgs.nota, 0) as nota, coalesce(avgs.totAvaliacoes, 0) as totAvaliacoes from jogos j left join (select jogo_id, avg(nota) as nota, count(*) as totAvaliacoes from avaliacoes a group by jogo_id) avgs on j.id = avgs.jogo_id;"
     )
 
@@ -119,7 +120,7 @@ router.get("/averages", async (req, res) => {
 router.get('/user/:id', async (req, res) => {
     const { id } = req.params
 
-    const [results] = await db.query(
+    const results = await queryDB(
         "select a.id, j.titulo, a.nota, a.comentario, data_avaliacao from avaliacoes as a join jogos as j on a.jogo_id = j.id where a.usuario_id = ?;",
         [id]
     )
@@ -150,7 +151,7 @@ router.get('/user/:id', async (req, res) => {
 router.get('/average/:id', async (req, res) => {
     const { id } = req.params
 
-    const [resultsAvgCount] = await db.query("select avg(nota) as notaMedia, count(*) as totAvaliacoes from avaliacoes where jogo_id = ?;", [id])
+    const resultsAvgCount = await queryDB("select avg(nota) as notaMedia, count(*) as totAvaliacoes from avaliacoes where jogo_id = ?;", [id])
 
     if (resultsAvgCount[0].totAvaliacoes === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
 
@@ -167,9 +168,9 @@ router.get('/average/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const { id } = req.params
 
-    const [results] = await db.query("delete from avaliacoes where id = ?;", [id])
+    const results = await queryDB("delete from avaliacoes where id = ?;", [id])
 
-    if (results.affectedRows === 0) return res.status(404).json({ erro: "Avaliação não encontrada!" })
+    if (results.length === 0) return res.status(404).json({ erro: "Avaliação não encontrada!" })
 
     return res.status(200).json({ message: "Avaliação deletada com sucesso!" })
 })
@@ -216,11 +217,11 @@ router.patch('/:id', async (req, res) => {
     // console.log('SQL:', `update avaliacoes set ${fieldsSQL} where id = ?;`)
     // console.log('Values:', valuesReqBody)
 
-    const [results] = await db.query(`update avaliacoes set ${fieldsSQL} where id = ?;`, valuesReqBody)
+    const results = await queryDB(`update avaliacoes set ${fieldsSQL} where id = ?;`, valuesReqBody)
 
-    if (results.affectedRows === 0) return res.status(404).json({ erro: "Avaliação não encontrada!" })
+    if (results.length === 0) return res.status(404).json({ erro: "Avaliação não encontrada!" })
 
-    const [updateReview] = await db.query(
+    const updateReview = await queryDB(
         `select a.id, a.nota as nota, a.comentario as comentario, a.jogo_id as gameId, a.data_avaliacao, a.data_edicao from avaliacoes as a where a.id = ?;`, [id]
     )
 
