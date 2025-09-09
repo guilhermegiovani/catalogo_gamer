@@ -65,8 +65,6 @@ export function AuthProvider({ children }) {
                     setRoleUser(parsedUser.role)
                 }
 
-                getEditProfilePhoto(userId)
-
                 try {
                     const fav = await getFavorites()
                     setFavorites(fav.data)
@@ -122,10 +120,13 @@ export function AuthProvider({ children }) {
             const idGame = fav.data.map(fav => fav.id)
             setFavoritesIdGame(idGame)
 
+            getProfilePhoto(userId)
+
             // const resAvgs = await getReviewsAvg()
             // setAvgsFavorites(resAvgs.data.filter(avg => idGame.includes(avg.id)))
 
             // console.log(favorites)
+            toast.success("Logado com sucesso!")
 
         } catch (err) {
 
@@ -149,6 +150,7 @@ export function AuthProvider({ children }) {
         setUser(null)
         setToken("")
         setUserId(0)
+        setImgPerfil(null)
         console.log("Deslogado com sucesso")
     }
 
@@ -224,6 +226,18 @@ export function AuthProvider({ children }) {
     }
 
     const getEditProfilePhoto = async (id) => {
+        try {
+            const res = await getUser(id)
+            const userData = res.data[0]
+            setImgPerfil(userData.profile_photo)
+            
+        } catch(err) {
+            console.log(`Erro ao pegar os dados do usuário: ${err}`)
+        }
+        
+    }
+
+    const getProfilePhoto = async (id) => {
         try {
             const res = await getUser(id)
             const userData = res.data[0]

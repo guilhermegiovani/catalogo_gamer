@@ -47,7 +47,7 @@ function Login() {
                     e.preventDefault()
                     handleLogin({ email, password })
                         .then(() => {
-                            toast.success("Logado com sucesso!")
+                            // toast.success("Logado com sucesso!")
                             navigate("/games")
                         }).catch(() => {
                             toast.error("Falha ao logar!")

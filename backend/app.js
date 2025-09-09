@@ -10,10 +10,16 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const server = express()
- const port = process.env.PORT || 8000
+const port = process.env.PORT || 8000
 
 server.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://catalogo-gamer.vercel.app'], // só aceita requisições desse endereço
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://catalogo-gamer.vercel.app', // frontend deploy
+    'https://catalogo-gamer-ps72y2x9h-guilhermegiovanis-projects.vercel.app',
+    'https://catalogo-gamer-git-main-guilhermegiovanis-projects.vercel.app'
+  ], // só aceita requisições desse endereço
   credentials: true
 }))
 

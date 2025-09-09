@@ -32,8 +32,8 @@ router.post('/', async (req, res) => {
     if(match) {
         const token = jwt.sign(
             { id: results[0].id, role: results[0].role },
-            jwt_secret,
-            { expiresIn: '2h' }
+            jwt_secret
+            // { expiresIn: '2h' }
         )
 
         return res.status(200).json({ message: "Login feito com sucesso", token: token, userId: results[0].id, })
