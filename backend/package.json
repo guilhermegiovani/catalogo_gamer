@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon node app.js",
-    "vercel-build": "node app.js"
+    "start": "node app.js",
+    "vercel-build": "echo 'Build finalizado'"
   },
   "keywords": [],
   "author": "",
