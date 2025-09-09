@@ -1,73 +1,10 @@
-// import Button from "../components/Button"
-// import clsx from "clsx"
-
-
-// function Profile() {
-
-//     return (
-//         <section>
-
-//             <header>
-//                 <h1>Foto perfil</h1>
-//                 <h2>Nome Usuario</h2>
-//                 <h3>{"Apelido(caso tenha)"}</h3>
-//             </header>
-
-//             <div>
-//                 <Button text="Editar perfil" />
-//             </div>
-
-//             <article>
-
-//                 <div>
-//                     <h3>Info básica</h3>
-
-//                     <span>
-//                         <p>name</p>
-//                         <p>Guilherme</p>
-//                     </span>
-
-//                     <span>
-//                         <p>email</p>
-//                         <p>Guilherme@email.com</p>
-//                     </span>
-
-//                     <span>
-//                         <p>Membro desde</p>
-//                         <p>{"data(caso tenha)"}</p>
-//                     </span>
-//                 </div>
-
-//                 <div>
-//                     <h3>Meus favoritos</h3>
-
-//                     <span>{/* map dos favoritos */}</span>
-//                 </div>
-
-//                 <div>
-//                     <h3>Minha reviews</h3>
-//                     <span>
-//                         {/* map reviews */}
-//                     </span>
-//                 </div>
-
-//             </article>
-
-//         </section>
-//     )
-// }
-
-// export default Profile
-
 import Button from "../components/Button"
 import clsx from "clsx"
-// import img from "../rainbow-six-siege.png"
 import { useAuth } from "../hooks/useAuth"
 import { getFavorites, getReviewsByUser, getUser } from "../services/routes"
 import { useEffect, useState } from "react"
 import { Star } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
-import Input from "../components/Input"
 
 function Profile() {
     const navigate = useNavigate()
@@ -76,12 +13,10 @@ function Profile() {
     const [favUser, setFavUser] = useState([])
     const [revUser, setRevUser] = useState([])
 
-    // console.log(userId)
     async function fetchUserData() {
         try {
             const resUser = await getUser(userId)
-            // const user = resUser.data.filter(u => u.id === userId)
-            setProfileUser(resUser.data)
+            setProfileUser(resUser.data[0])
 
             const resFav = await getFavorites()
             setFavUser(resFav.data)
@@ -107,7 +42,7 @@ function Profile() {
                         {/* Aqui entra a imagem do usuário */}
                         <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
                             <img
-                                src={`http://localhost:8000${profileUser.foto_perfil}`}
+                                src={`http://localhost:8000${profileUser.profile_photo}`}
                                 alt="foto_perfil"
                             />
 
@@ -121,8 +56,8 @@ function Profile() {
                             handleChange={(e) => handleFileChange(e)}
                         /> */}
                     </div>
-                    <h1 className="text-xl lg:text-3xl font-bold">{profileUser.nome}</h1>
-                    <h3 className="text-gray-400 text-base lg:text-lg">{profileUser.apelido}</h3>
+                    <h1 className="text-xl lg:text-3xl font-bold">{profileUser.name}</h1>
+                    <h3 className="text-gray-400 text-base lg:text-lg">{profileUser.nickname}</h3>
 
                     <Button
                         text="EDITAR PERFIL"
@@ -143,15 +78,15 @@ function Profile() {
                         <div className="space-y-3">
                             <div className="flex justify-between text-gray-300 text-sm lg:text-lg">
                                 <span>Nome:</span>
-                                <span className="font-medium text-white">{profileUser.nome}</span>
+                                <span className="font-medium text-white">{profileUser.name}</span>
                             </div>
                             <div className="flex justify-between text-gray-300 text-sm lg:text-lg">
                                 <span>Email:</span>
                                 <span className="font-medium text-white">{profileUser.email}</span>
                             </div>
                             <div className="flex justify-between text-gray-300 text-sm lg:text-lg">
-                                <span>Membro desde</span>
-                                <span className="font-medium text-white">Nov 25, 2021</span>
+                                <span>Membro desde:</span>
+                                <span className="font-medium text-white">{profileUser.created_account}</span>
                             </div>
                         </div>
                     </div>
@@ -167,8 +102,8 @@ function Profile() {
                                 <div key={fav.id} className="w-20 sm:w-24 lg:w-30 bg-gray-700 rounded-lg">
                                     <Link to={`/reviews/${fav.id}`}>
                                         <img
-                                            className="hover:scale-[1.04] cursor-pointer transition duration-400"
-                                            src={`http://localhost:8000${fav.imagem_url}`}
+                                            className="hover:scale-[1.04] cursor-pointer transition duration-400 object-cover"
+                                            src={`http://localhost:8000${fav.img_portrait}`}
                                             alt={fav.titulo}
                                         />
                                     </Link>
@@ -185,12 +120,12 @@ function Profile() {
 
                         {revUser.map((rev) => (
                             <div key={rev.id} className="bg-[#1c1233] rounded-xl p-4 shadow-md space-y-2">
-                                <p className="text-gray-200 text-base lg:text-xl">{rev.titulo}</p>
+                                <p className="text-gray-200 text-base lg:text-xl">{rev.title}</p>
                                 <div className="flex gap-1 items-center text-md lg:text-base">
-                                    <Star size={18} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {rev.nota}
+                                    <Star size={18} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {rev.rating}
                                 </div>
                                 {/* <div className="flex text-yellow-400">★★★★☆</div> */}
-                                <p className="text-gray-200 text-sm lg:text-base">{rev.comentario}</p>
+                                <p className="text-gray-200 text-sm lg:text-base">{rev.comment}</p>
                             </div>
                         ))
 

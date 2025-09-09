@@ -11,7 +11,7 @@ import toast from "react-hot-toast"
 
 function Login() {
     const [email, setEmail] = useState("")
-    const [senha, setSenha] = useState("")
+    const [password, setPassword] = useState("")
     const navigate = useNavigate()
     const { handleLogin } = useAuth()
 
@@ -45,7 +45,7 @@ function Login() {
 
                 <Form handleSubmit={(e) => {
                     e.preventDefault()
-                    handleLogin({ email, senha })
+                    handleLogin({ email, password })
                         .then(() => {
                             toast.success("Logado com sucesso!")
                             navigate("/games")
@@ -55,7 +55,7 @@ function Login() {
                 }}
                     className={clsx(
                         "bg-[#1e1b38]",
-                        "rounded-2xl shadow-md sm:shadow-lg p-4 w-full max-w-xl space-y-4",
+                        "rounded-2xl shadow-md sm:shadow-lg p-6 w-full max-w-xl space-y-4",
                         "landscape:sm:space-y-4 landscape:sm:shadow-md landscape:xl:space-y-6",
                         "portrait:sm:p-4",
                         "border border-[#4f46e5]/20"
@@ -84,8 +84,8 @@ function Login() {
                         type="password"
                         id="senha"
                         name="senha"
-                        value={senha}
-                        handleChange={(e) => setSenha(e.target.value)}
+                        value={password}
+                        handleChange={(e) => setPassword(e.target.value)}
                         required
                         classNameInput={clsx(
                             "px-4 py-2 rounded-md",

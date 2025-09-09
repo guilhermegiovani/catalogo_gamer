@@ -9,10 +9,10 @@ import toast from "react-hot-toast"
 
 
 function CreateAccountForm() {
-    const [nome, setNome] = useState("")
+    const [name, setName] = useState("")
     const [email, setEmail] = useState("")
-    const [senha, setSenha] = useState("")
-    const [confSenha, setConfSenha] = useState("")
+    const [password, setPassword] = useState("")
+    const [confPassword, setConfPassword] = useState("")
     const { handleCreateAccount } = useAuth()
     const navigate = useNavigate()
 
@@ -23,19 +23,19 @@ function CreateAccountForm() {
 
             <Form handleSubmit={(e) => {
                 e.preventDefault()
-                if (confSenha !== senha) {
+                if (confPassword !== password) {
                     toast.error("As senha não coincidem!")
                     return
                 }
 
-                handleCreateAccount({ nome, email, senha })
+                handleCreateAccount({ name, email, password })
                     .then(() => {
                         toast.success("Conta criada com sucesso! Faça login.")
 
-                        setNome("")
+                        setName("")
                         setEmail("")
-                        setSenha("")
-                        setConfSenha("")
+                        setPassword("")
+                        setConfPassword("")
 
                         navigate("/login")
                     }).catch((err) => {
@@ -53,8 +53,8 @@ function CreateAccountForm() {
                     type="text"
                     id="nome"
                     name="nome"
-                    value={nome}
-                    handleChange={(e) => setNome(e.target.value)}
+                    value={name}
+                    handleChange={(e) => setName(e.target.value)}
                     required
                     classNameInput={clsx(
                         "px-4 py-2 rounded-md",
@@ -85,8 +85,8 @@ function CreateAccountForm() {
                     type="password"
                     id="senha"
                     name="senha"
-                    value={senha}
-                    handleChange={(e) => setSenha(e.target.value)}
+                    value={password}
+                    handleChange={(e) => setPassword(e.target.value)}
                     required
                     classNameInput={clsx(
                         "px-4 py-2 rounded-md",
@@ -101,8 +101,8 @@ function CreateAccountForm() {
                     type="password"
                     id="confSenha"
                     name="confSenha"
-                    value={confSenha}
-                    handleChange={(e) => setConfSenha(e.target.value)}
+                    value={confPassword}
+                    handleChange={(e) => setConfPassword(e.target.value)}
                     required
                     classNameInput={clsx(
                         "px-4 py-2 rounded-md",

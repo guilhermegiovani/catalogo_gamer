@@ -15,18 +15,18 @@ router.post('/', async (req, res) => {
     // console.log(`Game id: ${gameId}`)
     // console.log(`User id: ${userId}`)
 
-    const checkGameId = await queryDB("select * from jogos where id = ?", [gameId])
+    const checkGameId = await queryDB("select * from games where id = ?", [gameId])
 
     if (checkGameId.length === 0) return res.status(404).json({ erro: "Jogo não existe!" })
     
     const checkFavoriteUser = await queryDB(
-        "select * from favoritos where usuario_id = ? and jogo_id = ?",
+        "select * from favorites where user_id = ? and game_id = ?",
         [userId, gameId]
     )
 
     if (checkFavoriteUser.length > 0) return res.status(409).json({ erro: "Jogo já está na lista de favoritos!" })
 
-    const results = await queryDB("insert into favoritos(usuario_id, jogo_id) values(?, ?)", [userId, gameId])
+    const results = await queryDB("insert into favorites(user_id, game_id) values(?, ?)", [userId, gameId])
 
     if (results.length === 0) return res.status(500).json({ erro: "Não foi possível adicionar o jogo na lista de favoritos!" })
 
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
     const userId = req.userId
 
     const results = await queryDB(
-        "select j.* from favoritos f join jogos j on f.jogo_id = j.id where f.usuario_id = ?;",
+        "select g.* from favorites f join games g on f.game_id = g.id where f.user_id = ?;",
         [userId]
     )
 
@@ -51,7 +51,7 @@ router.delete('/', async (req, res) => {
     const { gameId } = req.body
     const userId = req.userId
 
-    const results = await queryDB("delete from favoritos where usuario_id = ? and jogo_id = ?;", [userId, gameId])
+    const results = await queryDB("delete from favorites where user_id = ? and game_id = ?;", [userId, gameId])
 
     if (results.length === 0) return res.status(404).json({ erro: "Jogo não encontrado na lista de favoritos!" })
 

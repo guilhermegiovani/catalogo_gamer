@@ -25,7 +25,9 @@ export const getUser = (id) => {
 
 // Editar usuários
 export const patchUsers = (id, dados) => {
-    return api.patch(`/users/${id}`, dados)
+    return api.patch(`/users/${id}`, dados, {
+        headers: { "Content-Type": "multipart/form-data" }
+    })
 }
 
 // Função para logar usuário

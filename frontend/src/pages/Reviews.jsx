@@ -66,14 +66,14 @@ function Reviews() {
                                                 "bg-purple-500/10 text-purple-400 text-xs px-2 py-0.5 rounded-full"
                                             )}
                                         >
-                                            {game.plataforma}
+                                            {game.platform}
                                         </span>
                                         <span
                                             className={clsx(
                                                 "bg-blue-500/10 text-blue-400 text-xs px-2 py-0.5 rounded-full"
                                             )}
                                         >
-                                            {game.genero}
+                                            {game.genre}
                                         </span>
                                     </div>
                                     <p className="flex items-center gap-1 text-sm font-medium mt-2 text-gray-200">

@@ -56,8 +56,8 @@ function ReviewForm({ refreshReviews }) {
     const handleSubmitEditReview = async () => {
         const reviewData = {
             gameId: game.id,
-            nota: rating,
-            comentario: comment
+            rating: rating,
+            comment: comment
         }
 
         try {
@@ -68,9 +68,9 @@ function ReviewForm({ refreshReviews }) {
             setReviews(prev => prev.map(r =>
                 r.id === newReview.id ? {
                     ...r,
-                    nota: newReview.note,
-                    comentario: newReview.comment,
-                    date: newReview.data_edicao
+                    grade: newReview.rating,
+                    comment: newReview.comment,
+                    date: newReview.edit_date
                 } : r
             ))
 

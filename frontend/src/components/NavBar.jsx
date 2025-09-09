@@ -4,25 +4,25 @@ import { useAuth } from "../hooks/useAuth"
 import Button from "./Button"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
-import { getUser } from "../services/routes"
+// import { getUser } from "../services/routes"
 import { Menu, X } from "lucide-react"
 
 function NavBar() {
 
-    const { user, userId, logout, roleUser, isLoading, imgPerfil, setImgPerfil } = useAuth()
+    const { user, userId, logout, roleUser, isLoading, imgPerfil, getEditProfilePhoto } = useAuth()
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
     const dropdownref = useRef(null)
 
-    const getUserData = async (id) => {
-        try {
-            const res = await getUser(id)
-            setImgPerfil(res.data.foto_perfil)
-        } catch (err) {
-            console.log(`Erro ao pegar os dados: ${err}`)
-        }
-    }
+    // const getUserData = async (id) => {
+    //     try {
+    //         const res = await getUser(id)
+    //         // setImgPerfil(res.data[0].profile_photo)
+    //     } catch (err) {
+    //         console.log(`Erro ao pegar os dados: ${err}`)
+    //     }
+    // }
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -30,14 +30,14 @@ function NavBar() {
                 setIsOpen(false)
             }
         }
-        
-        getUserData(userId)
+
+        getEditProfilePhoto(userId)
         setMenuOpen(false)
         document.addEventListener("click", handleClickOutside)
         return () => document.removeEventListener("click", handleClickOutside)
     }, [])
 
-    // console.log(dropdownref.current)
+    // console.log(imgPerfil)
 
     return (
         <nav className={clsx(
@@ -53,7 +53,7 @@ function NavBar() {
             </NavLink>
 
             <div className="flex w-full items-center justify-end text-md lg:text-lg landscape:xl:text-xl font-normal">
-                
+
 
                 <div className="hidden lg:flex items-center gap-6 lg:mr-6">
                     <NavLink to="/" className={({ isActive }) => clsx(
@@ -105,10 +105,11 @@ function NavBar() {
                 {user ? (
 
                     <div ref={dropdownref} className="relative">
+
                         <img
                             src={`http://localhost:8000${imgPerfil}`}
                             alt="avatar"
-                            className="rounded-full shadow-sm w-10 h-10 lg:w-15 lg:h-15 cursor-pointer"
+                            className="rounded-full shadow-sm w-10 h-10 lg:w-15 lg:h-15 cursor-pointer object-cover"
                             onClick={() => setIsOpen(!isOpen)}
                         />
 
@@ -147,7 +148,7 @@ function NavBar() {
 
                 ) : ""}
 
-                
+
 
                 {menuOpen && (
                     <div className={clsx(

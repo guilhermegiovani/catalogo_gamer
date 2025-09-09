@@ -26,15 +26,15 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
     { name: "img-paisagem", maxCount: 1 }
 ]), async (req, res) => {
 
-    const { titulo, descricao, genero, plataforma, estudio } = req.body
-    let { imagem_url, imagem_paisagem } = req.body
+    const { title, description, genre, platform, studio } = req.body
+    let { img_portrait, img_landscape } = req.body
 
     if (req.files["img-retrato"]) {
-        imagem_url = `/uploads/${req.files["img-retrato"][0].filename}`
+        img_portrait = `/uploads/${req.files["img-retrato"][0].filename}`
     }
 
     if (req.files["img-paisagem"]) {
-        imagem_paisagem = `/uploads/${req.files["img-paisagem"][0].filename}`
+        img_landscape = `/uploads/${req.files["img-paisagem"][0].filename}`
     }
 
     // console.log(`Valores: ${titulo}`)
@@ -44,20 +44,20 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
     // console.log(`Valores: ${estudio}`)
     // console.log(`Valores: ${imagem_url}`)
 
-    if (!titulo || !descricao || !genero || !plataforma || !estudio || (!imagem_url && !req.file) || (!imagem_paisagem && !req.file)) {
+    if (!title || !description || !genre || !platform || !studio || (!img_portrait && !req.file) || (!img_landscape && !req.file)) {
         return res.status(400).json({ erro: "Preencha todos os campos" })
     }
 
     const results = await queryDB(
-        "select * from jogos where titulo = ?;",
-        [titulo]
+        "select * from games where title = ?;",
+        [title]
     )
 
     if (results.length > 0) return res.status(409).json({ erro: "Jogo já existe!" })
 
     const resInsert = await queryDB(
-        "insert into jogos(titulo, descricao, genero, plataforma, estudio, imagem_url, imagem_paisagem) values(?, ?, ?, ?, ?, ?, ?);",
-        [titulo, descricao, genero, plataforma, estudio, imagem_url, imagem_paisagem]
+        "insert into games(title, description, genre, platform, studio, img_portrait, img_landscape) values(?, ?, ?, ?, ?, ?, ?);",
+        [title, description, genre, platform, studio, img_portrait, img_landscape]
     )
 
     if (resInsert.length > 0) {
@@ -76,8 +76,8 @@ router.get("/search", async (req, res) => {
 
         if (value !== undefined && value !== '') {
 
-            if (cond === 'titulo') {
-                conditions.push('lower(titulo) LIKE lower(?)')
+            if (cond === 'title') {
+                conditions.push('lower(title) LIKE lower(?)')
                 values.push(`%${value}%`)
             } else {
                 conditions.push(`lower(${cond}) = lower(?)`)
@@ -89,7 +89,7 @@ router.get("/search", async (req, res) => {
     }
 
     const whereSQL = conditions.length > 0 ? `where ${conditions.join(' and ')}` : ''
-    const query = `select * from jogos ${whereSQL};`
+    const query = `select * from games ${whereSQL};`
 
     // console.log('SQL:', query)
     // console.log('Values:', values)
@@ -102,7 +102,7 @@ router.get("/search", async (req, res) => {
 })
 
 router.get("/", async (req, res) => {
-    const results = await queryDB("select * from jogos;")
+    const results = await queryDB("select * from games;")
 
     if (results.length === 0) return res.status(404).json({ erro: "Nenhum dado encontrado" })
 
@@ -114,7 +114,7 @@ router.get("/:id", authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params
 
     const results = await queryDB(
-        "select * from jogos where id = ?;",
+        "select * from games where id = ?;",
         [id]
     )
 
@@ -128,7 +128,7 @@ router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params
     // console.log("Recebi request pra deletar id:", req.params.id)
     const results = await queryDB(
-        "delete from jogos where id = ?;",
+        "delete from games where id = ?;",
         [id]
     )
 
@@ -153,11 +153,11 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     // console.log("BODY:", req.body)
 
     if (req.files["img-retrato"]) {
-        req.body.imagem_url = `/uploads/${req.files["img-retrato"][0].filename}`
+        req.body.img_portrait = `/uploads/${req.files["img-retrato"][0].filename}`
     }
 
     if (req.files["img-paisagem"]) {
-        req.body.imagem_paisagem = `/uploads/${req.files["img-paisagem"][0].filename}`
+        req.body.img_landscape = `/uploads/${req.files["img-paisagem"][0].filename}`
     }
 
 
@@ -183,7 +183,7 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     // console.log(`Campo: ${fieldsSQL}`)
     if (!fieldsSQL) return res.status(400).json({ erro: "Nenhum campo válido para atualizar!" })
 
-    const results = await queryDB(`update jogos set ${fieldsSQL} where id = ?;`, valuesReqBody)
+    const results = await queryDB(`update games set ${fieldsSQL} where id = ?;`, valuesReqBody)
     // console.log(`Jogo editado: ${results[0]}`)
 
     if (results.length === 0) {

@@ -21,7 +21,7 @@ function GamesList() {
             try {
                 const res = await getGames()
                 setGames(res.data)
-                setImgsGames(res.data.map(g => g.imagem_url))
+                setImgsGames(res.data.map(g => g.img_portrait))
 
                 const resAvg = await getReviewsAvgs()
                 setAverages(resAvg.data)
@@ -49,7 +49,7 @@ function GamesList() {
 
     // if (!games || !favorites) return <p>Carregando...</p>
 
-    const avgMap = Object.fromEntries(averages.map(a => [a.gameId, a.nota]))
+    const avgMap = Object.fromEntries(averages.map(a => [a.gameId, a.rating]))
 
 
     return (

@@ -11,13 +11,13 @@ const router = express.Router()
 router.use(express.json())
 
 router.post('/', async (req, res) => {
-    const { nome, email, senha } = req.body
+    const { name, email, password } = req.body
 
-    if (!nome || !email || !senha) {
+    if (!name || !email || !password) {
         return res.status(400).json({ erro: "Preencha todos os campos!" })
     }
 
-    const senhaCripto = await bcrypt.hash(senha, 10)
+    const senhaCripto = await bcrypt.hash(password, 10)
 
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -27,18 +27,18 @@ router.post('/', async (req, res) => {
         return res.status(400).json({ erro: "Email inválido" })
     }
 
-    const results = await queryDB("SELECT * FROM usuarios WHERE email = ?;", [email])
+    const results = await queryDB("SELECT * FROM users WHERE email = ?;", [email])
 
     if (results.length > 0) return res.status(409).json({ erro: "Email já existe!" })
 
-    const resInsert = await queryDB("insert into usuarios(nome, email, senha) values (?, ?, ?);",
-        [nome, emailSanitizado, senhaCripto]
+    const resInsert = await queryDB("insert into users(name, email, password) values (?, ?, ?);",
+        [name, emailSanitizado, senhaCripto]
     )
 
     const newUser = {
-        nome: resInsert.nome,
+        name: resInsert.name,
         email: resInsert.emailSanitizado,
-        senha: resInsert.senha
+        password: resInsert.password
     }
 
     return res.status(201).json({ message: "Usuário criado com sucesso!", id: newUserId, newUser: newUser })
@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/', authMiddleware, async (req, res) => {
-    const results = await queryDB("select * from usuarios;")
+    const results = await queryDB("select * from users;")
 
     if (results.length === 0) return res.status(404).json({ erro: "Nenhum usuário encontrado!" })
 
@@ -57,11 +57,28 @@ router.get('/', authMiddleware, async (req, res) => {
 router.get('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params
 
-    const results = await queryDB("select * from usuarios where id = ?;", [id])
+    const results = await queryDB("select * from users where id = ?;", [id])
 
     if (results.length === 0) return res.status(404).json({ erro: "Nenhum usuário encontrado!" })
 
-    return res.status(200).json(results[0])
+    const formattedDate = results.map(user => {
+        const date = new Date(user.created_account)
+
+        const day = String(date.getDate()).padStart(2, '0')
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const year = date.getFullYear()
+
+        const hours = String(date.getHours()).padStart(2, '0')
+        const minutes = String(date.getMinutes()).padStart(2, '0')
+
+        return {
+            ...user,
+            created_account: `${day}/${month}/${year} ${hours}:${minutes}`
+        }
+
+    })
+
+    return res.status(200).json(formattedDate)
 })
 
 router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
@@ -74,7 +91,7 @@ router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     //     [id]
     // )
 
-    const resDelete = await queryDB("delete from usuarios where id = ?;", [id])
+    const resDelete = await queryDB("delete from users where id = ?;", [id])
     if (resDelete.length === 0) return res.status(404).json({ erro: "Usuário não encontrado!" })
 
     return res.status(200).json({ message: "Usuário deletado com sucesso" })
@@ -90,12 +107,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-router.patch('/:id', authMiddleware, upload.single("img-jogo"), async (req, res) => {
+router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, res) => {
     const { id } = req.params
 
     if (req.file) {
-        req.body.foto_perfil = `/uploads/${req.file.filename}`;
+        req.body.profile_photo = `/uploads/${req.file.filename}`;
     }
+
+    // console.log(req.body.profile_photo)
 
     if (Object.keys(req.body).length === 0) return res.status(400).json({ erro: "Nenhum campo enviado para atualização" })
 
@@ -105,7 +124,7 @@ router.patch('/:id', authMiddleware, upload.single("img-jogo"), async (req, res)
     for (const [field, value] of Object.entries(req.body)) {
 
         if (value !== undefined && value !== '') {
-            if (field === 'senha') {
+            if (field === 'password') {
                 const senhaCripto = await bcrypt.hash(value, 10)
                 keysReqBody.push(`${field} = ?`)
                 valuesReqBody.push(senhaCripto)
@@ -122,12 +141,15 @@ router.patch('/:id', authMiddleware, upload.single("img-jogo"), async (req, res)
 
     // const setClause = keysReqBody.map((field) => `${field} = ?`).join(", ")
     // valuesReqBody.push(id)
-    const query = `update usuarios set ${fieldsSQL} where id = ?;`
+    const query = `update users set ${fieldsSQL} where id = ?;`
 
-    results = await queryDB(query, valuesReqBody)
+    const results = await queryDB(query, valuesReqBody)
     if (results.length === 0) return res.status(404).json({ erro: "Usuário não encontrado!" })
 
-    return res.status(200).json({ message: "Usuário atualizado com sucesso" })
+    const getUserData = await queryDB(`select ${fieldsSQL} from users where id = ?`, valuesReqBody)
+    console.log(getUserData)
+
+    return res.status(200).json({ message: "Usuário atualizado com sucesso", userData: getUserData })
 
 })
 

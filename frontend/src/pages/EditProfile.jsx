@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom"
 
 function EditProfile() {
     const navigate = useNavigate()
-    const { userId, setImgPerfil } = useAuth()
+    const { userId, setImgPerfil, getEditProfilePhoto } = useAuth()
     const [newName, setNewName] = useState("")
     const [newUserName, setNewUserName] = useState("")
     const [newEmail, setNewEmail] = useState("")
@@ -22,10 +22,12 @@ function EditProfile() {
         async function getUserData() {
             try {
                 const user = await getUser(userId)
+                const dataUser = user.data[0]
 
-                setNewName(user.data.nome)
-                setNewUserName(user.data.apelido)
-                setNewEmail(user.data.email)
+                setNewName(dataUser.name)
+                setNewUserName(dataUser.nickname)
+                setNewEmail(dataUser.email)
+                setPreviewImgPerfil(`http://localhost:8000${dataUser.profile_photo}`)
             } catch (err) {
                 console.log(err)
             }
@@ -33,6 +35,12 @@ function EditProfile() {
 
         getUserData()
     }, [])
+
+    useEffect(() => {
+        return () => {
+            if (previewImgPerfil) URL.revokeObjectURL(previewImgPerfil)
+        }
+    }, [previewImgPerfil])
 
     const handleChangeImg = (e) => {
         const selected = e.target.files[0]
@@ -45,17 +53,23 @@ function EditProfile() {
     const handleSubmitEditUser = async (id) => {
         try {
             const formData = new FormData()
-            formData.append("nome", newName)
-            formData.append("apelido", newUserName)
+            formData.append("name", newName)
+            formData.append("nickname", newUserName)
             formData.append("email", newEmail)
 
             if (fileImgPerfil instanceof File) {
-                formData.append("img-jogo", fileImgPerfil)
+                formData.append("img-profile", fileImgPerfil)
             }
 
-            await patchUsers(id, formData)
+            const res = await patchUsers(id, formData)
+
+            if(res.data.userData[0].profile_photo) {
+                // setImgPerfil(res.data.userData[0].profile_photo)
+                getEditProfilePhoto(id)
+                // console.log(id, res.data.userData[0].profile_photo)
+            }
         } catch (err) {
-            console.log(`Erro ao editar jogo: ${err}.`)
+            console.log(`Erro ao editar perfil: ${err}.`)
         }
 
     }
@@ -121,7 +135,7 @@ function EditProfile() {
                 />
 
                 <Input
-                    textLabel="Imagem do jogo:"
+                    textLabel="Foto perfil:"
                     classNameLabel={clsx(
                         "w-full px-4 py-2 rounded-md bg-[#2a264f] text-white text-center cursor-pointer",
                         "hover:bg-[#3a3360] transition-all duration-200",
@@ -150,7 +164,6 @@ function EditProfile() {
                                 "cursor-pointer"
                             )}
                             handleClick={() => {
-                                console.log(fileImgPerfil)
                                 URL.revokeObjectURL(previewImgPerfil)
                                 setPreviewImgPerfil(null)
                                 setFileImgPerfil(null)
@@ -200,10 +213,12 @@ function EditProfile() {
                         handleClick={() => {
                             handleSubmitEditUser(userId).then(() => {
                                 toast.success("perfil editado com sucesso!")
-                                setImgPerfil(fileImgPerfil.name)
+                                // if(fileImgPerfil.name !== null && fileImgPerfil.name !== undefined) {
+                                //     setImgPerfil(fileImgPerfil.name)
+                                // }
                                 navigate("/profile")
                             }).catch((err) => {
-                                toast.error("Erro ao editar jogo!")
+                                toast.error("Erro ao editar perfil!")
                                 console.log(err)
                             })
                         }}

@@ -49,19 +49,6 @@ function EditAdminGame({ form }) {
     // const [studioGame, setStudioGame] = useState("")
 
     useEffect(() => {
-        // async function getGame() {
-        //     try {
-        //         const res = await getGames()
-        //         setGamesAdmin(res.data)
-
-        //         const resAvg = await getReviewsAvgs()
-        //         setAvgGamesAdmin(resAvg.data)
-        //     } catch (err) {
-        //         console.log(`Erro ao pegar os jogos: ${err}`)
-        //     }
-        // }
-
-        // getGame()
         fetchGame()
     }, [])
 
@@ -96,6 +83,8 @@ function EditAdminGame({ form }) {
             setPreviewImgPaisagem(URL.createObjectURL(selected))
         }
     }
+
+    console.log(previewImg)
 
     return (
         <Form
@@ -225,7 +214,6 @@ function EditAdminGame({ form }) {
                             "cursor-pointer"
                         )}
                         handleClick={() => {
-                            console.log(fileImgGame)
                             URL.revokeObjectURL(previewImg)
                             setPreviewImg(null)
                             setFileImgGame(null)

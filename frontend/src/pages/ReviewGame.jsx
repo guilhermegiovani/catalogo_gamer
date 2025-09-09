@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth"
 import { Star, PencilIcon, Trash2Icon } from "lucide-react"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
-import { deleteReviews, getReviewsByGame } from "../services/routes"
+import { getReviewsByGame } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
 
 function ReviewGame() {
@@ -18,10 +18,11 @@ function ReviewGame() {
     const fetchReviews = async () => {
         try {
             const res = await getReviewsByGame(game.id)
-            setReviewsData(res.data.avaliacoes)
-            // console.log(res.data)
+            setReviewsData(res.data.reviews)
+            // console.log(res.data.reviews)
 
             const avg = averages.filter(avg => avg.gameId === game.id)
+            // console.log(avg)
             setAvgGame(avg[0])
         } catch (err) {
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
@@ -30,6 +31,8 @@ function ReviewGame() {
 
     useEffect(() => {
         fetchReviews()
+        setReviewsData([])
+        setAvgGame([])
     }, [gameId])
 
 
@@ -53,25 +56,25 @@ function ReviewGame() {
 
             <div className="space-y-2">
                 <img
-                    src={`http://localhost:8000${game.imagem_paisagem}`}
-                    alt={game.titulo}
+                    src={`http://localhost:8000${game.img_landscape}`}
+                    alt={game.title}
                     className="max-w-xl h-64 md:h-80 lg:h-96 object-contain rounded-xl border border-[#4f46e5]/30 shadow-md"
                 />
 
-                <h1 className="text-2xl font-bold">{game.titulo}</h1>
+                <h1 className="text-2xl font-bold">{game.title}</h1>
                 {/* <p className="text-muted-foreground">{game.plataforma}</p> */}
                 <div className="flex gap-2 flex-wrap">
-                    <span className="bg-green-500/10 text-green-400 text-xs px-2 py-0.5 rounded-2xl">{game.estudio}</span>
-                    <span className="bg-purple-500/10 text-purple-400 text-xs px-2 py-0.5 rounded-2xl">{game.plataforma}</span>
-                    <span className="bg-blue-500/10 text-blue-400 text-xs px-2 py-0.5 rounded-2xl">{game.genero}</span>
+                    <span className="bg-green-500/10 text-green-400 text-xs px-2 py-0.5 rounded-2xl">{game.studio}</span>
+                    <span className="bg-purple-500/10 text-purple-400 text-xs px-2 py-0.5 rounded-2xl">{game.platform}</span>
+                    <span className="bg-blue-500/10 text-blue-400 text-xs px-2 py-0.5 rounded-2xl">{game.genre}</span>
                 </div>
 
                 <p className="flex items-center gap-1 font-medium mb-3">
-                    <Star size={20} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {avgGame?.nota}
+                    <Star size={20} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {avgGame?.rating}
                 </p>
 
                 <p className="text-sm text-muted-foreground">
-                    {game.descricao}
+                    {game.description}
                 </p>
 
             </div>
@@ -90,11 +93,11 @@ function ReviewGame() {
                                         "transition-colors"
                                     )}
                                 >
-                                    <h3 className="text-lg font-semibold mb-1 text-gray-200">{rev.nome}</h3>
+                                    <h3 className="text-lg font-semibold mb-1 text-gray-200">{rev.name}</h3>
 
                                     <div className="flex items-center gap-3 text-sm mb-3 text-gray-200">
                                         <span className="flex items-center gap-1">
-                                            <Star size={18} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {rev.nota}
+                                            <Star size={18} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {rev.rating}
                                         </span>
 
                                         {/* {revEdit !== true ? (
@@ -108,13 +111,13 @@ function ReviewGame() {
                                         )} */}
 
                                         <span className="text-muted-foreground">
-                                            {rev.data_edicao !== rev.data_avaliacao ? `editado em ${rev.data_edicao}` : rev.data_avaliacao}
+                                            {rev.edit_date !== rev.review_date ? `editado em ${rev.edit_date}` : rev.review_date}
                                         </span>
 
                                     </div>
 
                                     <p className="text-md text-muted-foreground text-gray-100">
-                                        {rev.comentario}
+                                        {rev.comment}
                                     </p>
 
                                     {rev.idUser === userId ?

@@ -12,11 +12,11 @@ router.post('/', async (req, res) => {
     const { gameId, note, comment } = req.body
     const userId = req.userId
 
-    const checkGameExists = await queryDB("select * from jogos where id = ?;", [gameId])
+    const checkGameExists = await queryDB("select * from games where id = ?;", [gameId])
     if (checkGameExists.length === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
 
     const userReviewGame = await queryDB(
-        "select * from avaliacoes where usuario_id = ? and jogo_id = ?;",
+        "select * from reviews where user_id = ? and game_id = ?;",
         [userId, gameId]
     )
 
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     // console.log("values" + userId, gameId, note, comment)
 
     const results = await queryDB(
-        "insert into avaliacoes(usuario_id, jogo_id, nota, comentario) values(?, ?, ?, ?);",
+        "insert into reviews(user_id, game_id, rating, comment) values(?, ?, ?, ?);",
         [userId, gameId, note, comment]
     )
 
@@ -37,11 +37,11 @@ router.post('/', async (req, res) => {
     if (results.length === 0) return res.status(500).json({ erro: "Não foi possível salvar a avaliação!" })
 
     const createdReview = await queryDB(
-        `SELECT a.id, a.nota AS note, a.comentario AS comment, a.jogo_id AS gameId,
-            u.id AS userId, u.nome AS userName, a.data_avaliacao as data_avaliacao, a.data_edicao as data_edicao
-     FROM avaliacoes a
-     JOIN usuarios u ON a.usuario_id = u.id
-     WHERE a.id = ?;`,
+        `SELECT r.id, r.rating, r.comment, r.game_id AS gameId,
+            u.id AS userId, u.nickname AS nickname, r.review_date, r.edit_date
+     FROM reviews r
+     JOIN users u ON r.user_id = u.id
+     WHERE r.id = ?;`,
         [results.insertId]
     )
 
@@ -54,13 +54,13 @@ router.get('/game/:id', async (req, res) => {
     const { id } = req.params
 
     const results = await queryDB(
-        "select a.id, u.id as idUser, u.nome, a.nota, a.comentario, data_avaliacao, data_edicao from avaliacoes as a join usuarios as u on a.usuario_id = u.id where a.jogo_id = ?;",
+        "select r.id, u.id as idUser, u.name, r.rating, r.comment, review_date, edit_date from reviews as r join users as u on r.user_id = u.id where r.game_id = ?;",
         [id]
     )
 
     if (results.length === 0) return res.status(404).json({ erro: "Jogo não encontrado ou não foi avaliado!" })
 
-    const formattedDate = results.map(avaliacao => {
+    const formattedDate = results.map(review => {
         const format = (dateString) => {
             // console.log(`data rev: ${dateString}`)
             if (!dateString) return null
@@ -77,37 +77,37 @@ router.get('/game/:id', async (req, res) => {
         }
 
         return {
-            ...avaliacao,
-            data_avaliacao: format(avaliacao.data_avaliacao),
-            data_edicao: format(avaliacao.data_edicao)
+            ...review,
+            review_date: format(review.review_date),
+            edit_date: format(review.edit_date)
         }
 
     })
 
-    const resultsAvgCount = await queryDB("select avg(nota) as notaMedia, count(*) as totAvaliacoes from avaliacoes where jogo_id = ?;", [id])
+    const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where game_id = ?;", [id])
 
-    if (resultsAvgCount[0].totAvaliacoes === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
+    if (resultsAvgCount[0].totReviews === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
 
-    let average = Number(resultsAvgCount[0].notaMedia)
+    let average = Number(resultsAvgCount[0].avgGrade)
 
     if (!isNaN(average)) {
-        resultsAvgCount[0].notaMedia = Number(average.toFixed(1))
+        resultsAvgCount[0].avgGrade = Number(average.toFixed(1))
     }
 
-    return res.status(200).json({ avaliacoes: formattedDate, estatisticas: resultsAvgCount[0] })
+    return res.status(200).json({ reviews: formattedDate, statistics: resultsAvgCount[0] })
 })
 
 router.get("/averages", async (req, res) => {
     const avgGames = await queryDB(
-        "select j.id as gameId, coalesce(avgs.nota, 0) as nota, coalesce(avgs.totAvaliacoes, 0) as totAvaliacoes from jogos j left join (select jogo_id, avg(nota) as nota, count(*) as totAvaliacoes from avaliacoes a group by jogo_id) avgs on j.id = avgs.jogo_id;"
+        "select g.id as gameId, coalesce(avgs.avgGrade, 0) as rating, coalesce(avgs.totReviews, 0) as totReviews from games g left join (select game_id, avg(rating) as avgGrade, count(*) as totReviews from reviews a group by game_id) avgs on g.id = avgs.game_id;"
     )
 
     if (avgGames.length === 0) return res.status(404).json({ error: "Não foi possível pegar as notas médias dos jogos!" })
 
     const formattedAvgsGames = avgGames.map(avg => {
-        let notaNum = parseFloat(avg.nota)
+        let notaNum = parseFloat(avg.rating)
         if (isNaN(notaNum)) notaNum = 0
-        avg.nota = Number(notaNum.toFixed(1))
+        avg.rating = Number(notaNum.toFixed(1))
         return avg
     })
 
@@ -121,14 +121,14 @@ router.get('/user/:id', async (req, res) => {
     const { id } = req.params
 
     const results = await queryDB(
-        "select a.id, j.titulo, a.nota, a.comentario, data_avaliacao from avaliacoes as a join jogos as j on a.jogo_id = j.id where a.usuario_id = ?;",
+        "select r.id, g.title, r.rating, r.comment, review_date from reviews as r join games as g on r.game_id = g.id where r.user_id = ?;",
         [id]
     )
 
     if (results.length === 0) return res.status(404).json({ erro: "Este usuário ainda não avaliou nenhum jogo!" })
 
-    const formattedDate = results.map(avaliacao => {
-        const date = new Date(avaliacao.data_avaliacao)
+    const formattedDate = results.map(review => {
+        const date = new Date(review.review_date)
 
         const day = String(date.getDate()).padStart(2, '0')
         const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -138,8 +138,8 @@ router.get('/user/:id', async (req, res) => {
         const minutes = String(date.getMinutes()).padStart(2, '0')
 
         return {
-            ...avaliacao,
-            data_avaliacao: `${day}/${month}/${year} ${hours}:${minutes}`
+            ...review,
+            review_date: `${day}/${month}/${year} ${hours}:${minutes}`
         }
 
     })
@@ -151,14 +151,14 @@ router.get('/user/:id', async (req, res) => {
 router.get('/average/:id', async (req, res) => {
     const { id } = req.params
 
-    const resultsAvgCount = await queryDB("select avg(nota) as notaMedia, count(*) as totAvaliacoes from avaliacoes where jogo_id = ?;", [id])
+    const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where games_id = ?;", [id])
 
-    if (resultsAvgCount[0].totAvaliacoes === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
+    if (resultsAvgCount[0].totReviews === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
 
-    let average = Number(resultsAvgCount[0].notaMedia)
+    let average = Number(resultsAvgCount[0].avgGrade)
 
     if (!isNaN(average)) {
-        resultsAvgCount[0].notaMedia = Number(average.toFixed(1))
+        resultsAvgCount[0].avgGrade = Number(average.toFixed(1))
     }
 
     return res.status(200).json(resultsAvgCount[0])
@@ -168,7 +168,7 @@ router.get('/average/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const { id } = req.params
 
-    const results = await queryDB("delete from avaliacoes where id = ?;", [id])
+    const results = await queryDB("delete from reviews where id = ?;", [id])
 
     if (results.length === 0) return res.status(404).json({ erro: "Avaliação não encontrada!" })
 
@@ -184,9 +184,9 @@ router.patch('/:id', async (req, res) => {
     const valuesReqBody = []
 
     const fieldMap = {
-        gameId: 'jogo_id',
-        nota: 'nota',
-        comentario: 'comentario'
+        gameId: 'game_id',
+        rating: 'rating',
+        comment: 'comment'
     }
 
     for (const [field, value] of Object.entries(req.body)) {
@@ -198,10 +198,10 @@ router.patch('/:id', async (req, res) => {
 
     }
 
-    if ('nota' in req.body) {
-        const note = req.body.nota
+    if ('rating' in req.body) {
+        const grade = req.body.rating
 
-        if (note < 1 || note > 5) {
+        if (grade < 1 || grade > 5) {
             return res.status(400).json({ erro: "A nota tem que ser entre 1 e 5." })
         }
     }
@@ -217,12 +217,12 @@ router.patch('/:id', async (req, res) => {
     // console.log('SQL:', `update avaliacoes set ${fieldsSQL} where id = ?;`)
     // console.log('Values:', valuesReqBody)
 
-    const results = await queryDB(`update avaliacoes set ${fieldsSQL} where id = ?;`, valuesReqBody)
+    const results = await queryDB(`update reviews set ${fieldsSQL} where id = ?;`, valuesReqBody)
 
     if (results.length === 0) return res.status(404).json({ erro: "Avaliação não encontrada!" })
 
     const updateReview = await queryDB(
-        `select a.id, a.nota as nota, a.comentario as comentario, a.jogo_id as gameId, a.data_avaliacao, a.data_edicao from avaliacoes as a where a.id = ?;`, [id]
+        `select r.id, r.rating as rating, r.comment as comment, r.game_id as gameId, r.review_date, r.edit_date from reviews as r where r.id = ?;`, [id]
     )
 
     const format = (dateString) => {
@@ -240,8 +240,8 @@ router.patch('/:id', async (req, res) => {
         return `${day}/${month}/${year} ${hours}:${minutes}`
     }
 
-    updateReview[0].data_edicao = format(updateReview[0].data_edicao)
-    updateReview[0].data_avaliacao = format(updateReview[0].data_avaliacao)
+    updateReview[0].edit_date = format(updateReview[0].edit_date)
+    updateReview[0].review_date = format(updateReview[0].review_date)
 
     return res.status(200).json(updateReview[0])
     // return res.status(200).json({ message: "Avaliação atualizada com sucesso" })

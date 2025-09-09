@@ -13,9 +13,9 @@ const jwt_secret = process.env.JWT_SECRET
 router.use(express.json())
 
 router.post('/', async (req, res) => {
-    const {email, senha} = req.body
+    const {email, password} = req.body
 
-    if(!email || !senha) {
+    if(!email || !password) {
         return res.status(404).json({ erro: "Preencha todos os campos" })
     }
 
@@ -25,10 +25,10 @@ router.post('/', async (req, res) => {
         return res.status(400).json({ erro: "Email inválido" })
     }
 
-    const results = await queryDB("select id, email, senha, role from usuarios where email = ?;", [email])
+    const results = await queryDB("select id, email, password, role from users where email = ?;", [email])
     if(results.length === 0) return res.status(404).json({ erro: "Usuário não encontrado" })
 
-    const match = await bcrypt.compare(senha, results[0].senha)
+    const match = await bcrypt.compare(password, results[0].password)
     if(match) {
         const token = jwt.sign(
             { id: results[0].id, role: results[0].role },

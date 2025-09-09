@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { AuthContext } from "./AuthContext"
-import { deleteFavorites, deleteReviews, getFavorites, getGames, getReviewsAvgs, loginUser, newUser, postFavorites } from "../services/routes"
+import { deleteFavorites, deleteReviews, getFavorites, getGames, getReviewsAvgs, getUser, loginUser, newUser, postFavorites } from "../services/routes"
 import { jwtDecode } from "jwt-decode"
 import toast from "react-hot-toast"
 
@@ -28,6 +28,7 @@ export function AuthProvider({ children }) {
     const [imgsGames, setImgsGames] = useState([])
     const [searchGame, setSearchGame] = useState([])
     const [isSearch, setIsSearch] = useState(false)
+    const [previewImgPerfil, setPreviewImgPerfil] = useState(null)
 
     const storedToken = localStorage.getItem("token")
     let initialRole = ""
@@ -64,14 +65,15 @@ export function AuthProvider({ children }) {
                     setRoleUser(parsedUser.role)
                 }
 
-                try{
+                getEditProfilePhoto(userId)
 
+                try {
                     const fav = await getFavorites()
                     setFavorites(fav.data)
-    
+
                     const idGame = fav.data.map(fav => fav.id)
                     setFavoritesIdGame(idGame)
-                } catch(err) {
+                } catch (err) {
                     console.log(`Erro ao pegar game e favoritos: ${err}`)
                 }
             }
@@ -112,7 +114,7 @@ export function AuthProvider({ children }) {
 
             const decoded = jwtDecode(token)
             setRoleUser(decoded.role)
-            
+
 
             // const decodedSen = jwtDecode(dados.senha)
             // console.log(decodedSen)
@@ -192,8 +194,8 @@ export function AuthProvider({ children }) {
 
     const handleEditReview = (uId, rId) => {
         const review = reviewsData.filter(r => r.idUser === uId)
-        const dataRev = { comment: review[0].comentario, nota: review[0].nota }
-        setRating(dataRev.nota)
+        const dataRev = { comment: review[0].comment, rating: review[0].rating }
+        setRating(dataRev.rating)
         setComment(dataRev.comment)
         setIsEditing(true)
         setReviewId(rId)
@@ -221,8 +223,25 @@ export function AuthProvider({ children }) {
         }
     }
 
+    const getEditProfilePhoto = async (id) => {
+        try {
+            const res = await getUser(id)
+            const userData = res.data[0]
+            setImgPerfil(userData.profile_photo)
+
+            // console.log(userData)
+            
+        } catch(err) {
+            console.log(`Erro ao pegar os dados do usuário: ${err}`)
+        }
+        
+    }
+
+    
+
     return (
-        <AuthContext.Provider value={{ user, handleLogin, logout, favorites, setFavorites, favoritesIdGame, setFavoritesIdGame, handleFavorites, getFavoritesUser, games, setGames, averages, setAverages, avgsFavorites, setAvgsFavorites, reviews, setReviews, reviewsData, setReviewsData, userId, reviewEdit, setReviewEdit, handleEditReview, isEditing, setIsEditing, rating, setRating, comment, setComment, reviewId, setReviewId, isLoading, deleteRev, handleCreateAccount, roleUser, gamesAdmin, fetchGame, imgPerfil, setImgPerfil, imgsGames, setImgsGames, searchGame, setSearchGame, isSearch, setIsSearch
+        <AuthContext.Provider value={{
+            user, handleLogin, logout, favorites, setFavorites, favoritesIdGame, setFavoritesIdGame, handleFavorites, getFavoritesUser, games, setGames, averages, setAverages, avgsFavorites, setAvgsFavorites, reviews, setReviews, reviewsData, setReviewsData, userId, reviewEdit, setReviewEdit, handleEditReview, isEditing, setIsEditing, rating, setRating, comment, setComment, reviewId, setReviewId, isLoading, deleteRev, handleCreateAccount, roleUser, gamesAdmin, fetchGame, imgPerfil, setImgPerfil, imgsGames, setImgsGames, searchGame, setSearchGame, isSearch, setIsSearch, previewImgPerfil, setPreviewImgPerfil, getEditProfilePhoto
         }}>
             {children}
         </AuthContext.Provider>

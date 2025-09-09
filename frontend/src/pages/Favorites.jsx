@@ -46,7 +46,7 @@ function Favorites() {
     }
 
     // if(!avgsFavorites) return <p>Carregando...</p>
-    const avgsFavMap = Object.fromEntries(avgsFavorites.map(avg => [avg.gameId, avg.nota]))
+    const avgsFavMap = Object.fromEntries(avgsFavorites.map(avg => [avg.gameId, avg.rating]))
 
     return (
         <section className={clsx("px-4 py-10 max-w-6xl mx-auto")}>

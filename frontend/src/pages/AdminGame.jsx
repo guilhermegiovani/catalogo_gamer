@@ -82,11 +82,11 @@ function AdminGame() {
     const handleSubmitEditGame = async (id) => {
         try {
             const formData = new FormData()
-            formData.append("titulo", titleGame)
-            formData.append("descricao", descriptionGame)
-            formData.append("genero", genderGame)
-            formData.append("plataforma", platformGame)
-            formData.append("estudio", studioGame)
+            formData.append("title", titleGame)
+            formData.append("description", descriptionGame)
+            formData.append("genre", genderGame)
+            formData.append("platform", platformGame)
+            formData.append("studio", studioGame)
 
             if (fileImgGame instanceof File) {
                 formData.append("img-retrato", fileImgGame)
@@ -117,7 +117,7 @@ function AdminGame() {
                 )}>
                 <div className="w-full flex flex justify-center sm:justify-start">
                     <img
-                        src={`http://localhost:8000${game.imagem_paisagem}`}
+                        src={`http://localhost:8000${game.img_landscape}`}
                         alt={game.titleGame}
                         className={clsx(
                             "max-w-xl h-58 md:h-80 lg:h-96 rounded-xl border border-[#4f46e5]/30 shadow-md",
@@ -126,20 +126,20 @@ function AdminGame() {
                     />
                 </div>
 
-                <h1 className="text-xl sm:text-2xl font-bold">{game.titulo}</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">{game.title}</h1>
                 {/* <p className="text-muted-foreground">{game.plataforma}</p> */}
                 <div className="flex gap-2 flex-wrap">
-                    <span className="bg-green-500/10 text-green-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.estudio}</span>
-                    <span className="bg-purple-500/10 text-purple-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.plataforma}</span>
-                    <span className="bg-blue-500/10 text-blue-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.genero}</span>
+                    <span className="bg-green-500/10 text-green-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.studio}</span>
+                    <span className="bg-purple-500/10 text-purple-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.platform}</span>
+                    <span className="bg-blue-500/10 text-blue-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.genre}</span>
                 </div>
 
                 <p className="flex items-center gap-1 font-medium mb-3">
-                    <Star size={20} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {avgGame[0]?.nota}
+                    <Star size={20} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {avgGame[0]?.rating}
                 </p>
 
                 <p className="text-sm text-muted-foreground">
-                    {game.descricao}
+                    {game.description}
                 </p>
 
             </div>
@@ -186,15 +186,15 @@ function AdminGame() {
 
                         if (isEditingGame === false) {
                             setIsEditingGame(true)
-                            setTitleGame(game.titulo)
-                            setDescriptionGame(game.descricao)
-                            setGenderGame(game.genero)
-                            setPlatformGame(game.plataforma)
-                            setStudioGame(game.estudio)
-                            setFileImgGame(game.imagem_url)
-                            setPreviewImg(`http://localhost:8000${game.imagem_url}`)
-                            setFileImgGamePaisagem(game.imagem_paisagem)
-                            setPreviewImgPaisagem(`http://localhost:8000${game.imagem_paisagem}`)
+                            setTitleGame(game.title)
+                            setDescriptionGame(game.description)
+                            setGenderGame(game.genre)
+                            setPlatformGame(game.platform)
+                            setStudioGame(game.studio)
+                            setFileImgGame(game.img_portrait)
+                            setPreviewImg(`http://localhost:8000${game.img_portrait}`)
+                            setFileImgGamePaisagem(game.img_landscape)
+                            setPreviewImgPaisagem(`http://localhost:8000${game.img_landscape}`)
                         } else {
                             handleSubmitEditGame(game.id).then(() => {
                                 fetchGame()

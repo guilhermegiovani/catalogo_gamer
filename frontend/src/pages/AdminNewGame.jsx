@@ -37,11 +37,11 @@ function AdminNewGame() {
     const handleSubmitNewGame = async () => {
         try {
             const formData = new FormData()
-            formData.append("titulo", titleGame)
-            formData.append("descricao", descriptionGame)
-            formData.append("genero", genderGame)
-            formData.append("plataforma", platformGame)
-            formData.append("estudio", studioGame)
+            formData.append("title", titleGame)
+            formData.append("description", descriptionGame)
+            formData.append("genre", genderGame)
+            formData.append("platform", platformGame)
+            formData.append("studio", studioGame)
 
             if (fileImgGame instanceof File) {
                 formData.append("img-retrato", fileImgGame)

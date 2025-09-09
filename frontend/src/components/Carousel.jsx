@@ -35,8 +35,8 @@ function Carousel({ items }) {
                         )}>
                         {items ? (
                             <img
-                                src={`http://localhost:8000${item.imagem_paisagem}`}
-                                alt={item.nome ?? "imagem_jogo"}
+                                src={`http://localhost:8000${item.img_landscape}`}
+                                alt={item.name ?? "imagem_jogo"}
                                 className="w-full h-full object-cover object-top rounded-lg"
                             />
 

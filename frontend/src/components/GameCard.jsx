@@ -21,8 +21,8 @@ function GameCard({ game, isFavorite, to, avgGame }) {
             >
 
                 <img
-                    src={`http://localhost:8000${game.imagem_url}`}
-                    alt={game.titulo}
+                    src={`http://localhost:8000${game.img_portrait}`}
+                    alt={game.title}
                     className={clsx(
                         "w-full h-64 md:h-76 bg-gradient-to-br from-[#222] to-[#111] rounded-lg mb-3 object-cover object-top"
                     )}
@@ -30,20 +30,20 @@ function GameCard({ game, isFavorite, to, avgGame }) {
                 />
 
                 <h3 className={clsx(
-                    "line-clamp-1 text-base lg:text-lg font-semibold text-white mb-1"
+                    "line-clamp-1 text-base lg:text-lg xl:text-xl font-semibold text-white mb-1"
                     )}>
-                    {game.titulo}
+                    {game.title}
                 </h3>
 
                 <div className="flex flex-wrap mb-1">
-                    <span className="bg-blue-500/10 text-blue-400 text-xs px-2 py-1 rounded-2xl">{game.genero}</span>
+                    <span className="bg-blue-500/10 text-blue-400 text-xs lg:text-sm px-2 py-1 rounded-2xl">{game.genre}</span>
                 </div>
 
-                <p className="flex items-center gap-1 font-medium mb-2">
-                    <Star size={20} fill="currentColor" className="text-yellow-400 stroke-0 -mt-[1px]" /> {avgGame}
+                <p className="flex items-center text-sm lg:text-lg gap-1 font-medium mb-2">
+                    <Star size={22} fill="currentColor" className="text-yellow-400 stroke-0 -mt-[1px]" /> {avgGame}
                 </p>
 
-                <p className="text-xs sm:text-sm text-gray-400">
+                <p className="text-xs sm:text-sm lg:text-base text-gray-400">
                     Clique para mais detalhes e avaliações
                 </p>
 
