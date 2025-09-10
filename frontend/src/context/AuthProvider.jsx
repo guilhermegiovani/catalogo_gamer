@@ -30,28 +30,42 @@ export function AuthProvider({ children }) {
     const [isSearch, setIsSearch] = useState(false)
     const [previewImgPerfil, setPreviewImgPerfil] = useState(null)
 
-    const storedToken = localStorage.getItem("token")
-    let initialRole = ""
-    let initialUserId = 0
+    // const storedToken = localStorage.getItem("token")
+    // let initialRole = ""
+    // let initialUserId = 0
 
-    if (storedToken) {
-        const decoded = jwtDecode(storedToken)
-        initialRole = decoded.role
-        initialUserId = decoded.id
-    }
+    // if (storedToken) {
+    //     const decoded = jwtDecode(storedToken)
+    //     initialRole = decoded.role
+    //     initialUserId = decoded.id
+    // }
 
-    const [roleUser, setRoleUser] = useState(initialRole)
-    const [userId, setUserId] = useState(initialUserId)
+    // const [roleUser, setRoleUser] = useState(initialRole)
+    // const [userId, setUserId] = useState(initialUserId)
+    const [roleUser, setRoleUser] = useState("")
+    const [userId, setUserId] = useState(0)
 
     useEffect(() => {
+
         const loadUser = async () => {
+            const storedToken = localStorage.getItem("token")
             const userActive = localStorage.getItem("user")
 
             if (storedToken) {
-                const decoded = jwtDecode(storedToken)
-                setToken(storedToken)
-                setRoleUser(decoded.role)
-                setUserId(decoded.id)
+                try {
+                    const decoded = jwtDecode(storedToken)
+                    setToken(storedToken)
+                    setRoleUser(decoded.role || "")
+                    setUserId(decoded.id || 0)
+
+                } catch (err) {
+                    console.error("Token inválido ou corrompido", err);
+                    localStorage.removeItem("token");
+                    setToken("");
+                    setRoleUser("");
+                    setUserId(0);
+                }
+
             } else {
                 setUserId(0);
                 setRoleUser("");
@@ -230,11 +244,11 @@ export function AuthProvider({ children }) {
             const res = await getUser(id)
             const userData = res.data[0]
             setImgPerfil(userData.profile_photo)
-            
-        } catch(err) {
+
+        } catch (err) {
             console.log(`Erro ao pegar os dados do usuário: ${err}`)
         }
-        
+
     }
 
     const getProfilePhoto = async (id) => {
@@ -244,14 +258,14 @@ export function AuthProvider({ children }) {
             setImgPerfil(userData.profile_photo)
 
             // console.log(userData)
-            
-        } catch(err) {
+
+        } catch (err) {
             console.log(`Erro ao pegar os dados do usuário: ${err}`)
         }
-        
+
     }
 
-    
+
 
     return (
         <AuthContext.Provider value={{
