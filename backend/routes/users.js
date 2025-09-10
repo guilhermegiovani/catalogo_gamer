@@ -6,6 +6,7 @@ import adminMiddleware from '../middleware/adminMiddleware.js'
 import multer from "multer"
 import { db, isProd } from '../db.js'
 import { queryDB } from '../utils/dbQuery.js'
+import { uploadToCloudinary } from '../utils/cloudinary.js'
 
 const router = express.Router()
 router.use(express.json())
@@ -98,20 +99,27 @@ router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
 
 })
 
-const storage = multer.diskStorage({
+const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
     destination: "uploads/",
     filename: (req, file, cb) => {
         cb(null, Date.now() + "-" + file.originalname)
     }
-})
+}) : multer.memoryStorage()
 
 const upload = multer({ storage })
 
 router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, res) => {
     const { id } = req.params
 
+    // if (req.file) {
+    //     req.body.profile_photo = `/uploads/${req.file.filename}`;
+    // }
+
     if (req.file) {
-        req.body.profile_photo = `/uploads/${req.file.filename}`;
+        const resultsImg = await uploadToCloudinary(req.file.buffer, "users/profilePhoto", `user_photo_${id}`)
+        req.body.profile_photo = process.env.NODE_ENV === "development"
+            ? `/uploads/${req.file.filename}`
+            : resultsImg.secure_url
     }
 
     // console.log(req.body.profile_photo)

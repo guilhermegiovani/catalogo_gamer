@@ -3,24 +3,41 @@ import { db, isProd } from '../db.js'
 import authMiddleware from '../middleware/authMiddleware.js'
 import adminMiddleware from '../middleware/adminMiddleware.js'
 import multer from "multer"
-import sharp from "sharp"
-import path from "path"
-import fs from "fs"
+// import sharp from "sharp"
+// import path from "path"
+// import fs from "fs"
 import { queryDB } from '../utils/dbQuery.js'
+import { uploadToCloudinary } from '../utils/cloudinary.js'
+
 
 const router = express.Router()
 
 router.use(express.json())
 
-const storage = multer.diskStorage({
+const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
     destination: "uploads/",
     filename: (req, file, cb) => {
         cb(null, Date.now() + "-" + file.originalname)
     }
-})
+}) : multer.memoryStorage()
+// const storage = multer.memoryStorage()
 
-const upload = multer({ storage })
+export const upload = multer({ storage })
 
+// export const uploadToCloudinary = (buffer, folder, public_id) => {
+//     return new Promise((resolve, reject) => {
+//         const stream = cloudinary.uploader.upload_stream({ folder, public_id, overwrite: true },
+//             (error, result) => {
+//                 if (result) resolve(result)
+//                 else reject(error)
+//             })
+
+//         streamifier.createReadStream(buffer).pipe(stream)
+//     })
+
+// }
+
+// Adicionar novo jogo
 router.post('/', authMiddleware, adminMiddleware, upload.fields([
     { name: "img-retrato", maxCount: 1 },
     { name: "img-paisagem", maxCount: 1 }
@@ -29,22 +46,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
     const { title, description, genre, platform, studio } = req.body
     let { img_portrait, img_landscape } = req.body
 
-    if (req.files["img-retrato"]) {
-        img_portrait = `/uploads/${req.files["img-retrato"][0].filename}`
-    }
-
-    if (req.files["img-paisagem"]) {
-        img_landscape = `/uploads/${req.files["img-paisagem"][0].filename}`
-    }
-
-    // console.log(`Valores: ${titulo}`)
-    // console.log(`Valores: ${descricao}`)
-    // console.log(`Valores: ${genero}`)
-    // console.log(`Valores: ${plataforma}`)
-    // console.log(`Valores: ${estudio}`)
-    // console.log(`Valores: ${imagem_url}`)
-
-    if (!title || !description || !genre || !platform || !studio || (!img_portrait && !req.file) || (!img_landscape && !req.file)) {
+    if (!title || !description || !genre || !platform || !studio) {
         return res.status(400).json({ erro: "Preencha todos os campos" })
     }
 
@@ -56,18 +58,37 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
     if (results.length > 0) return res.status(409).json({ erro: "Jogo já existe!" })
 
     const resInsert = await queryDB(
-        "insert into games(title, description, genre, platform, studio, img_portrait, img_landscape) values(?, ?, ?, ?, ?, ?, ?);",
-        [title, description, genre, platform, studio, img_portrait, img_landscape]
+        "insert into games(title, description, genre, platform, studio) values(?, ?, ?, ?, ?);",
+        [title, description, genre, platform, studio] // img_portrait, img_landscape
     )
 
-    if (resInsert.length > 0) {
-        return res.status(201).json({ message: "Jogo cadastrado com sucesso!", id: resInsert.insertId })
+    const gameId = resInsert.insertId
+    if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
+
+    if (req.files["img-retrato"]) {
+        const resultsImg = await uploadToCloudinary(req.files["img-retrato"][0].buffer, "games/portraits", `game_portrait_${gameId}`)
+        img_portrait = process.env.NODE_ENV === "development"
+            ? `/uploads/${req.files["img-retrato"][0].filename}`
+            : resultsImg.secure_url
     }
 
-    return res.status(500).json({ erro: "Erro ao cadastrar jogo", id: newGameId })
+    if (req.files["img-paisagem"]) {
+        const resultsImg = await uploadToCloudinary(req.files["img-paisagem"][0].buffer, "games/landscapes", `game_landscape_${gameId}`)
+        img_landscape = process.env.NODE_ENV === "development"
+            ? `/uploads/${req.files["img-paisagem"][0].filename}`
+            : resultsImg.secure_url
+    }
+
+    await queryDB(
+        "update games set img_portrait = ?, img_landscape = ? where id = ?;",
+        [img_portrait, img_landscape, gameId]
+    )
+
+    return res.status(201).json({ message: "Jogo cadastrado com sucesso!", id: gameId })
 
 })
 
+// Pesquisar jogo
 router.get("/search", async (req, res) => {
     const conditions = []
     const values = []
@@ -91,16 +112,13 @@ router.get("/search", async (req, res) => {
     const whereSQL = conditions.length > 0 ? `where ${conditions.join(' and ')}` : ''
     const query = `select * from games ${whereSQL};`
 
-    // console.log('SQL:', query)
-    // console.log('Values:', values)
-
     const results = await queryDB(query, values)
-    // console.log(results)
 
     return res.status(200).json(results)
 
 })
 
+// Pegar todos os jogos
 router.get("/", async (req, res) => {
     const results = await queryDB("select * from games;")
 
@@ -110,6 +128,7 @@ router.get("/", async (req, res) => {
 
 })
 
+// Pegar jogo por ID
 router.get("/:id", authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params
 
@@ -124,6 +143,7 @@ router.get("/:id", authMiddleware, adminMiddleware, async (req, res) => {
 
 })
 
+// Deletar Jogo
 router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params
     // console.log("Recebi request pra deletar id:", req.params.id)
@@ -132,16 +152,14 @@ router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
         [id]
     )
 
-    // console.log("Resultados do delete:", results)
-
     if (results.length === 0) {
         return res.status(404).json({ erro: "Jogo não encontrado!" })
     }
-    // console.log(`idGame: ${id}`)
 
     return res.status(200).json({ message: "Jogo deletado com sucesso!", id: id })
 })
 
+// Atualizar Jogo
 router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     { name: "img-retrato", maxCount: 1 },
     { name: "img-paisagem", maxCount: 1 }
@@ -152,12 +170,26 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     // console.log("FILES:", req.files) 
     // console.log("BODY:", req.body)
 
+    // if (req.files["img-retrato"]) {
+    //     req.body.img_portrait = `/uploads/${req.files["img-retrato"][0].filename}`
+    // }
+
+    // if (req.files["img-paisagem"]) {
+    //     req.body.img_landscape = `/uploads/${req.files["img-paisagem"][0].filename}`
+    // }
+
     if (req.files["img-retrato"]) {
-        req.body.img_portrait = `/uploads/${req.files["img-retrato"][0].filename}`
+        const resultsImg = await uploadToCloudinary(req.files["img-retrato"][0].buffer, "games/portraits", `game_portrait_${id}`)
+        req.body.img_portrait = process.env.NODE_ENV === "development"
+            ? `/uploads/${req.files["img-retrato"][0].filename}`
+            : resultsImg.secure_url
     }
 
     if (req.files["img-paisagem"]) {
-        req.body.img_landscape = `/uploads/${req.files["img-paisagem"][0].filename}`
+        const resultsImg = await uploadToCloudinary(req.files["img-paisagem"][0].buffer, "games/landscapes", `game_landscape_${id}`)
+        req.body.img_landscape = process.env.NODE_ENV === "development"
+            ? `/uploads/${req.files["img-paisagem"][0].filename}`
+            : resultsImg.secure_url
     }
 
 
@@ -165,9 +197,6 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
 
     const keysReqBody = []
     const valuesReqBody = []
-
-    // const imagem_url = req.file ? `/uploads/${req.file.filename}` : undefined
-    // if (imagem_url) req.body.imagem_url = imagem_url
 
     Object.entries(req.body).forEach(([field, value]) => {
         if (value !== undefined && value !== '') {
@@ -179,12 +208,9 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     const fieldsSQL = keysReqBody.join(", ")
     valuesReqBody.push(id)
 
-    // console.log(`Valores: ${valuesReqBody}`)
-    // console.log(`Campo: ${fieldsSQL}`)
     if (!fieldsSQL) return res.status(400).json({ erro: "Nenhum campo válido para atualizar!" })
 
     const results = await queryDB(`update games set ${fieldsSQL} where id = ?;`, valuesReqBody)
-    // console.log(`Jogo editado: ${results[0]}`)
 
     if (results.length === 0) {
         return res.status(404).json({ erro: "Jogo não encontrado!" })
