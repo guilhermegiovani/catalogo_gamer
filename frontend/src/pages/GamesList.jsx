@@ -77,7 +77,9 @@ function GamesList() {
                 )}
 
                 {isSearch !== true ?
-                    games.map((game) => (
+                    games.length === 0 ? (
+                        <p>Nenhum jogo encontrado</p>
+                    ) : games.map((game) => (
 
                         <GameCard
                             key={game.id}
@@ -86,6 +88,8 @@ function GamesList() {
                             isFavorite={favoritesIdGame.includes(game.id)}
                             to={`/reviews/${game.id}`}
                         />
+
+
                     )) : searchGame.map((g) => (
                         <GameCard
                             key={g.id}
