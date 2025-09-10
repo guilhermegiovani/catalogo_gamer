@@ -24,6 +24,7 @@ server.use(cors({
 }))
 
 server.use(express.json())
+server.use("/favicon.png", express.static(path.join("caminho/do/frontend", "vite.svg")));
 
 // db.connect((err) => {
 //     if(err) throw err
