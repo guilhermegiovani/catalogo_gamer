@@ -15,6 +15,9 @@ const isProd = process.env.NODE_ENV === "production"
 
 let db
 
+// console.log("NODE_ENV:", process.env.NODE_ENV);
+// console.log("Conectando ao DB:", isProd ? "Neon (Postgres)" : "MySQL (dev)");
+
 // Conectando com o banco de dados
 if (isProd) {
     db = new Pool({

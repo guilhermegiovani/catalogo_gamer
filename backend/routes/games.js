@@ -207,4 +207,17 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
 
 })
 
+router.get("/db-test", async (req, res) => {
+    try {
+        const result = await queryDB("SELECT NOW();");
+        res.json({ message: "Banco conectado!", now: result });
+        console.log("Usando o banco na neon com postgres")
+        console.log("NODE_ENV:", process.env.NODE_ENV);
+        console.log("Conectando ao DB:", isProd ? "Neon (Postgres)" : "MySQL (dev)");
+    } catch (err) {
+        console.log("Usando o mysql")
+        res.status(500).json({ error: err.message });
+    }
+});
+
 export default router
