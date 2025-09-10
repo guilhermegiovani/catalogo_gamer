@@ -11,125 +11,126 @@ function GameCard({ game, isFavorite, to, avgGame }) {
     const { handleFavorites } = useAuth()
 
     return (
-        <section>
-            {game.length === 0 ? (
-                <p>Nenhum jogo encontrado</p>
-            ) : (
-                <Link key={game.id} to={to}>
-                    <div
-                        className={clsx(
-                            "relative rounded-2xl overflow-hidden shadow-md p-4 backdrop-blur-md bg-white/5 border border-white/10 transition hover:scale-[1.04] hover:border-white/20 cursor-pointer",
-                            "w-full h-full flex flex-col justify-between"
-                            // "hover:shadow-xl hover:bg-white/10 hover:backdrop-blur-lg transition-all duration-300"
-                        )}
-                    >
-
-                        <img
-                            src={`http://localhost:8000${game.img_portrait}`}
-                            alt={game.title}
-                            className={clsx(
-                                "w-full h-64 md:h-76 bg-gradient-to-br from-[#222] to-[#111] rounded-lg mb-3 object-cover object-top"
-                            )}
-                        // aspect-[4/3]
-                        />
-
-                        <h3 className={clsx(
-                            "line-clamp-1 text-base lg:text-lg xl:text-xl font-semibold text-white mb-1"
-                        )}>
-                            {game.title}
-                        </h3>
-
-                        <div className="flex flex-wrap mb-1">
-                            <span className="bg-blue-500/10 text-blue-400 text-xs lg:text-sm px-2 py-1 rounded-2xl">{game.genre}</span>
-                        </div>
-
-                        <p className="flex items-center text-sm lg:text-lg gap-1 font-medium mb-2">
-                            <Star size={22} fill="currentColor" className="text-yellow-400 stroke-0 -mt-[1px]" /> {avgGame}
-                        </p>
-
-                        <p className="text-xs sm:text-sm lg:text-base text-gray-400">
-                            Clique para mais detalhes e avaliações
-                        </p>
-
-                        <div>
-                            <Button
-                                className={clsx(
-                                    "absolute top-4 right-4",
-                                    "bg-black/50 w-6 h-6 rounded-full transition",
-                                    "flex justify-center items-center cursor-pointer",
-                                    "hover:bg-black/70 transition-colors",
-                                    isFavorite ? "text-red-500" : "text-zinc-400 hover:text-red-400"
-                                )}
-                                text={isFavorite ? <HeartSolid className="w-4 h-4 text-red-500" /> : <HeartOutline className="w-4 h-4" />}
-                                handleClick={(e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    handleFavorites(game.id)
-                                }}
-                            />
-                        </div>
-                    </div>
-
-                </Link>
-            )
-            }
-        </section>
-        // <Link key={game.id} to={to}>
-        //     <div
-        //         className={clsx(
-        //             "relative rounded-2xl overflow-hidden shadow-md p-4 backdrop-blur-md bg-white/5 border border-white/10 transition hover:scale-[1.04] hover:border-white/20 cursor-pointer",
-        //             "w-full h-full flex flex-col justify-between"
-        //             // "hover:shadow-xl hover:bg-white/10 hover:backdrop-blur-lg transition-all duration-300"
-        //         )}
-        //     >
-
-        //         <img
-        //             src={`http://localhost:8000${game.img_portrait}`}
-        //             alt={game.title}
-        //             className={clsx(
-        //                 "w-full h-64 md:h-76 bg-gradient-to-br from-[#222] to-[#111] rounded-lg mb-3 object-cover object-top"
-        //             )}
-        //             // aspect-[4/3]
-        //         />
-
-        //         <h3 className={clsx(
-        //             "line-clamp-1 text-base lg:text-lg xl:text-xl font-semibold text-white mb-1"
-        //             )}>
-        //             {game.title}
-        //         </h3>
-
-        //         <div className="flex flex-wrap mb-1">
-        //             <span className="bg-blue-500/10 text-blue-400 text-xs lg:text-sm px-2 py-1 rounded-2xl">{game.genre}</span>
-        //         </div>
-
-        //         <p className="flex items-center text-sm lg:text-lg gap-1 font-medium mb-2">
-        //             <Star size={22} fill="currentColor" className="text-yellow-400 stroke-0 -mt-[1px]" /> {avgGame}
-        //         </p>
-
-        //         <p className="text-xs sm:text-sm lg:text-base text-gray-400">
-        //             Clique para mais detalhes e avaliações
-        //         </p>
-
-        //         <div>
-        //             <Button
+        // <section>
+        //     {game.length === 0 ? (
+        //         <p>Nenhum jogo encontrado</p>
+        //     ) : (
+        //         <Link key={game.id} to={to}>
+        //             <div
         //                 className={clsx(
-        //                     "absolute top-4 right-4",
-        //                     "bg-black/50 w-6 h-6 rounded-full transition",
-        //                     "flex justify-center items-center cursor-pointer",
-        //                     "hover:bg-black/70 transition-colors",
-        //                     isFavorite ? "text-red-500" : "text-zinc-400 hover:text-red-400"
+        //                     "relative rounded-2xl overflow-hidden shadow-md p-4 backdrop-blur-md bg-white/5 border border-white/10 transition hover:scale-[1.04] hover:border-white/20 cursor-pointer",
+        //                     "w-full h-full flex flex-col justify-between"
+        //                     // "hover:shadow-xl hover:bg-white/10 hover:backdrop-blur-lg transition-all duration-300"
         //                 )}
-        //                 text={isFavorite ? <HeartSolid className="w-4 h-4 text-red-500" /> : <HeartOutline className="w-4 h-4" />}
-        //                 handleClick={(e) => {
-        //                     e.preventDefault()
-        //                     e.stopPropagation()
-        //                     handleFavorites(game.id)
-        //                 }}
-        //             />
-        //         </div>
-        //     </div>
+        //             >
 
-        // </Link>
+        //                 <img
+        //                     src={`http://localhost:8000${game.img_portrait}`}
+        //                     alt={game.title}
+        //                     className={clsx(
+        //                         "w-full h-64 md:h-76 bg-gradient-to-br from-[#222] to-[#111] rounded-lg mb-3 object-cover object-top"
+        //                     )}
+        //                 // aspect-[4/3]
+        //                 />
+
+        //                 <h3 className={clsx(
+        //                     "line-clamp-1 text-base lg:text-lg xl:text-xl font-semibold text-white mb-1"
+        //                 )}>
+        //                     {game.title}
+        //                 </h3>
+
+        //                 <div className="flex flex-wrap mb-1">
+        //                     <span className="bg-blue-500/10 text-blue-400 text-xs lg:text-sm px-2 py-1 rounded-2xl">{game.genre}</span>
+        //                 </div>
+
+        //                 <p className="flex items-center text-sm lg:text-lg gap-1 font-medium mb-2">
+        //                     <Star size={22} fill="currentColor" className="text-yellow-400 stroke-0 -mt-[1px]" /> {avgGame}
+        //                 </p>
+
+        //                 <p className="text-xs sm:text-sm lg:text-base text-gray-400">
+        //                     Clique para mais detalhes e avaliações
+        //                 </p>
+
+        //                 <div>
+        //                     <Button
+        //                         className={clsx(
+        //                             "absolute top-4 right-4",
+        //                             "bg-black/50 w-6 h-6 rounded-full transition",
+        //                             "flex justify-center items-center cursor-pointer",
+        //                             "hover:bg-black/70 transition-colors",
+        //                             isFavorite ? "text-red-500" : "text-zinc-400 hover:text-red-400"
+        //                         )}
+        //                         text={isFavorite ? <HeartSolid className="w-4 h-4 text-red-500" /> : <HeartOutline className="w-4 h-4" />}
+        //                         handleClick={(e) => {
+        //                             e.preventDefault()
+        //                             e.stopPropagation()
+        //                             handleFavorites(game.id)
+        //                         }}
+        //                     />
+        //                 </div>
+        //             </div>
+
+        //         </Link>
+        //     )
+        //     }
+        // </section>
+        
+        <Link key={game.id} to={to}>
+            <div
+                className={clsx(
+                    "relative rounded-2xl overflow-hidden shadow-md p-4 backdrop-blur-md bg-white/5 border border-white/10 transition hover:scale-[1.04] hover:border-white/20 cursor-pointer",
+                    "w-full h-full flex flex-col justify-between"
+                    // "hover:shadow-xl hover:bg-white/10 hover:backdrop-blur-lg transition-all duration-300"
+                )}
+            >
+
+                <img
+                    src={`http://localhost:8000${game.img_portrait}`}
+                    alt={game.title}
+                    className={clsx(
+                        "w-full h-64 md:h-76 bg-gradient-to-br from-[#222] to-[#111] rounded-lg mb-3 object-cover object-top"
+                    )}
+                    // aspect-[4/3]
+                />
+
+                <h3 className={clsx(
+                    "line-clamp-1 text-base lg:text-lg xl:text-xl font-semibold text-white mb-1"
+                    )}>
+                    {game.title}
+                </h3>
+
+                <div className="flex flex-wrap mb-1">
+                    <span className="bg-blue-500/10 text-blue-400 text-xs lg:text-sm px-2 py-1 rounded-2xl">{game.genre}</span>
+                </div>
+
+                <p className="flex items-center text-sm lg:text-lg gap-1 font-medium mb-2">
+                    <Star size={22} fill="currentColor" className="text-yellow-400 stroke-0 -mt-[1px]" /> {avgGame}
+                </p>
+
+                <p className="text-xs sm:text-sm lg:text-base text-gray-400">
+                    Clique para mais detalhes e avaliações
+                </p>
+
+                <div>
+                    <Button
+                        className={clsx(
+                            "absolute top-4 right-4",
+                            "bg-black/50 w-6 h-6 rounded-full transition",
+                            "flex justify-center items-center cursor-pointer",
+                            "hover:bg-black/70 transition-colors",
+                            isFavorite ? "text-red-500" : "text-zinc-400 hover:text-red-400"
+                        )}
+                        text={isFavorite ? <HeartSolid className="w-4 h-4 text-red-500" /> : <HeartOutline className="w-4 h-4" />}
+                        handleClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            handleFavorites(game.id)
+                        }}
+                    />
+                </div>
+            </div>
+
+        </Link>
     )
 }
 
