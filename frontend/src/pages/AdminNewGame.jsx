@@ -13,6 +13,8 @@ function AdminNewGame() {
     const navigate = useNavigate()
     const [fileImgGame, setFileImgGame] = useState(null)
     const [previewImg, setPreviewImg] = useState(null)
+    const [fileImgGamePaisagem, setFileImgGamePaisagem] = useState(null)
+    const [previewImgPaisagem, setPreviewImgPaisagem] = useState(null)
     const [titleGame, setTitleGame] = useState("")
     const [descriptionGame, setDescriptionGame] = useState("")
     const [genderGame, setGenderGame] = useState("")
@@ -23,14 +25,23 @@ function AdminNewGame() {
     useEffect(() => {
         return () => {
             if (previewImg) URL.revokeObjectURL(previewImg)
+            if (previewImgPaisagem) URL.revokeObjectURL(previewImgPaisagem)
         }
-    }, [previewImg])
+    }, [previewImg, previewImgPaisagem])
 
     const handleChangeImg = (e) => {
         const selected = e.target.files[0]
         if (selected) {
             setFileImgGame(selected)
             setPreviewImg(URL.createObjectURL(selected))
+        }
+    }
+
+    const handleChangeImgPaisagem = (e) => {
+        const selected = e.target.files[0]
+        if (selected) {
+            setFileImgGamePaisagem(selected)
+            setPreviewImgPaisagem(URL.createObjectURL(selected))
         }
     }
 
@@ -107,7 +118,7 @@ function AdminNewGame() {
                 <label htmlFor="descricao" className={clsx(
                     "block mb-1 text-sm sm:text-base text-gray-200",
                     "landscape:sm:text-sm landscape:lg:text-lg landscape:xl:text-xl"
-                    )}>Descrição:</label>
+                )}>Descrição:</label>
                 <textarea
                     name="descricao"
                     id="descricao"
@@ -172,7 +183,7 @@ function AdminNewGame() {
                 />
 
                 <Input
-                    textLabel="Imagem do jogo:"
+                    textLabel="Imagem do jogo (retrato):"
                     classNameLabel={clsx(
                         "w-full px-4 py-2 rounded-md bg-[#2a264f] text-white text-center cursor-pointer",
                         "hover:bg-[#3a3360] transition-all duration-200",
@@ -183,13 +194,6 @@ function AdminNewGame() {
                     name="img-retrato"
                     classNameInput={"hidden"}
                     handleChange={(e) => handleChangeImg(e)}
-                // classNameInput={clsx(
-                //     "px-4 py-2 rounded-md",
-                //     "bg-[#2a264f] text-white placeholder:text-gray-400",
-                //     "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]",
-                //     "transition-all duration-200",
-                //     "cursor-pointer"
-                // )}
                 />
 
                 {previewImg && (
@@ -212,6 +216,47 @@ function AdminNewGame() {
                                 URL.revokeObjectURL(previewImg)
                                 setPreviewImg(null)
                                 setFileImgGame(null)
+                            }}
+                        />
+                    </div>
+
+                )}
+
+                <Input
+                    textLabel="Imagem do jogo (paisagem):"
+                    classNameLabel={clsx(
+                        "w-full px-4 py-2 rounded-md bg-[#2a264f] text-white text-center cursor-pointer",
+                        "hover:bg-[#3a3360] transition-all duration-200",
+                        "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]"
+                    )}
+                    type="file"
+                    id="img-paisagem"
+                    name="img-paisagem"
+                    classNameInput={"hidden"}
+                    handleChange={(e) => handleChangeImgPaisagem(e)}
+                />
+
+
+                {previewImgPaisagem && (
+                    <div>
+                        <img src={previewImgPaisagem}
+                            alt="Preview"
+                            className="w-full h-64 object-contain rounded-md mt-4 border border-[#4f46e5]/20"
+                        />
+
+                        <Button
+                            text="Remover imagem"
+                            className={clsx(
+                                " w-40 text-white font-semibold py-2 rounded-md mt-4",
+                                "bg-red-700/90",
+                                "hover:brightness-130 transition-all duration-200",
+                                "cursor-pointer"
+                            )}
+                            handleClick={() => {
+                                console.log(fileImgGamePaisagem)
+                                URL.revokeObjectURL(previewImgPaisagem)
+                                setPreviewImgPaisagem(null)
+                                setFileImgGamePaisagem(null)
                             }}
                         />
                     </div>
