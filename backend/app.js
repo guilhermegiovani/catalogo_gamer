@@ -1,5 +1,5 @@
 import express from 'express'
-import {db} from './db.js'
+import {db, isProd} from './db.js'
 import usersRoutes from './routes/users.js'
 import loginRoutes from './routes/login.js'
 import gamesRoutes from './routes/games.js'
