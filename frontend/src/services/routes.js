@@ -1,8 +1,4 @@
-import { userMock } from "../mocks/authMock"
-import { gamesMock } from "../mocks/gamesMocks"
 import api from "./api"
-
-const isProd = import.meta.env.MODE === "production"
 
 // Criar novo usuário
 export const newUser = (dados) => {
@@ -16,10 +12,6 @@ export const getUsers = () => {
 
 // Pegar todos os usuários
 export const getUser = (id) => {
-    if (isProd) {
-        return { data: userMock }
-    }
-
     return api.get(`users/${id}`)
 }
 
@@ -32,11 +24,6 @@ export const patchUsers = (id, dados) => {
 
 // Função para logar usuário
 export const loginUser = (dados) => {
-    // if (isProd) {
-    //     // mocka login sempre sucesso
-    //     return { data: userMock }
-    // }
-
     return api.post("/login", dados)
 }
 
@@ -56,11 +43,6 @@ export const patchGames = (id, dados) => {
 
 // Função para pegar todos os jogos
 export const getGames = () => {
-    // if (isProd) {
-    //     // quando tiver no deploy
-    //     return { data: gamesMock }
-    // }
-
     return api.get("/games")
 }
 

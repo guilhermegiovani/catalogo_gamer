@@ -45,56 +45,54 @@ export function AuthProvider({ children }) {
     const [roleUser, setRoleUser] = useState("")
     const [userId, setUserId] = useState(0)
 
-    useEffect(() => {
+    const loadUser = async () => {
+        const storedToken = localStorage.getItem("token")
+        const userActive = localStorage.getItem("user")
 
-        const loadUser = async () => {
-            const storedToken = localStorage.getItem("token")
-            const userActive = localStorage.getItem("user")
+        if (storedToken) {
+            try {
+                const decoded = jwtDecode(storedToken)
+                setToken(storedToken)
+                setRoleUser(decoded.role || "")
+                setUserId(decoded.id || 0)
 
-            if (storedToken) {
-                try {
-                    const decoded = jwtDecode(storedToken)
-                    setToken(storedToken)
-                    setRoleUser(decoded.role || "")
-                    setUserId(decoded.id || 0)
-
-                } catch (err) {
-                    console.error("Token inválido ou corrompido", err);
-                    localStorage.removeItem("token");
-                    setToken("");
-                    setRoleUser("");
-                    setUserId(0);
-                }
-
-            } else {
-                setUserId(0);
+            } catch (err) {
+                console.error("Token inválido ou corrompido", err);
+                localStorage.removeItem("token");
+                setToken("");
                 setRoleUser("");
+                setUserId(0);
             }
 
-            if (userActive) {
-                const parsedUser = JSON.parse(userActive)
-                setUser(parsedUser)
-
-                if (!roleUser && parsedUser.role) {
-                    setRoleUser(parsedUser.role)
-                }
-
-                try {
-                    const fav = await getFavorites()
-                    setFavorites(fav.data)
-
-                    const idGame = fav.data.map(fav => fav.id)
-                    setFavoritesIdGame(idGame)
-                } catch (err) {
-                    console.log(`Erro ao pegar game e favoritos: ${err}`)
-                }
-            }
-
-            setIsLoading(false)
+        } else {
+            setUserId(0);
+            setRoleUser("");
         }
 
-        loadUser()
+        if (userActive) {
+            const parsedUser = JSON.parse(userActive)
+            setUser(parsedUser)
 
+            if (parsedUser.role) setRoleUser(parsedUser.role)
+
+            try {
+                const fav = await getFavorites()
+                setFavorites(fav.data)
+
+                const idGame = fav.data.map(fav => fav.id)
+                setFavoritesIdGame(idGame)
+            } catch (err) {
+                console.log(`Erro ao pegar game e favoritos: ${err}`)
+                setFavorites([])
+                setFavoritesIdGame([])
+            }
+        }
+
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
+        loadUser()
     }, [])
 
     const handleCreateAccount = async (dados) => {
@@ -111,35 +109,38 @@ export function AuthProvider({ children }) {
 
     const handleLogin = async (dados) => {
         try {
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
+            localStorage.removeItem("userId")
+
             const res = await loginUser(dados)
             const { token, userId } = res.data
             // setUserId(res.data.userId)
 
+            // Decodificar token para pegar role
+            const decoded = jwtDecode(token)
+            const role = decoded.role || ""
+
+            // Atualizando estados corretamente
+            setUser({email: dados.email, role})
+            setUserId(userId)
+            setRoleUser(role)
+            setToken(token)
+
+            // Salvar no localstorage apenas os dados corretos
             localStorage.setItem("user", JSON.stringify(dados))
             localStorage.setItem("userId", userId)
             localStorage.setItem("token", token)
-            setUser(dados)
-            setUserId(userId)
 
+            // Buscar favoritos e outras infos do usuário
             const fav = await getFavorites()
             setFavorites(fav.data)
-
-            const decoded = jwtDecode(token)
-            setRoleUser(decoded.role)
-
-
-            // const decodedSen = jwtDecode(dados.senha)
-            // console.log(decodedSen)
 
             const idGame = fav.data.map(fav => fav.id)
             setFavoritesIdGame(idGame)
 
             getProfilePhoto(userId)
 
-            // const resAvgs = await getReviewsAvg()
-            // setAvgsFavorites(resAvgs.data.filter(avg => idGame.includes(avg.id)))
-
-            // console.log(favorites)
             toast.success("Logado com sucesso!")
 
         } catch (err) {
@@ -155,16 +156,17 @@ export function AuthProvider({ children }) {
     }
 
     const logout = () => {
-        setFavorites()
-        localStorage.removeItem("user")
-        localStorage.removeItem("token")
-        console.log(userId)
         console.log(roleUser)
-        setRoleUser("")
         setUser(null)
         setToken("")
         setUserId(0)
+        setRoleUser("")
+        setFavorites([])
+        setFavoritesIdGame([])
         setImgPerfil(null)
+        localStorage.removeItem("user")
+        localStorage.removeItem("token")
+        localStorage.removeItem("userId")
         console.log("Deslogado com sucesso")
     }
 
