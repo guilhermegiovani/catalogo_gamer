@@ -26,8 +26,8 @@ router.post('/', async (req, res) => {
     }
 
     const results = await queryDB("select id, email, password, role from users where email = ?;", [email])
-    if(results.length === 0) return res.status(404).json({ erro: "Usuário não encontrado" })
     console.log("Banco conectado:", process.env.NODE_ENV)
+    if(results.length === 0) return res.status(404).json({ erro: "Usuário não encontrado" })
 
     const match = await bcrypt.compare(password, results[0].password)
     if(match) {
