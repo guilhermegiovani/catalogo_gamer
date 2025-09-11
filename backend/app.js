@@ -19,14 +19,21 @@ import { fileURLToPath } from 'url';
 const server = express()
 const port = process.env.PORT || 8000
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://catalogo-gamer.vercel.app",
+];
+
 server.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://catalogo-gamer.vercel.app', // frontend deploy
-    'https://catalogo-gamer-ps72y2x9h-guilhermegiovanis-projects.vercel.app',
-    'https://catalogo-gamer-git-main-guilhermegiovanis-projects.vercel.app'
-  ], // só aceita requisições desse endereço
+  origin: function(origin, callback) {
+    if(!origin) return callback(null, true)
+      if(allowedOrigins.includes(origin)) {
+        return callback(null, true)
+      } else {
+        return callback(new Error("Not allowed by CORS"))
+      }
+  }, // só aceita requisições desse endereço
   credentials: true
 }))
 
