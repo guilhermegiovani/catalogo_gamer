@@ -8,6 +8,13 @@ import reviewsRoutes from './routes/reviews.js'
 import cors from 'cors'
 import path from 'path';
 import { fileURLToPath } from 'url';
+// import bcrypt from 'bcryptjs';
+
+// const senha = "12345"; // coloque a senha que você quer
+// const hash = await bcrypt.hash(senha, 10);
+//$2b$10$WfWKVOjLKN07omPBA4P.FOiNn7sK3SdUupUiqUjCd4ynmJbGe2sde
+
+// console.log(hash);
 
 const server = express()
 const port = process.env.PORT || 8000
