@@ -55,7 +55,7 @@ function AdminNewGame() {
     }
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center w-full">
             <Form
                 handleSubmit={(e) => {
                     e.preventDefault()
@@ -71,7 +71,7 @@ function AdminNewGame() {
                 )}
                 enctype="multipart/form-data"
             >
-                <h2 className="text-xl font-semibold text-center mb-10 text-white drop-shadow">Adicionar Jogo</h2>
+                <h2 className="text-xl lg:text-2xl font-semibold text-center mb-10 text-white drop-shadow">Adicionar Jogo</h2>
 
                 <Input
                     textLabel="Título:"
@@ -104,7 +104,10 @@ function AdminNewGame() {
                             )}
                         /> */}
 
-                <label htmlFor="descricao" className="block mb-1 text-lg font-medium text-gray-200">Descrição:</label>
+                <label htmlFor="descricao" className={clsx(
+                    "block mb-1 text-sm sm:text-base text-gray-200",
+                    "landscape:sm:text-sm landscape:lg:text-lg landscape:xl:text-xl"
+                    )}>Descrição:</label>
                 <textarea
                     name="descricao"
                     id="descricao"
@@ -114,7 +117,7 @@ function AdminNewGame() {
                     className={clsx(
                         "w-full rounded-md text-while placeholder-gray-400",
                         "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]",
-                        "p-2 text-sm resize-none",
+                        "p-2 resize-none",
                         "bg-[#2a264f]"
                     )}
                     placeholder="Descrição do jogo..."
@@ -217,7 +220,7 @@ function AdminNewGame() {
                 <Button
                     text="Confirmar novo jogo"
                     className={clsx(
-                        " w-50 text-white font-semibold py-2 rounded-md mt-4",
+                        "w-50 text-white lg:text-lg font-semibold py-2 rounded-md mt-4",
                         "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
                         "hover:brightness-130 transition-all duration-200",
                         "cursor-pointer"
