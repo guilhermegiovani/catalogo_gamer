@@ -107,7 +107,7 @@ const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
     }
 }) : multer.memoryStorage()
 
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } })
+const upload = multer({ storage })
 
 router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, res) => {
     const { id } = req.params

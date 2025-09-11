@@ -26,9 +26,14 @@ const allowedOrigins = [
 ];
 
 server.use(cors({
-  origin: '*', // só aceita requisições desse endereço
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://catalogo-gamer.vercel.app'
+  ],
   credentials: true
-}))
+}));
+
 // server.use(cors({
 //   origin: function(origin, callback) {
 //     if(!origin) return callback(null, true)
