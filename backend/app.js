@@ -26,16 +26,20 @@ const allowedOrigins = [
 ];
 
 server.use(cors({
-  origin: function(origin, callback) {
-    if(!origin) return callback(null, true)
-      if(allowedOrigins.includes(origin)) {
-        return callback(null, true)
-      } else {
-        return callback(new Error("Not allowed by CORS"))
-      }
-  }, // só aceita requisições desse endereço
+  origin: '*', // só aceita requisições desse endereço
   credentials: true
 }))
+// server.use(cors({
+//   origin: function(origin, callback) {
+//     if(!origin) return callback(null, true)
+//       if(allowedOrigins.includes(origin)) {
+//         return callback(null, true)
+//       } else {
+//         return callback(new Error("Not allowed by CORS"))
+//       }
+//   }, // só aceita requisições desse endereço
+//   credentials: true
+// }))
 
 server.use(express.json())
 server.use("/favicon.png", express.static(path.join("caminho/do/frontend", "vite.svg")));

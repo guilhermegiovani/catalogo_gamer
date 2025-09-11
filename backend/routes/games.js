@@ -23,7 +23,7 @@ const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
 }) : multer.memoryStorage()
 // const storage = multer.memoryStorage()
 
-export const upload = multer({ storage })
+export const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } })
 
 // Adicionar novo jogo
 router.post('/', authMiddleware, adminMiddleware, upload.fields([
