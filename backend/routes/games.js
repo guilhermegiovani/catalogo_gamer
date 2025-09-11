@@ -8,6 +8,7 @@ import multer from "multer"
 // import fs from "fs"
 import { queryDB } from '../utils/dbQuery.js'
 import { uploadToCloudinary } from '../utils/cloudinary.js'
+import handleUpload from '../utils/uploadHander.js'
 
 
 const router = express.Router()
@@ -52,18 +53,34 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
     const gameId = resInsert.insertId
     if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
 
+    // if (req.files["img-retrato"]) {
+    //     const resultsImg = await uploadToCloudinary(req.files["img-retrato"][0].buffer, "games/portraits", `game_portrait_${gameId}`)
+    //     img_portrait = process.env.NODE_ENV === "development"
+    //         ? `/uploads/${req.files["img-retrato"][0].filename}`
+    //         : resultsImg.secure_url
+    // }
+
+    // if (req.files["img-paisagem"]) {
+    //     const resultsImg = await uploadToCloudinary(req.files["img-paisagem"][0].buffer, "games/landscapes", `game_landscape_${gameId}`)
+    //     img_landscape = process.env.NODE_ENV === "development"
+    //         ? `/uploads/${req.files["img-paisagem"][0].filename}`
+    //         : resultsImg.secure_url
+    // }
+
     if (req.files["img-retrato"]) {
-        const resultsImg = await uploadToCloudinary(req.files["img-retrato"][0].buffer, "games/portraits", `game_portrait_${gameId}`)
-        img_portrait = process.env.NODE_ENV === "development"
-            ? `/uploads/${req.files["img-retrato"][0].filename}`
-            : resultsImg.secure_url
+        req.body.img_portrait = await handleUpload(
+            req.files["img-retrato"][0],
+            "games/portraits",
+            `game_portrait_${gameId}`
+        )
     }
 
     if (req.files["img-paisagem"]) {
-        const resultsImg = await uploadToCloudinary(req.files["img-paisagem"][0].buffer, "games/landscapes", `game_landscape_${gameId}`)
-        img_landscape = process.env.NODE_ENV === "development"
-            ? `/uploads/${req.files["img-paisagem"][0].filename}`
-            : resultsImg.secure_url
+        req.body.img_landscape = await handleUpload(
+            req.files["img-paisagem"][0],
+            "games/landscapes",
+            `games_landscapes_${id}`
+        )
     }
 
     await queryDB(
@@ -165,19 +182,39 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     //     req.body.img_landscape = `/uploads/${req.files["img-paisagem"][0].filename}`
     // }
 
+    // if (req.files["img-retrato"]) {
+    //     const resultsImg = await uploadToCloudinary(req.files["img-retrato"][0].buffer, "games/portraits", `game_portrait_${id}`)
+    //     req.body.img_portrait = process.env.NODE_ENV === "development"
+    //         ? `/uploads/${req.files["img-retrato"][0].filename}`
+    //         : resultsImg.secure_url
+    // }
+
+    // if (req.files["img-paisagem"]) {
+    //     const resultsImg = await uploadToCloudinary(req.files["img-paisagem"][0].buffer, "games/landscapes", `game_landscape_${id}`)
+    //     req.body.img_landscape = process.env.NODE_ENV === "development"
+    //         ? `/uploads/${req.files["img-paisagem"][0].filename}`
+    //         : resultsImg.secure_url
+    // }
+
     if (req.files["img-retrato"]) {
-        const resultsImg = await uploadToCloudinary(req.files["img-retrato"][0].buffer, "games/portraits", `game_portrait_${id}`)
-        req.body.img_portrait = process.env.NODE_ENV === "development"
-            ? `/uploads/${req.files["img-retrato"][0].filename}`
-            : resultsImg.secure_url
+        req.body.img_portrait = await handleUpload(
+            req.files["img-retrato"][0],
+            "games/portraits",
+            `game_portrait_${id}`
+        )
     }
 
+    console.log(req.body.img_portrait)
+
     if (req.files["img-paisagem"]) {
-        const resultsImg = await uploadToCloudinary(req.files["img-paisagem"][0].buffer, "games/landscapes", `game_landscape_${id}`)
-        req.body.img_landscape = process.env.NODE_ENV === "development"
-            ? `/uploads/${req.files["img-paisagem"][0].filename}`
-            : resultsImg.secure_url
+        req.body.img_landscape = await handleUpload(
+            req.files["img-paisagem"][0],
+            "games/landscapes",
+            `games_landscapes_${id}`
+        )
     }
+
+    console.log(req.body.img_landscape)
 
 
     if (Object.keys(req.body).length === 0) return res.status(400).json({ erro: "Nenhum campo enviado para atualização!" })

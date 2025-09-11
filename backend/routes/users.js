@@ -7,6 +7,7 @@ import multer from "multer"
 import { db, isProd } from '../db.js'
 import { queryDB } from '../utils/dbQuery.js'
 import { uploadToCloudinary } from '../utils/cloudinary.js'
+import handleUpload from '../utils/uploadHander.js'
 
 const router = express.Router()
 router.use(express.json())
@@ -115,11 +116,19 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
     //     req.body.profile_photo = `/uploads/${req.file.filename}`;
     // }
 
+    // if (req.file) {
+    //     const resultsImg = await uploadToCloudinary(req.file.buffer, "users/profilePhoto", `user_photo_${id}`)
+    //     req.body.profile_photo = process.env.NODE_ENV === "development"
+    //         ? `/uploads/${req.file.filename}`
+    //         : resultsImg.secure_url
+    // }
+
     if (req.file) {
-        const resultsImg = await uploadToCloudinary(req.file.buffer, "users/profilePhoto", `user_photo_${id}`)
-        req.body.profile_photo = process.env.NODE_ENV === "development"
-            ? `/uploads/${req.file.filename}`
-            : resultsImg.secure_url
+        req.body.profile_photo = await handleUpload(
+            req.file,
+            "users/profilePhoto",
+            `user_photo_${id}`
+        )
     }
 
     // console.log(req.body.profile_photo)
@@ -154,7 +163,8 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
     const results = await queryDB(query, valuesReqBody)
     if (results.length === 0) return res.status(404).json({ erro: "Usuário não encontrado!" })
 
-    const getUserData = await queryDB(`select ${fieldsSQL} from users where id = ?`, valuesReqBody)
+    const fieldsNames = Object.keys(req.body).join(", ");
+    const getUserData = await queryDB(`select ${fieldsNames} from users where id = ?`, valuesReqBody)
     console.log(getUserData)
 
     return res.status(200).json({ message: "Usuário atualizado com sucesso", userData: getUserData })

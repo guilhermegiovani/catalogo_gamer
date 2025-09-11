@@ -71,6 +71,7 @@ function EditAdminGame({ form }) {
     const handleChangeImg = (e) => {
         const selected = e.target.files[0]
         if (selected) {
+            console.log(selected)
             setFileImgGame(selected)
             setPreviewImg(URL.createObjectURL(selected))
         }
@@ -79,12 +80,13 @@ function EditAdminGame({ form }) {
     const handleChangeImgPaisagem = (e) => {
         const selected = e.target.files[0]
         if (selected) {
+            console.log(selected)
             setFileImgGamePaisagem(selected)
             setPreviewImgPaisagem(URL.createObjectURL(selected))
         }
     }
 
-    console.log(previewImg)
+    // console.log(previewImg)
 
     return (
         <Form

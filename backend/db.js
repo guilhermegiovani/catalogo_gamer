@@ -7,13 +7,13 @@ const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".en
 dotenv.config({ path: envFile })
 
 const { Pool } = pkg
-const isProd = process.env.NODE_ENV === "production"
+export const isProd = process.env.NODE_ENV === "production"
 
 // console.log("USER:", process.env.DB_USER)
 // console.log("PASSWORD:", process.env.DB_PASSWORD)
 // console.log("ENV:", process.env.NODE_ENV)
 
-let db
+export let db
 
 // console.log("NODE_ENV:", process.env.NODE_ENV);
 // console.log("Conectando ao DB:", isProd ? "Neon (Postgres)" : "MySQL (dev)");
@@ -41,4 +41,4 @@ if (isProd) {
   console.log("NODE_ENV:", process.env.NODE_ENV);
 }
 
-export {db, isProd}
+// export default {db, isProd}
