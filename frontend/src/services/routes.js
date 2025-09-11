@@ -32,10 +32,10 @@ export const patchUsers = (id, dados) => {
 
 // Função para logar usuário
 export const loginUser = (dados) => {
-    if (isProd) {
-        // mocka login sempre sucesso
-        return { data: userMock }
-    }
+    // if (isProd) {
+    //     // mocka login sempre sucesso
+    //     return { data: userMock }
+    // }
 
     return api.post("/login", dados)
 }
@@ -56,11 +56,10 @@ export const patchGames = (id, dados) => {
 
 // Função para pegar todos os jogos
 export const getGames = () => {
-    if (isProd) {
-        // quando tiver no deploy
-        return { data: gamesMock }
-    }
-
+    // if (isProd) {
+    //     // quando tiver no deploy
+    //     return { data: gamesMock }
+    // }
 
     return api.get("/games")
 }
