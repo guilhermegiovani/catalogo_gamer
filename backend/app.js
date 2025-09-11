@@ -44,7 +44,17 @@ server.use('/login', loginRoutes)
 server.use('/games', gamesRoutes)
 server.use('/favorites', favoritesRoutes)
 server.use('/reviews', reviewsRoutes)
-server.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
+if (process.env.NODE_ENV !== "production") {
+  server.use("/uploads", express.static(path.join(__dirname, "uploads")));
+}
+
+server.get("/check-db", (req, res) => {
+  res.json({
+    env: process.env.NODE_ENV,
+    database: isProd ? "Postgres (Neon)" : "MySQL (local)"
+  });
+});
 
 server.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`)
