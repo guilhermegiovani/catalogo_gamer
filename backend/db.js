@@ -31,7 +31,14 @@ if (isProd) {
         password: process.env.DB_PASSWORD,
         database: process.env.DATABASE
     })
+}
 
+if (isProd) {
+  console.log("🌐 Conectado ao Postgres (Neon)");
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+} else {
+  console.log("💻 Conectado ao MySQL (local)");
+  console.log("NODE_ENV:", process.env.NODE_ENV);
 }
 
 export {db, isProd}
