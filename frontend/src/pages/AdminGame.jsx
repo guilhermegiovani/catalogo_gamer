@@ -90,12 +90,10 @@ function AdminGame() {
 
             if (fileImgGame instanceof File) {
                 formData.append("img-retrato", fileImgGame)
-                console.log(fileImgGame)
             }
 
             if (fileImgGamePaisagem instanceof File) {
                 formData.append("img-paisagem", fileImgGamePaisagem)
-                console.log(JSON.stringify(fileImgGamePaisagem))
             }
 
             await patchGames(id, formData)
