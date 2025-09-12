@@ -36,6 +36,7 @@ export const postGames = (dados) => {
 
 // Atualizar dados do jogo (apenas admin)
 export const patchGames = (id, dados) => {
+    console.log(id, dados)
     return api.patch(`/games/${id}`, dados, {
         headers: { "Content-Type": "multipart/form-data" }
     })

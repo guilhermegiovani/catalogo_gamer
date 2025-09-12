@@ -62,6 +62,8 @@ function EditAdminGame({ form }) {
     if (!gamesAdmin.length) return <p>Carregando...</p>;
 
     const game = gamesAdmin.find(game => game.id === Number(id))
+    console.log(gamesAdmin)
+    console.log(game)
 
     if (!isLoading && !game) {
         // console.log("Jogo não encontrada.")

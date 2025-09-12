@@ -27,8 +27,8 @@ export const upload = multer({ storage })
 
 // Adicionar novo jogo
 router.post('/', authMiddleware, adminMiddleware, upload.fields([
-    { name: "img-retrato", maxCount: 1 },
-    { name: "img-paisagem", maxCount: 1 }
+    { name: "img-portrait", maxCount: 1 },
+    { name: "img-landscape", maxCount: 1 }
 ]), async (req, res) => {
 
     const { title, description, genre, platform, studio } = req.body
@@ -67,26 +67,28 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
     //         : resultsImg.secure_url
     // }
 
-    if (req.files["img-retrato"]) {
-        req.body.img_portrait = await handleUpload(
-            req.files["img-retrato"][0],
+    if (req.files["img-portrait"]) {
+        img_portrait = await handleUpload(
+            req.files["img-portrai"][0],
             "games/portraits",
             `game_portrait_${gameId}`
         )
     }
 
-    if (req.files["img-paisagem"]) {
-        req.body.img_landscape = await handleUpload(
-            req.files["img-paisagem"][0],
+    if (req.files["img-landscape"]) {
+        img_landscape = await handleUpload(
+            req.files["img-landscape"][0],
             "games/landscapes",
-            `games_landscapes_${id}`
+            `games_landscapes_${gameId}`
         )
     }
 
-    await queryDB(
-        "update games set img_portrait = ?, img_landscape = ? where id = ?;",
-        [img_portrait, img_landscape, gameId]
-    )
+    if(img_portrait || img_landscape) {
+        await queryDB(
+            "update games set img_portrait = ?, img_landscape = ? where id = ?;",
+            [img_portrait, img_landscape, gameId]
+        )
+    }
 
     return res.status(201).json({ message: "Jogo cadastrado com sucesso!", id: gameId })
 
