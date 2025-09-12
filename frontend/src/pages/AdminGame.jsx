@@ -95,7 +95,7 @@ function AdminGame() {
 
             if (fileImgGamePaisagem instanceof File) {
                 formData.append("img-paisagem", fileImgGamePaisagem)
-                console.log(fileImgGamePaisagem)
+                console.log(JSON.stringify(fileImgGamePaisagem))
             }
 
             await patchGames(id, formData)

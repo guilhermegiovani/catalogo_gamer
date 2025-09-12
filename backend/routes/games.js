@@ -79,11 +79,11 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
         img_landscape = await handleUpload(
             req.files["img-landscape"][0],
             "games/landscapes",
-            `games_landscapes_${gameId}`
+            `games_landscape_${gameId}`
         )
     }
 
-    if(img_portrait || img_landscape) {
+    if (img_portrait || img_landscape) {
         await queryDB(
             "update games set img_portrait = ?, img_landscape = ? where id = ?;",
             [img_portrait, img_landscape, gameId]
@@ -167,8 +167,8 @@ router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
 
 // Atualizar Jogo
 router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
-    { name: "img-retrato", maxCount: 1 },
-    { name: "img-paisagem", maxCount: 1 }
+    { name: "img-portrait", maxCount: 1 },
+    { name: "img-landscape", maxCount: 1 }
 ]), async (req, res) => {
 
     const { id } = req.params
@@ -198,26 +198,26 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     //         : resultsImg.secure_url
     // }
 
-    if (req.files["img-retrato"]) {
+    if (req.files["img-portrait"]) {
         req.body.img_portrait = await handleUpload(
-            req.files["img-retrato"][0],
+            req.files["img-portrait"][0],
             "games/portraits",
             `game_portrait_${id}`
         )
     }
 
-    console.log(req.body.img_portrait)
-
-    if (req.files["img-paisagem"]) {
+    if (req.files["img-landscape"]) {
         req.body.img_landscape = await handleUpload(
-            req.files["img-paisagem"][0],
+            req.files["img-landscape"][0],
             "games/landscapes",
-            `games_landscapes_${id}`
+            `games_landscape_${id}`
         )
     }
 
-    console.log(req.body.img_landscape)
-
+    console.log("FILES:", req.files)
+    console.log("BODY:", req.body)
+    console.log("Portrait:", req.body.img_portrait)
+    console.log("Landscape:", req.body.img_landscape)
 
     if (Object.keys(req.body).length === 0) return res.status(400).json({ erro: "Nenhum campo enviado para atualização!" })
 
