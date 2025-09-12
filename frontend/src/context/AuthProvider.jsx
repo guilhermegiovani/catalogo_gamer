@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
     const [searchGame, setSearchGame] = useState([])
     const [isSearch, setIsSearch] = useState(false)
     const [previewImgPerfil, setPreviewImgPerfil] = useState(null)
-    const baseURL = import.meta.env.VITE_API_URL ? "http://localhost:8000" : ""
+    const baseURL = import.meta.env.VITE_API_URL === "http://localhost:8000" ? "http://localhost:8000" : ""
 
     // const storedToken = localStorage.getItem("token")
     // let initialRole = ""

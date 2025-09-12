@@ -69,7 +69,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
 
     if (req.files["img-portrait"]) {
         img_portrait = await handleUpload(
-            req.files["img-portrai"][0],
+            req.files["img-portrait"][0],
             "games/portraits",
             `game_portrait_${gameId}`
         )
@@ -83,12 +83,29 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
         )
     }
 
-    if (img_portrait || img_landscape) {
-        await queryDB(
-            "update games set img_portrait = ?, img_landscape = ? where id = ?;",
-            [img_portrait, img_landscape, gameId]
-        )
+    const updates = [];
+    const values = [];
+
+    if (img_portrait) {
+        updates.push("img_portrait = ?");
+        values.push(img_portrait);
     }
+    if (img_landscape) {
+        updates.push("img_landscape = ?");
+        values.push(img_landscape);
+    }
+
+    if (updates.length > 0) {
+        values.push(gameId);
+        await queryDB(`UPDATE games SET ${updates.join(", ")} WHERE id = ?;`, values);
+    }
+
+    // if (img_portrait || img_landscape) {
+    //     await queryDB(
+    //         "update games set img_portrait = ?, img_landscape = ? where id = ?;",
+    //         [img_portrait, img_landscape, gameId]
+    //     )
+    // }
 
     return res.status(201).json({ message: "Jogo cadastrado com sucesso!", id: gameId })
 
@@ -172,6 +189,7 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
 ]), async (req, res) => {
 
     const { id } = req.params
+    let img_portrait, img_landscape
 
     // console.log("FILES:", req.files) 
     // console.log("BODY:", req.body)
@@ -199,7 +217,7 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     // }
 
     if (req.files["img-portrait"]) {
-        req.body.img_portrait = await handleUpload(
+        img_portrait = await handleUpload(
             req.files["img-portrait"][0],
             "games/portraits",
             `game_portrait_${id}`
@@ -207,12 +225,15 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     }
 
     if (req.files["img-landscape"]) {
-        req.body.img_landscape = await handleUpload(
+        img_landscape = await handleUpload(
             req.files["img-landscape"][0],
             "games/landscapes",
             `games_landscape_${id}`
         )
     }
+
+    if (img_portrait) req.body.img_portrait = img_portrait
+    if (img_landscape) req.body.img_landscape = img_landscape
 
     console.log("FILES:", req.files)
     console.log("BODY:", req.body)
