@@ -2,10 +2,12 @@ import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Button from "./Button"
 import clsx from "clsx"
+import { useAuth } from "../hooks/useAuth"
 
 
 function Carousel({ items }) {
     let [current, setCurrent] = useState(0)
+    const { baseURL } = useAuth()
 
     let prevSlide = () => {
         if (current === 0) setCurrent(items.length - 1)
@@ -35,7 +37,7 @@ function Carousel({ items }) {
                         )}>
                         {items ? (
                             <img
-                                src={`http://localhost:8000${item.img_landscape}`}
+                                src={baseURL + item.img_landscape}
                                 alt={item.name ?? "imagem_jogo"}
                                 className="w-full h-full object-cover object-top rounded-lg"
                             />

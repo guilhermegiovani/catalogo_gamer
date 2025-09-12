@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom"
 
 function Profile() {
     const navigate = useNavigate()
-    const { userId } = useAuth()
+    const { userId, baseURL } = useAuth()
     const [profileUser, setProfileUser] = useState([])
     const [favUser, setFavUser] = useState([])
     const [revUser, setRevUser] = useState([])
@@ -42,7 +42,7 @@ function Profile() {
                         {/* Aqui entra a imagem do usuário */}
                         <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
                             <img
-                                src={`http://localhost:8000${profileUser.profile_photo}`}
+                                src={baseURL + profileUser.profile_photo}
                                 alt="foto_perfil"
                             />
 

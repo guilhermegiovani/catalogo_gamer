@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom"
 
 function EditProfile() {
     const navigate = useNavigate()
-    const { userId, setImgPerfil, getEditProfilePhoto } = useAuth()
+    const { userId, setImgPerfil, getEditProfilePhoto, baseURL } = useAuth()
     const [newName, setNewName] = useState("")
     const [newUserName, setNewUserName] = useState("")
     const [newEmail, setNewEmail] = useState("")
@@ -27,7 +27,7 @@ function EditProfile() {
                 setNewName(dataUser.name)
                 setNewUserName(dataUser.nickname)
                 setNewEmail(dataUser.email)
-                setPreviewImgPerfil(`http://localhost:8000${dataUser.profile_photo}`)
+                setPreviewImgPerfil(baseURL + dataUser.profile_photo)
             } catch (err) {
                 console.log(err)
             }

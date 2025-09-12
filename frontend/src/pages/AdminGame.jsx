@@ -12,7 +12,7 @@ import EditAdminGame from "../components/EditAdminGame"
 
 function AdminGame() {
     const { id } = useParams()
-    const { isLoading, gamesAdmin, fetchGame, averages } = useAuth()
+    const { isLoading, gamesAdmin, fetchGame, averages, baseURL } = useAuth()
     const [isEditingGame, setIsEditingGame] = useState(false)
     const navigate = useNavigate()
 
@@ -117,7 +117,7 @@ function AdminGame() {
                 )}>
                 <div className="w-full flex flex justify-center sm:justify-start">
                     <img
-                        src={`http://localhost:8000${game.img_landscape}`}
+                        src={baseURL + game.img_landscape}
                         alt={game.titleGame}
                         className={clsx(
                             "max-w-xl h-58 md:h-80 lg:h-96 rounded-xl border border-[#4f46e5]/30 shadow-md",

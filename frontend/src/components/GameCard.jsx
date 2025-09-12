@@ -8,7 +8,7 @@ import { useAuth } from "../hooks/useAuth"
 
 function GameCard({ game, isFavorite, to, avgGame }) {
 
-    const { handleFavorites } = useAuth()
+    const { handleFavorites, baseURL } = useAuth()
 
     return (
         // <section>
@@ -85,7 +85,7 @@ function GameCard({ game, isFavorite, to, avgGame }) {
             >
 
                 <img
-                    src={`http://localhost:8000${game.img_portrait}`}
+                    src={baseURL + game.img_portrait}
                     alt={game.title}
                     className={clsx(
                         "w-full h-64 md:h-76 bg-gradient-to-br from-[#222] to-[#111] rounded-lg mb-3 object-cover object-top"
