@@ -9,7 +9,7 @@ import { Menu, X } from "lucide-react"
 
 function NavBar() {
 
-    const { user, userId, logout, roleUser, isLoading, imgPerfil, getEditProfilePhoto } = useAuth()
+    const { user, userId, logout, roleUser, isLoading, imgPerfil, getEditProfilePhoto, baseURL } = useAuth()
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
@@ -107,7 +107,7 @@ function NavBar() {
                     <div ref={dropdownref} className="relative">
 
                         <img
-                            src={`http://localhost:8000${imgPerfil}`}
+                            src={baseURL + imgPerfil}
                             alt="avatar"
                             className="rounded-full shadow-sm w-10 h-10 lg:w-15 lg:h-15 cursor-pointer object-cover"
                             onClick={() => setIsOpen(!isOpen)}

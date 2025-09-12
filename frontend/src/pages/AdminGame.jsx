@@ -107,7 +107,7 @@ function AdminGame() {
 
     // console.log(game.imagem_paisagem)
     // console.log(game.imagem_url)
-    console.log(baseURL + game.img_landscape)
+    // console.log(baseURL + game.img_landscape)
 
     return (
         <section className="space-y-5 min-h-screen mt-5 sm:mt-0">
