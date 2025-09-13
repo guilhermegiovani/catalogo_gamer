@@ -123,7 +123,7 @@ export function AuthProvider({ children }) {
             const role = decoded.role || ""
 
             // Atualizando estados corretamente
-            setUser({email: dados.email, role})
+            setUser({ email: dados.email, role })
             setUserId(userId)
             setRoleUser(role)
             setToken(token)
@@ -192,22 +192,48 @@ export function AuthProvider({ children }) {
         // await getFavoritesUser()
 
         if (favoritesIdGame.includes(id)) {
+            setFavorites(prev => prev.filter(fav => fav.id !== id))
+            setFavoritesIdGame(prev => prev.filter(gameId => gameId !== id))
+
             try {
                 await deleteFavorites(id)
-                setFavorites(prev => prev.filter(fav => fav.id !== id))
-                setFavoritesIdGame(prev => prev.filter(gameId => gameId !== id))
+                toast.success("Jogo tirado da lista de favoritos com sucesso.")
             } catch (err) {
                 console.log(`Não foi possível tirar o jogo dos favortitos: ${err}`)
+                try {
+                    const res = await getFavorites();
+                    setFavorites(res.data);
+                    setFavoritesIdGame(res.data.map(f => f.id));
+                } catch (e) {
+                    console.error("Erro ao recarregar favoritos após falha:", e);
+                }
+                toast.error("Não foi possível remover dos favoritos.");
             }
-        } else {
-            try {
-                const newFavorites = await postFavorites(id)
-                setFavorites(prev => [...prev, newFavorites])
-                setFavoritesIdGame(prev => [...prev, id])
-            } catch (err) {
-                console.log(`Não foi possível adicionar o jogo dos favortitos: ${err}`)
-            }
+
+            return
         }
+        
+        setFavoritesIdGame(prev => [...prev, id])
+
+        try {
+            const res = await postFavorites(id)
+
+            const newFav = res?.data ?? res
+            if (newFav && newFav.id) {
+                setFavorites(prev => [...prev, newFav])
+            } else {
+                const favRes = await getFavorites();
+                setFavorites(favRes.data)
+                setFavoritesIdGame(favRes.data.map(f => f.id))
+            }
+
+            toast.success("Jogo adicionado aos favoritos.");
+        } catch (err) {
+            console.log(`Não foi possível adicionar o jogo dos favortitos: ${err}`)
+            setFavoritesIdGame(prev => prev.filter(g => g !== id));
+            toast.error("Não foi possível adicionar aos favoritos");
+        }
+
 
     }
 
