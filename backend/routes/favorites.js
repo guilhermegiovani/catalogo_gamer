@@ -27,6 +27,7 @@ router.post('/', async (req, res) => {
     if (checkFavoriteUser.length > 0) return res.status(409).json({ erro: "Jogo já está na lista de favoritos!" })
 
     const results = await queryDB("insert into favorites(user_id, game_id) values(?, ?)", [userId, gameId])
+    console.log(results)
 
     if (results.length === 0) return res.status(500).json({ erro: "Não foi possível adicionar o jogo na lista de favoritos!" })
 
@@ -57,7 +58,6 @@ router.delete('/', async (req, res) => {
     const userId = req.userId
 
     const results = await queryDB("delete from favorites where user_id = ? and game_id = ?;", [userId, gameId])
-    console.log(results)
 
     if (results.length === 0) return res.status(404).json({ erro: "Jogo não encontrado na lista de favoritos!" })
 
