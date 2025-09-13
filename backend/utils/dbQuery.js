@@ -15,7 +15,8 @@ export const queryDB = async (query, values = []) => {
         const pgQuery = query.replace(/\?/g, () => `$${index++}`)
 
         if(!query.trim().toLowerCase().startsWith("select")) {
-            const pgQueryWithReturn = pgQuery + " RETURNING id"
+            const pgQueryBase = pgQuery.trim().replace(/;$/, "")
+            const pgQueryWithReturn = pgQueryBase + " RETURNING id;"
             const result = await db.query(pgQueryWithReturn, values)
             console.log(pgQueryWithReturn)
             return result.rows
