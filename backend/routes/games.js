@@ -191,30 +191,8 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     const { id } = req.params
     let img_portrait, img_landscape
 
-    // console.log("FILES:", req.files) 
-    // console.log("BODY:", req.body)
-
-    // if (req.files["img-retrato"]) {
-    //     req.body.img_portrait = `/uploads/${req.files["img-retrato"][0].filename}`
-    // }
-
-    // if (req.files["img-paisagem"]) {
-    //     req.body.img_landscape = `/uploads/${req.files["img-paisagem"][0].filename}`
-    // }
-
-    // if (req.files["img-retrato"]) {
-    //     const resultsImg = await uploadToCloudinary(req.files["img-retrato"][0].buffer, "games/portraits", `game_portrait_${id}`)
-    //     req.body.img_portrait = process.env.NODE_ENV === "development"
-    //         ? `/uploads/${req.files["img-retrato"][0].filename}`
-    //         : resultsImg.secure_url
-    // }
-
-    // if (req.files["img-paisagem"]) {
-    //     const resultsImg = await uploadToCloudinary(req.files["img-paisagem"][0].buffer, "games/landscapes", `game_landscape_${id}`)
-    //     req.body.img_landscape = process.env.NODE_ENV === "development"
-    //         ? `/uploads/${req.files["img-paisagem"][0].filename}`
-    //         : resultsImg.secure_url
-    // }
+    console.log("FILES:", req.files) 
+    console.log("BODY:", req.body)
 
     if (req.files["img-portrait"]) {
         img_portrait = await handleUpload(
