@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
         [userId, gameId, note, comment]
     )
 
-    console.log("res:" + results)
+    console.log("res:" + JSON.stringify(results))
 
     if (results.length === 0) return res.status(500).json({ erro: "Não foi possível salvar a avaliação!" })
 

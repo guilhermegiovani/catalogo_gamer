@@ -12,6 +12,7 @@ export const queryDB = async (query, values = []) => {
 
     if(isProd) {
         let index = 1
+        console.log(values)
         const pgQuery = query.replace(/\?/g, () => `$${index++}`)
         const result = await db.query(pgQuery, values)
         return result.rows
