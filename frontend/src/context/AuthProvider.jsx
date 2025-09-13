@@ -197,17 +197,18 @@ export function AuthProvider({ children }) {
 
             try {
                 await deleteFavorites(id)
-                toast.success("Jogo tirado da lista de favoritos com sucesso.")
+                toast.success("Jogo removido dos favoritos com sucesso.")
             } catch (err) {
                 console.log(`Não foi possível tirar o jogo dos favortitos: ${err}`)
                 try {
                     const res = await getFavorites();
                     setFavorites(res.data);
                     setFavoritesIdGame(res.data.map(f => f.id));
+                    toast.success("Jogo removido dos favoritos com sucesso.")
                 } catch (e) {
                     console.error("Erro ao recarregar favoritos após falha:", e);
+                    toast.error("Não foi possível remover dos favoritos.");
                 }
-                toast.error("Não foi possível remover dos favoritos.");
             }
 
             return
@@ -229,7 +230,7 @@ export function AuthProvider({ children }) {
 
             toast.success("Jogo adicionado aos favoritos.");
         } catch (err) {
-            console.log(`Não foi possível adicionar o jogo dos favortitos: ${err}`)
+            console.log(`Não foi possível adicionar o jogo nos favoritos: ${err}`)
             setFavoritesIdGame(prev => prev.filter(g => g !== id));
             toast.error("Não foi possível adicionar aos favoritos");
         }
