@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
         [userId, gameId, note, comment]
     )
 
-    console.log("res:" + JSON.stringify(results))
+    // console.log("res:" + JSON.stringify(results))
 
     if (results.length === 0) return res.status(500).json({ erro: "Não foi possível salvar a avaliação!" })
 
@@ -44,6 +44,8 @@ router.post('/', async (req, res) => {
      WHERE r.id = ?;`,
         [results.insertId]
     )
+
+    console.log(createdReview[0])
 
     return res.status(201).json(createdReview[0])
     // return res.status(201).json({ message: "Avaliação feita com sucesso!", data: createdReview[0] })
