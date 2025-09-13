@@ -212,8 +212,8 @@ export function AuthProvider({ children }) {
 
             return
         }
-        
-        setFavoritesIdGame(prev => [...prev, id])
+
+        // setFavoritesIdGame(prev => [...prev, id])
 
         try {
             const res = await postFavorites(id)
