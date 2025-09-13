@@ -60,14 +60,15 @@ function EditProfile() {
             if (fileImgPerfil instanceof File) {
                 formData.append("img-profile", fileImgPerfil)
             }
-
+            
             const res = await patchUsers(id, formData)
-
+            
             if(res.data.userData[0].profile_photo) {
                 // setImgPerfil(res.data.userData[0].profile_photo)
                 getEditProfilePhoto(id)
                 // console.log(id, res.data.userData[0].profile_photo)
             }
+
         } catch (err) {
             console.log(`Erro ao editar perfil: ${err}.`)
         }

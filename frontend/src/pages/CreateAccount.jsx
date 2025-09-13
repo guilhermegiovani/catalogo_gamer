@@ -4,7 +4,7 @@ import CreateAccountForm from "../components/CreateAccountForm"
 function CreateAccount() {
 
     return (
-        <section>
+        <section className="w-full">
             <CreateAccountForm />
         </section>
     )

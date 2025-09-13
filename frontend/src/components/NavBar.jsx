@@ -42,7 +42,7 @@ function NavBar() {
     return (
         <nav className={clsx(
             "w-full flex items-center",
-            "bg-transparent text-whit mb-6 lg:mb-10 px-2 lg:px-4 md:px-10"
+            "bg-transparent text-whit mb-6 px-2 lg:px-4 md:px-10"
         )}>
             <NavLink to="/" className={clsx(
                 "flex flex-col leading-none text-3xl font-semibold tracking-wide",

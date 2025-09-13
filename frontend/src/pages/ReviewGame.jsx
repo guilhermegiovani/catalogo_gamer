@@ -19,7 +19,7 @@ function ReviewGame() {
         try {
             const res = await getReviewsByGame(game.id)
             setReviewsData(res.data.reviews)
-            // console.log(res.data.reviews)
+            console.log(res.data.reviews)
 
             const avg = averages.filter(avg => avg.gameId === game.id)
             // console.log(avg)
@@ -47,7 +47,7 @@ function ReviewGame() {
     // }
 
     // const handleEditReview = (rat, comment) => {}
-        console.log(avgGame)
+    console.log(avgGame)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
