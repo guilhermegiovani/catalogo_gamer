@@ -33,45 +33,51 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
     try {
         const { title, description, genre, platform, studio } = req.body
         let { img_portrait, img_landscape } = req.body
-    
+
         if (!title || !description || !genre || !platform || !studio) {
             return res.status(400).json({ erro: "Preencha todos os campos" })
         }
-    
+
+        console.log("REQ.BODY:", req.body);
+        console.log("REQ.FILES:", req.files);
+
         const results = await queryDB(
             "select * from games where title = ?;",
             [title]
         )
-    
+
         if (results.length > 0) return res.status(409).json({ erro: "Jogo já existe!" })
-    
+
         const resInsert = await queryDB(
             "insert into games(title, description, genre, platform, studio) values(?, ?, ?, ?, ?);",
             [title, description, genre, platform, studio] // img_portrait, img_landscape
         )
-    
+
         const gameId = resInsert.insertId
         if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
-    
+
         if (req.files["img-portrait"]) {
+            console.log(`Retrato: ${req.files["img-portrait"][0]}`)
             img_portrait = await handleUpload(
                 req.files["img-portrait"][0],
                 "games/portraits",
                 `game_portrait_${gameId}`
             )
+
         }
-    
+
         if (req.files["img-landscape"]) {
+            console.log(`Paisagem: ${req.files["img-landscape"][0]}`)
             img_landscape = await handleUpload(
                 req.files["img-landscape"][0],
                 "games/landscapes",
                 `games_landscape_${gameId}`
             )
         }
-    
+
         const updates = [];
         const values = [];
-    
+
         if (img_portrait) {
             updates.push("img_portrait = ?");
             values.push(img_portrait);
@@ -80,21 +86,21 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             updates.push("img_landscape = ?");
             values.push(img_landscape);
         }
-    
+
         if (updates.length > 0) {
             values.push(gameId);
             await queryDB(`UPDATE games SET ${updates.join(", ")} WHERE id = ?;`, values);
         }
-    
+
         // if (img_portrait || img_landscape) {
         //     await queryDB(
         //         "update games set img_portrait = ?, img_landscape = ? where id = ?;",
         //         [img_portrait, img_landscape, gameId]
         //     )
         // }
-    
+
         return res.status(201).json({ message: "Jogo cadastrado com sucesso!", id: gameId })
-    } catch(err) {
+    } catch (err) {
         console.error("Erro no POST /games:", err);
         return res.status(500).json({ erro: err.message });
     }
@@ -182,7 +188,7 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     const { id } = req.params
     let img_portrait, img_landscape
 
-    console.log("FILES:", req.files) 
+    console.log("FILES:", req.files)
     console.log("BODY:", req.body)
 
     if (req.files["img-portrait"]) {

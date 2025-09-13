@@ -17,6 +17,7 @@ async function handleUpload(file, folder, name) {
         }
     } catch(err) {
         console.log(`Erro: ${err}`)
+        throw err
     }
 }
 
