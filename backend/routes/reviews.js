@@ -28,11 +28,11 @@ router.post('/', async (req, res) => {
     // console.log("values" + userId, gameId, note, comment)
 
     const results = await queryDB(
-        "insert into reviews(user_id, game_id, rating, comment) values(?, ?, ?, ?);",
+        "insert into reviews(user_id, game_id, rating, comment) values(?, ?, ?, ?) RETURNING id;",
         [userId, gameId, note, comment]
     )
 
-    // console.log("res:" + results)
+    console.log("res:" + results)
 
     if (results.length === 0) return res.status(500).json({ erro: "Não foi possível salvar a avaliação!" })
 
