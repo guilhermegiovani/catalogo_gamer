@@ -219,7 +219,7 @@ export function AuthProvider({ children }) {
             const res = await postFavorites(id)
 
             const newFav = res?.data ?? res
-            console.log(newFav)
+            console.log(res.data)
             if (newFav && newFav.id) {
                 setFavorites(prev => [...prev, newFav])
             } else {
