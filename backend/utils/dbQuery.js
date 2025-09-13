@@ -14,7 +14,7 @@ export const queryDB = async (query, values = []) => {
         let index = 1
         const pgQuery = query.replace(/\?/g, () => `$${index++}`)
         const result = await db.query(pgQuery, values)
-        console.log(result)
+        console.log(pgQuery)
         console.log(result.rows)
         return result.rows
     } else {
