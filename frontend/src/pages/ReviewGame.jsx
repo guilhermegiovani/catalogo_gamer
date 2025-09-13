@@ -9,7 +9,7 @@ import ReviewForm from "../components/ReviewForm"
 
 function ReviewGame() {
     const { id } = useParams()
-    const { games, averages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev } = useAuth()
+    const { games, averages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
     const [avgGame, setAvgGame] = useState()
 
     const game = games.find((g) => g.id === Number(id))
@@ -47,6 +47,7 @@ function ReviewGame() {
     // }
 
     // const handleEditReview = (rat, comment) => {}
+        console.log(avgGame)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
@@ -56,7 +57,7 @@ function ReviewGame() {
 
             <div className="space-y-2">
                 <img
-                    src={`http://localhost:8000${game.img_landscape}`}
+                    src={baseURL + game.img_landscape}
                     alt={game.title}
                     className="max-w-xl h-64 md:h-80 lg:h-96 object-contain rounded-xl border border-[#4f46e5]/30 shadow-md"
                 />
