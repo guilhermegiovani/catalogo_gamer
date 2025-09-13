@@ -1,5 +1,5 @@
 import express from 'express'
-import { db } from '../db.js'
+import { db, isProd } from '../db.js'
 import authMiddleware from '../middleware/authMiddleware.js'
 import { queryDB } from '../utils/dbQuery.js'
 
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     // console.log("values" + userId, gameId, note, comment)
 
     const results = await queryDB(
-        "insert into reviews(user_id, game_id, rating, comment) values(?, ?, ?, ?) RETURNING id;",
+        "insert into reviews(user_id, game_id, rating, comment) values(?, ?, ?, ?);",
         [userId, gameId, note, comment]
     )
 

@@ -26,8 +26,8 @@ router.post('/', async (req, res) => {
 
     if (checkFavoriteUser.length > 0) return res.status(409).json({ erro: "Jogo já está na lista de favoritos!" })
 
-    const results = await queryDB("insert into favorites(user_id, game_id) values(?, ?) RETURNING id", [userId, gameId])
-    console.log(results)
+    const results = await queryDB("insert into favorites(user_id, game_id) values(?, ?)", [userId, gameId])
+    console.log(results) // RETURNING id
 
     if (results.length === 0) return res.status(500).json({ erro: "Não foi possível adicionar o jogo na lista de favoritos!" })
 

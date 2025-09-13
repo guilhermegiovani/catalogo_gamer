@@ -13,10 +13,18 @@ export const queryDB = async (query, values = []) => {
     if(isProd) {
         let index = 1
         const pgQuery = query.replace(/\?/g, () => `$${index++}`)
-        const result = await db.query(pgQuery, values)
-        console.log(pgQuery)
-        console.log(result.rows)
-        return result.rows
+
+        if(!query.trim().toLowerCase().startsWith("select")) {
+            const pgQueryWithReturn = pgQuery + " RETURNING id"
+            const result = await db.query(pgQueryWithReturn, values)
+            console.log(pgQueryWithReturn)
+            return result.rows
+        } else {
+            const result = await db.query(pgQuery, values)
+            console.log(pgQuery)
+            return result.rows
+        }
+
     } else {
         const [rows] = await db.query(query, values)
         if(rows.insertId !== undefined) return [{ id: rows.insertId }]
