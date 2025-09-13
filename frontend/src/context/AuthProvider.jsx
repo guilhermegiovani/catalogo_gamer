@@ -214,12 +214,12 @@ export function AuthProvider({ children }) {
             return
         }
 
-        // setFavoritesIdGame(prev => [...prev, id])
-
         try {
+            setFavoritesIdGame(prev => [...prev, id])
             const res = await postFavorites(id)
 
             const newFav = res?.data ?? res
+            console.log(newFav)
             if (newFav && newFav.id) {
                 setFavorites(prev => [...prev, newFav])
             } else {
@@ -234,74 +234,74 @@ export function AuthProvider({ children }) {
             setFavoritesIdGame(prev => prev.filter(g => g !== id));
             toast.error("Não foi possível adicionar aos favoritos");
         }
-
-
     }
 
-    const handleEditReview = (uId, rId) => {
-        const review = reviewsData.filter(r => r.idUser === uId)
-        const dataRev = { comment: review[0].comment, rating: review[0].rating }
-        setRating(dataRev.rating)
-        setComment(dataRev.comment)
-        setIsEditing(true)
-        setReviewId(rId)
+}
+
+const handleEditReview = (uId, rId) => {
+    const review = reviewsData.filter(r => r.idUser === uId)
+    const dataRev = { comment: review[0].comment, rating: review[0].rating }
+    setRating(dataRev.rating)
+    setComment(dataRev.comment)
+    setIsEditing(true)
+    setReviewId(rId)
+}
+
+const deleteRev = async (revId) => {
+    try {
+        await deleteReviews(revId)
+        setReviewsData(prev => prev.filter(r => r.id !== revId))
+        console.log("Deletado com sucesso!")
+    } catch (err) {
+        console.log(`Erro ao deletar avaliação: ${err}`)
+    }
+}
+
+const fetchGame = async () => {
+    try {
+        const res = await getGames()
+        setGamesAdmin(res.data)
+
+        const resAvg = await getReviewsAvgs()
+        setAverages(resAvg.data)
+    } catch (err) {
+        console.log(`Erro ao pegar jogos: ${err}`)
+    }
+}
+
+const getEditProfilePhoto = async (id) => {
+    try {
+        const res = await getUser(id)
+        const userData = res.data[0]
+        setImgPerfil(userData.profile_photo)
+
+    } catch (err) {
+        console.log(`Erro ao pegar os dados do usuário: ${err}`)
     }
 
-    const deleteRev = async (revId) => {
-        try {
-            await deleteReviews(revId)
-            setReviewsData(prev => prev.filter(r => r.id !== revId))
-            console.log("Deletado com sucesso!")
-        } catch (err) {
-            console.log(`Erro ao deletar avaliação: ${err}`)
-        }
+}
+
+const getProfilePhoto = async (id) => {
+    try {
+        const res = await getUser(id)
+        const userData = res.data[0]
+        setImgPerfil(userData.profile_photo)
+
+        // console.log(userData)
+
+    } catch (err) {
+        console.log(`Erro ao pegar os dados do usuário: ${err}`)
     }
 
-    const fetchGame = async () => {
-        try {
-            const res = await getGames()
-            setGamesAdmin(res.data)
-
-            const resAvg = await getReviewsAvgs()
-            setAverages(resAvg.data)
-        } catch (err) {
-            console.log(`Erro ao pegar jogos: ${err}`)
-        }
-    }
-
-    const getEditProfilePhoto = async (id) => {
-        try {
-            const res = await getUser(id)
-            const userData = res.data[0]
-            setImgPerfil(userData.profile_photo)
-
-        } catch (err) {
-            console.log(`Erro ao pegar os dados do usuário: ${err}`)
-        }
-
-    }
-
-    const getProfilePhoto = async (id) => {
-        try {
-            const res = await getUser(id)
-            const userData = res.data[0]
-            setImgPerfil(userData.profile_photo)
-
-            // console.log(userData)
-
-        } catch (err) {
-            console.log(`Erro ao pegar os dados do usuário: ${err}`)
-        }
-
-    }
+}
 
 
 
-    return (
-        <AuthContext.Provider value={{
-            user, handleLogin, logout, favorites, setFavorites, favoritesIdGame, setFavoritesIdGame, handleFavorites, getFavoritesUser, games, setGames, averages, setAverages, avgsFavorites, setAvgsFavorites, reviews, setReviews, reviewsData, setReviewsData, userId, reviewEdit, setReviewEdit, handleEditReview, isEditing, setIsEditing, rating, setRating, comment, setComment, reviewId, setReviewId, isLoading, deleteRev, handleCreateAccount, roleUser, gamesAdmin, fetchGame, imgPerfil, setImgPerfil, imgsGames, setImgsGames, searchGame, setSearchGame, isSearch, setIsSearch, previewImgPerfil, setPreviewImgPerfil, getEditProfilePhoto, baseURL
-        }}>
-            {children}
-        </AuthContext.Provider>
-    )
+return (
+    <AuthContext.Provider value={{
+        user, handleLogin, logout, favorites, setFavorites, favoritesIdGame, setFavoritesIdGame, handleFavorites, getFavoritesUser, games, setGames, averages, setAverages, avgsFavorites, setAvgsFavorites, reviews, setReviews, reviewsData, setReviewsData, userId, reviewEdit, setReviewEdit, handleEditReview, isEditing, setIsEditing, rating, setRating, comment, setComment, reviewId, setReviewId, isLoading, deleteRev, handleCreateAccount, roleUser, gamesAdmin, fetchGame, imgPerfil, setImgPerfil, imgsGames, setImgsGames, searchGame, setSearchGame, isSearch, setIsSearch, previewImgPerfil, setPreviewImgPerfil, getEditProfilePhoto, baseURL
+    }}>
+        {children}
+    </AuthContext.Provider>
+)
 }
