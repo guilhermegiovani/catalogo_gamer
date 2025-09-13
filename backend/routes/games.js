@@ -57,22 +57,34 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
         if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
 
         if (req.files["img-portrait"]) {
-            console.log(`Retrato: ${req.files["img-portrait"][0]}`)
-            img_portrait = await handleUpload(
-                req.files["img-portrait"][0],
-                "games/portraits",
-                `game_portrait_${gameId}`
-            )
+            try {
+                img_portrait = await handleUpload(
+                    req.files["img-portrait"][0],
+                    "games/portraits",
+                    `game_portrait_${gameId}`
+                )
+
+                console.log(`URL Retrato: ${img_portrait}`)
+            } catch(err) {
+                console.log(`Error: ${err}`)
+                return res.status(500).json({ erro: "Falha ao enviar imagem retrato", detalhe: err.message })
+            }
 
         }
 
         if (req.files["img-landscape"]) {
-            console.log(`Paisagem: ${req.files["img-landscape"][0]}`)
-            img_landscape = await handleUpload(
-                req.files["img-landscape"][0],
-                "games/landscapes",
-                `games_landscape_${gameId}`
-            )
+            try {
+                img_landscape = await handleUpload(
+                    req.files["img-landscape"][0],
+                    "games/landscapes",
+                    `games_landscape_${gameId}`
+                )
+
+                console.log(`URL Paisagem: ${img_landscape}`)
+            } catch(err) {
+                console.log(`Error: ${err}`)
+                return res.status(500).json({ erro: "Falha ao enviar imagem retrato", detalhe: err.message })
+            }
         }
 
         const updates = [];
