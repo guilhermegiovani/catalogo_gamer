@@ -103,7 +103,7 @@ function Profile() {
                                     <Link to={`/reviews/${fav.id}`}>
                                         <img
                                             className="hover:scale-[1.04] cursor-pointer transition duration-400 object-cover"
-                                            src={`http://localhost:8000${fav.img_portrait}`}
+                                            src={baseURL + fav.img_portrait}
                                             alt={fav.titulo}
                                         />
                                     </Link>
