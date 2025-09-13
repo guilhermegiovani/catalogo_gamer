@@ -89,11 +89,11 @@ function AdminGame() {
             formData.append("studio", studioGame)
 
             if (fileImgGame instanceof File) {
-                formData.append("img-retrato", fileImgGame)
+                formData.append("img-portrait", fileImgGame)
             }
 
             if (fileImgGamePaisagem instanceof File) {
-                formData.append("img-paisagem", fileImgGamePaisagem)
+                formData.append("img-landscape", fileImgGamePaisagem)
             }
 
             await patchGames(id, formData)
