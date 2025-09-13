@@ -7,6 +7,7 @@ import Form from "../components/Form"
 import { useEffect } from "react"
 import { postGames } from "../services/routes"
 import { useAuth } from "../hooks/useAuth"
+import toast from "react-hot-toast"
 
 
 function AdminNewGame() {
@@ -74,7 +75,12 @@ function AdminNewGame() {
             <Form
                 handleSubmit={(e) => {
                     e.preventDefault()
-                    handleSubmitNewGame()
+                    handleSubmitNewGame().then(() => {
+                        toast.success("Jogo criado com sucesso!")
+                    }).catch((err) => {
+                        toast.error("Erro ao criar jogo!")
+                        console.log(err)
+                    })
                     navigate("/admin")
                     fetchGame()
                 }}
