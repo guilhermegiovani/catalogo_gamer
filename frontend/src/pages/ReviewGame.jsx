@@ -19,7 +19,7 @@ function ReviewGame() {
         try {
             const res = await getReviewsByGame(game.id)
             setReviewsData(res.data.reviews)
-            console.log(resizeBy.data.reviews)
+            console.log(res.data.reviews)
             console.log(userId)
 
             const avg = averages.filter(avg => avg.gameId === game.id)
