@@ -19,7 +19,7 @@ function ReviewGame() {
     // const gameId = game?.id
 
     const fetchReviews = async () => {
-        if(!gameId) return
+        if (!gameId) return
         try {
             const resGame = await getGames()
             setGames(resGame.data)
@@ -124,6 +124,20 @@ function ReviewGame() {
                                     <p className="text-md text-muted-foreground text-gray-100">
                                         {rev.comment}
                                     </p>
+
+                                    <p>{`rev.idUser: ${rev.idUser}, userId: ${userId}`}</p>
+                                    {rev.idUser == userId ? (
+                                        <div className="flex gap-3 mt-5">
+                                            <Button
+                                                text={<PencilIcon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
+                                                handleClick={() => handleEditReview(userId, rev.id)}
+                                            />
+                                            <Button
+                                                text={<Trash2Icon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
+                                                handleClick={() => deleteRev(rev.id)}
+                                            />
+                                        </div>
+                                    ) : null}
 
                                     {Number(rev.idUser) === Number(userId) ?
                                         <div className="flex gap-3 mt-5">
