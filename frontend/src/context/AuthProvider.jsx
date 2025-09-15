@@ -238,7 +238,7 @@ export function AuthProvider({ children }) {
     const handleEditReview = async(uId, rId) => {
         console.log(uId, rId)
         console.log(reviewsData)
-        const review = reviewsData.find(r => r.idUser === uId)
+        const review = reviewsData.find(r => r.iduser === uId)
         const dataRev = { comment: review[0].comment, rating: review[0].rating }
         setRating(dataRev.rating)
         setComment(dataRev.comment)
