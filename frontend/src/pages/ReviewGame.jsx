@@ -4,37 +4,80 @@ import { useAuth } from "../hooks/useAuth"
 import { Star, PencilIcon, Trash2Icon } from "lucide-react"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
-import { getReviewsByGame } from "../services/routes"
+import { getGames, getReviewsByGame } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
+import toast from "react-hot-toast"
 
 function ReviewGame() {
     const { id } = useParams()
-    const { games, averages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
+    const { games, setGames, averages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL, isLoading, setIsLoading } = useAuth()
     const [avgGame, setAvgGame] = useState()
 
-    const game = games.find((g) => g.id === Number(id))
-    const gameId = game?.id
+    // const game = games.find((g) => g.id === Number(id))
+    const gameId = Number(id)
+    // const gameId = game?.id
 
     const fetchReviews = async () => {
         try {
             const res = await getReviewsByGame(game.id)
             setReviewsData(res.data.reviews)
-            console.log(res.data.reviews)
-            console.log(userId)
+            // console.log(res.data.reviews)
+            // console.log(userId)
 
             const avg = averages.filter(avg => avg.gameId === game.id)
             // console.log(avg)
             setAvgGame(avg[0])
         } catch (err) {
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
+            setReviewsData([])
+            setAvgGame(null)
         }
     }
 
     useEffect(() => {
-        setReviewsData([])
-        setAvgGame([])
-        fetchReviews()
-    }, [game])
+        // let mounded = true
+
+        // const init = async () => {
+        //     setIsLoading(true)
+
+        //     try {
+        //         let localGames = games
+        //         if (!localGames || localGames.length === 0) {
+        //             const res = await getGames()
+        //             localGames = res.data
+
+        //             if (mounded) setGames(localGames)
+        //         }
+
+        //         const found = localGames.fing(g => g.id === gameId)
+        //         if (!found) {
+        //             if (mounded) {
+        //                 setIsLoading(false)
+        //                 setReviewsData([])
+        //                 setAvgGame(null)
+        //             }
+
+        //             return
+        //         }
+
+        //         await fetchReviews(found.id)
+        //     } catch (err) {
+        //         console.log(`Erro ao inicializar review: ${err}`)
+        //     } finally {
+        //         if (mounded) setIsLoading(false)
+        //     }
+        // }
+
+        // init()
+        // return () => { mounded = false }
+        // setReviewsData([])
+        // setAvgGame([])
+        const init = async() => {
+            await fetchReviews(id)
+
+        }
+        init()
+    }, [id])
 
     // const deleteRev = async (revId) => {
     //     try {
@@ -51,6 +94,16 @@ function ReviewGame() {
     // if (games.length === 0) {
     //     return <p className="text-white">Carregando...</p>
     // }
+
+    if (isLoading) {
+        return (
+            <section className="w-full flex justify-center items-start min-h-screen">
+                <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            </section>
+        )
+    }
+
+    const game = games.find((g) => g.id === gameId)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
