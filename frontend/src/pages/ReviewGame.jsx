@@ -29,9 +29,9 @@ function ReviewGame() {
             
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameId === gameId)
+            console.log(avg)
             setAvgGame(avg)
 
-            console.log(avg)
 
             setIsLoadingGame(false)
         } catch (err) {
