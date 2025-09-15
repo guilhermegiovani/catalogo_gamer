@@ -124,19 +124,19 @@ function AdminGame() {
                     />
                 </div>
 
-                <h1 className="text-xl sm:text-2xl font-bold">{game.title}</h1>
+                <h1 className="text-2xl xl:text-3xl font-bold">{game.title}</h1>
                 {/* <p className="text-muted-foreground">{game.plataforma}</p> */}
-                <div className="flex gap-2 flex-wrap">
-                    <span className="bg-green-500/10 text-green-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.studio}</span>
-                    <span className="bg-purple-500/10 text-purple-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.platform}</span>
-                    <span className="bg-blue-500/10 text-blue-400 text-center text-xs sm:text-sm px-2 py-0.5 rounded-full">{game.genre}</span>
+                <div className="flex gap-2 flex-wrap text-xs xl:text-sm">
+                    <span className="bg-green-500/10 text-green-400 text-center sm:text-sm px-2 py-0.5 rounded-full">{game.studio}</span>
+                    <span className="bg-purple-500/10 text-purple-400 text-center sm:text-sm px-2 py-0.5 rounded-full">{game.platform}</span>
+                    <span className="bg-blue-500/10 text-blue-400 text-center sm:text-sm px-2 py-0.5 rounded-full">{game.genre}</span>
                 </div>
 
-                <p className="flex items-center gap-1 font-medium mb-3">
+                <p className="flex items-center gap-1 font-medium mb-3 xl:text-lg">
                     <Star size={20} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {avgGame[0]?.rating}
                 </p>
 
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm xl:text-base text-muted-foreground">
                     {game.description}
                 </p>
 
@@ -174,10 +174,10 @@ function AdminGame() {
                 <Button
                     text={isEditingGame === true ? "Concluir edição" : "Editar jogo"}
                     className={clsx(
-                        " w-40 text-white font-semibold py-2 rounded-md mt-4",
+                        "w-40 xl:w-50 text-white font-semibold py-2 rounded-md mt-4",
                         "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
                         "hover:brightness-130 transition-all duration-200",
-                        "cursor-pointer"
+                        "cursor-pointer xl:text-lg"
                     )}
                     handleClick={(e) => {
                         e.preventDefault()
@@ -210,11 +210,11 @@ function AdminGame() {
                 <Button
                     text={isEditingGame === true ? "Cancelar edição" : "Deletar jogo"}
                     className={clsx(
-                        " w-40 text-white font-semibold py-2 rounded-md mt-4",
+                        "w-40 xl:w-50 text-white font-semibold py-2 rounded-md mt-4",
                         // "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
                         "bg-red-700/90",
                         "hover:brightness-130 transition-all duration-200",
-                        "cursor-pointer"
+                        "cursor-pointer xl:text-lg"
                     )}
                     handleClick={async () => {
                         if (isEditingGame === true) {

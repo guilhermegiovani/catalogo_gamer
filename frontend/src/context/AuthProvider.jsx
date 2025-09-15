@@ -238,6 +238,7 @@ export function AuthProvider({ children }) {
 
 
     const handleEditReview = async(uId, rId) => {
+        console.log(uId, rId)
         const review = reviewsData.filter(r => r.idUser === uId)
         const dataRev = { comment: review[0].comment, rating: review[0].rating }
         setRating(dataRev.rating)

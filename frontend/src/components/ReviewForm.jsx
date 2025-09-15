@@ -101,13 +101,13 @@ function ReviewForm({ refreshReviews }) {
         }}
         className={"space-y-2"}
         >
-            <label htmlFor="nota" className="block mb-1 text-lg font-medium text-gray-200">Nota:</label>
+            <label htmlFor="nota" className="block mb-1 text-lg xl:text-xl font-medium text-gray-200">Nota:</label>
             <div className="flex gap-1">
                 {[1, 2, 3, 4, 5].map((index) => {
 
                     return (
                         <Star
-                            size={18} fill="currentColor"
+                            size={20} fill="currentColor"
                             key={index}
                             onMouseEnter={() => setRatingHover(index)}
                             onMouseLeave={() => setRatingHover(null)}
@@ -128,7 +128,7 @@ function ReviewForm({ refreshReviews }) {
                 value={rating}
             />
 
-            <label htmlFor="comment" className="block mb-1 text-lg font-medium text-gray-200">Comentário:</label>
+            <label htmlFor="comment" className="block mb-1 text-lg xl:text-xl font-medium text-gray-200">Comentário:</label>
             <textarea
                 name="comment"
                 id="comment"
@@ -138,7 +138,7 @@ function ReviewForm({ refreshReviews }) {
                 className={clsx(
                     "w-full rounded-md text-gray-100 placeholder-gray-300",
                     "border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-gray-600",
-                    "p-2 text-sm resize-none",
+                    "p-2 text-sm xl:text-base resize-none",
                     "bg-white/5 backdrop-blur-sm shadow-sm"
                 )}
                 placeholder="Escreva seu comentário aqui..."
@@ -147,10 +147,10 @@ function ReviewForm({ refreshReviews }) {
             <Button
                 text="Enviar comentário"
                 className={clsx(
-                    " w-50 text-white font-semibold py-2 rounded-md mt-4",
+                    "w-50 text-white font-semibold py-2 rounded-md mt-4",
                     "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
                     "hover:brightness-130 transition-all duration-200",
-                    "cursor-pointer"
+                    "cursor-pointer xl:text-lg"
                 )} />
         </Form>
 

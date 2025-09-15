@@ -65,31 +65,31 @@ function ReviewGame() {
                     className="max-w-xl h-64 md:h-80 lg:h-96 object-contain rounded-xl border border-[#4f46e5]/30 shadow-md"
                 />
 
-                <h1 className="text-2xl font-bold">{game.title}</h1>
+                <h1 className="text-2xl xl:text-3xl font-bold">{game.title}</h1>
                 {/* <p className="text-muted-foreground">{game.plataforma}</p> */}
-                <div className="flex gap-2 flex-wrap">
-                    <span className="bg-green-500/10 text-green-400 text-xs px-2 py-0.5 rounded-2xl">{game.studio}</span>
-                    <span className="bg-purple-500/10 text-purple-400 text-xs px-2 py-0.5 rounded-2xl">{game.platform}</span>
-                    <span className="bg-blue-500/10 text-blue-400 text-xs px-2 py-0.5 rounded-2xl">{game.genre}</span>
+                <div className="flex gap-2 flex-wrap text-xs xl:text-sm">
+                    <span className="bg-green-500/10 text-green-400 px-2 py-0.5 rounded-2xl">{game.studio}</span>
+                    <span className="bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded-2xl">{game.platform}</span>
+                    <span className="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-2xl">{game.genre}</span>
                 </div>
 
-                <p className="flex items-center gap-1 font-medium mb-3">
+                <p className="flex items-center gap-1 font-medium mb-3 xl:text-lg">
                     <Star size={20} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {avgGame?.rating}
                 </p>
 
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm xl:text-base text-muted-foreground">
                     {game.description}
                 </p>
 
             </div>
 
             <div>
-                <h2 className="text-xl font-semibold mb-5">Notas e avaliações</h2>
+                <h2 className="text-xl xl:text-2xl font-semibold mb-5">Notas e avaliações</h2>
 
                 <ul className="space-y-4">
                     {!reviewsData.length > 0 || !reviewsData ? <p>Nenhuma avaliação!</p> :
                         reviewsData.map((rev) => (
-                            <li key={rev.id}>
+                            <li key={rev.id} className="max-w-5xl">
                                 <article
                                     className={clsx(
                                         "w-full rounded-2xl p-4",
@@ -97,9 +97,9 @@ function ReviewGame() {
                                         "transition-colors"
                                     )}
                                 >
-                                    <h3 className="text-lg font-semibold mb-1 text-gray-200">{rev.name}</h3>
+                                    <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{rev.name}</h3>
 
-                                    <div className="flex items-center gap-3 text-sm mb-3 text-gray-200">
+                                    <div className="flex items-center gap-3 text-sm xl:text-base mb-3 text-gray-200">
                                         <span className="flex items-center gap-1">
                                             <Star size={18} fill="currentColor" className="text-yellow-400 -mt-[1px]" /> {rev.rating}
                                         </span>
@@ -114,13 +114,13 @@ function ReviewGame() {
                                             </span>
                                         )} */}
 
-                                        <span className="text-muted-foreground">
+                                        <span className="text-muted-foreground xl:text-base">
                                             {rev.edit_date !== rev.review_date ? `editado em ${rev.edit_date}` : rev.review_date}
                                         </span>
 
                                     </div>
 
-                                    <p className="text-md text-muted-foreground text-gray-100">
+                                    <p className="text-md xl:text-lg text-muted-foreground text-gray-100">
                                         {rev.comment}
                                     </p>
 
