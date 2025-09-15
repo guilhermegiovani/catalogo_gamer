@@ -21,7 +21,7 @@ function ReviewGame() {
         try {
             const res = await getReviewsByGame(game.id)
             setReviewsData(res.data.reviews)
-            // console.log(res.data.reviews)
+            console.log(res.data.reviews)
             // console.log(userId)
 
             const avg = averages.filter(avg => avg.gameId === game.id)
@@ -29,6 +29,7 @@ function ReviewGame() {
             setAvgGame(avg[0])
         } catch (err) {
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
+            console.log(err.response?.status, err.response?.data)
             setReviewsData([])
             setAvgGame(null)
         }
@@ -45,6 +46,7 @@ function ReviewGame() {
                 if (!localGames || localGames.length === 0) {
                     const res = await getGames()
                     localGames = res.data
+                    console.log(localGames)
 
                     if (mounded) setGames(localGames)
                 }
@@ -59,6 +61,8 @@ function ReviewGame() {
 
                     return
                 }
+                console.log(found)
+                console.log(gameId)
 
                 await fetchReviews(found.id)
             } catch (err) {
@@ -136,7 +140,7 @@ function ReviewGame() {
                 <h2 className="text-xl font-semibold mb-5">Notas e avaliações</h2>
 
                 <ul className="space-y-4">
-                    {!reviewsData.length > 0 ? <p>Nenhuma avaliação!</p> :
+                    {!reviewsData.length > 0 || !reviewsData ? <p>Nenhuma avaliação!</p> :
                         reviewsData.map((rev) => (
                             <li key={rev.id}>
                                 <article
