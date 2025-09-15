@@ -10,7 +10,7 @@ import toast from "react-hot-toast"
 
 function ReviewGame() {
     const { id } = useParams()
-    const { games, setGames, averages, setAverages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
+    const { games, setGames, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
     const [avgGame, setAvgGame] = useState()
     const [isLoadingGame, setIsLoadingGame] = useState(true)
 
@@ -52,6 +52,7 @@ function ReviewGame() {
     }
 
     const game = games.find((g) => g.id === gameId)
+    console.log(game)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 

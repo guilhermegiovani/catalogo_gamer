@@ -50,6 +50,7 @@ function GamesList() {
     // if (!games || !favorites) return <p>Carregando...</p>
 
     const avgMap = Object.fromEntries(averages.map(a => [a.gameid, a.rating]))
+    console.log(games)
     
     return (
         <section className={clsx("px-4 py-10 max-w-[90rem] mx-auto min-h-screen")}>

@@ -17,8 +17,6 @@ function Admin() {
     }, [])
 
     const avgMap = Object.fromEntries(averages.map(a => [a.gameid, a.rating]))
-    console.log(averages)
-    console.log(avgMap)
 
     return (
         <section className={clsx("px-2 sm:px-4 py-6 sm:py-10 max-w-8xl mx-auto")}>
