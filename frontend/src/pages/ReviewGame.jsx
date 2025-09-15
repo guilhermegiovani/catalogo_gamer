@@ -21,20 +21,31 @@ function ReviewGame() {
     const fetchReviews = async () => {
         if (!gameId) return
         try {
+            console.log(gameId)
+            console.log("-------------PAROU AQUI 1-------------------")
             const resGame = await getGames()
+            console.log(gameId)
+            console.log("-------------PAROU AQUI 2-------------------")
             setGames(resGame.data)
-            
+            console.log(gameId)
+            console.log("-------------PAROU AQUI 3-------------------")
             const res = await getReviewsByGame(gameId)
             setReviewsData(res.data.reviews)
+            console.log(gameId)
+            console.log("-------------PAROU AQUI 4-------------------")
             
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
-            
+            console.log(gameId)
+            console.log("-------------PAROU AQUI 5-------------------")
             const tes = games.find((g) => g.id === gameId)
             console.log(tes)
-
+            console.log(gameId)
+            console.log("-------------PAROU AQUI 6-------------------")
             setAvgGame(avg)
             setIsLoadingGame(false)
+            console.log(gameId)
+            console.log("-------------PAROU AQUI 7-------------------")
         } catch (err) {
             const tes = games.find((g) => g.id === gameId)
             console.log(tes)
