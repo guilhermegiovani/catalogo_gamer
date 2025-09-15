@@ -242,7 +242,7 @@ export function AuthProvider({ children }) {
         const review = reviewsData.find(r => r.iduser === uId)
         console.log(review)
         console.log("--------------------------------------------------------")
-        const dataRev = { comment: review[0].comment, rating: review[0].rating }
+        const dataRev = { comment: review.comment, rating: review.rating }
         console.log(dataRev)
         setRating(dataRev.rating)
         setComment(dataRev.comment)
