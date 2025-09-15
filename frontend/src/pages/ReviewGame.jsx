@@ -20,6 +20,9 @@ function ReviewGame() {
     const fetchReviews = async () => {
         if(!gameId) return
         try {
+            const resGame = await getGames()
+            setGames(resGame.data)
+
             const res = await getReviewsByGame(gameId)
             setReviewsData(res.data.reviews)
             console.log(res.data.reviews)
