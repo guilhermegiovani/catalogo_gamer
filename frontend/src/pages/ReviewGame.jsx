@@ -28,11 +28,10 @@ function ReviewGame() {
             setReviewsData(res.data.reviews)
             
             const resAvg = await getReviewsAvgs()
-            const avg = averages.filter(avg => avg.gameId === gameId)
+            const avg = resAvg.find(avg => avg.gameId === gameId)
             setAvgGame(avg[0])
-            
-            console.log(resAvg.data)
-            console.log(averages)
+
+            console.log(avg)
 
             setIsLoadingGame(false)
         } catch (err) {
