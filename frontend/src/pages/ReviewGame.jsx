@@ -29,8 +29,8 @@ function ReviewGame() {
             
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.filter((avg) => {
-                avg.gameId === gameId
-                console.log(`${avg.gameId} ||| ${gameId}`)
+                avg.gameid === gameId
+                console.log(`${avg.gameid} ||| ${gameId}`)
             })
             console.log(resAvg.data)
             console.log(avg)
