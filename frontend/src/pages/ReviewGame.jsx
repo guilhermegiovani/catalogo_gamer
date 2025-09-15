@@ -34,8 +34,7 @@ function ReviewGame() {
         fetchReviews()
         setReviewsData([])
         setAvgGame([])
-    }, [gameId])
-
+    }, [game])
 
     // const deleteRev = async (revId) => {
     //     try {
@@ -48,6 +47,10 @@ function ReviewGame() {
     // }
 
     // const handleEditReview = (rat, comment) => {}
+
+    if (games.length === 0) {
+        return <p className="text-white">Carregando...</p>
+    }
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
