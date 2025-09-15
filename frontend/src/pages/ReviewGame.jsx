@@ -51,7 +51,6 @@ function ReviewGame() {
     }
 
     const game = games.find((g) => g.id === gameId)
-    console.log(reviewsData)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
@@ -124,20 +123,6 @@ function ReviewGame() {
                                     <p className="text-md text-muted-foreground text-gray-100">
                                         {rev.comment}
                                     </p>
-
-                                    <p>{`rev.idUser: ${rev.iduser}, userId: ${userId}`}</p>
-                                    {rev.iduser == userId ? (
-                                        <div className="flex gap-3 mt-5">
-                                            <Button
-                                                text={<PencilIcon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
-                                                handleClick={() => handleEditReview(userId, rev.id)}
-                                            />
-                                            <Button
-                                                text={<Trash2Icon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
-                                                handleClick={() => deleteRev(rev.id)}
-                                            />
-                                        </div>
-                                    ) : null}
 
                                     {Number(rev.idUser) === Number(userId) ?
                                         <div className="flex gap-3 mt-5">
