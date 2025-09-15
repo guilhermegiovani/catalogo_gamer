@@ -65,7 +65,7 @@ function ReviewGame() {
                 console.log(found)
                 console.log(gameId)
 
-                await fetchReviews(found.id)
+                await fetchReviews()
             } catch (err) {
                 console.log(`Erro ao inicializar review: ${err}`)
             } finally {
