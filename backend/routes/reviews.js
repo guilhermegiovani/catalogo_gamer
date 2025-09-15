@@ -88,12 +88,18 @@ router.get('/game/:id', async (req, res) => {
 
     const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where game_id = ?;", [id])
 
-    if (resultsAvgCount[0].totReviews === 0) return res.status(404).json({ erro: "Jogo não encontrado!" })
+    let statistics = {
+        avgGrade: null,
+        totReviews: 0
+    }
 
-    let average = Number(resultsAvgCount[0].avgGrade)
+    if (resultsAvgCount.length > 0)  {
+        let average = Number(resultsAvgCount[0].avgGrade)
+        if (!isNaN(average)) {
+            statistics.avgGrade = Number(average.toFixed(1))
+        }
 
-    if (!isNaN(average)) {
-        resultsAvgCount[0].avgGrade = Number(average.toFixed(1))
+        statistics.totReviews = resultsAvgCount[0].totReviews
     }
 
     return res.status(200).json({ reviews: formattedDate, statistics: resultsAvgCount[0] })

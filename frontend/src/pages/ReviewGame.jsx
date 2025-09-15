@@ -30,11 +30,11 @@ function ReviewGame() {
             console.log(gameId)
             console.log("-------------PAROU AQUI 3-------------------")
             const res = await getReviewsByGame(gameId)
-            if (res?.data?.reviews) {
-                setReviewsData(res.data.reviews)
-            } else {
-                setReviewsData([])
-            }
+            // if (res?.data?.reviews) {
+            //     setReviewsData(res.data.reviews)
+            // } else {
+            //     setReviewsData([])
+            // }
             console.log(res.data)
             setReviewsData(res.data.reviews)
             console.log(gameId)
