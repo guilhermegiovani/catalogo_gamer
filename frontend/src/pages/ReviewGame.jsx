@@ -10,8 +10,9 @@ import toast from "react-hot-toast"
 
 function ReviewGame() {
     const { id } = useParams()
-    const { games, setGames, averages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL, isLoading, setIsLoading } = useAuth()
+    const { games, setGames, averages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
     const [avgGame, setAvgGame] = useState()
+    const [isLoadingGame, setIsLoadingGame] = useState(true)
 
     // const game = games.find((g) => g.id === Number(id))
     const gameId = Number(id)
@@ -25,83 +26,23 @@ function ReviewGame() {
 
             const res = await getReviewsByGame(gameId)
             setReviewsData(res.data.reviews)
-            console.log(res.data.reviews)
-            console.log(gameId)
 
             const avg = averages.filter(avg => avg.gameId === gameId)
             // console.log(avg)
             setAvgGame(avg[0])
-            setIsLoading(false)
+            setIsLoadingGame(false)
         } catch (err) {
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
-            console.log(err.response?.status, err.response?.data)
             setReviewsData([])
             setAvgGame(null)
         }
     }
 
     useEffect(() => {
-        // let mounded = true
-
-        // const init = async () => {
-        //     setIsLoading(true)
-
-        //     try {
-        //         let localGames = games
-        //         if (!localGames || localGames.length === 0) {
-        //             const res = await getGames()
-        //             localGames = res.data
-        //             console.log(localGames)
-
-        //             if (mounded) setGames(localGames)
-        //         }
-
-        //         const found = localGames.find(g => g.id === gameId)
-        //         if (!found) {
-        //             if (mounded) {
-        //                 setIsLoading(false)
-        //                 setReviewsData([])
-        //                 setAvgGame(null)
-        //             }
-
-        //             return
-        //         }
-        //         console.log(found)
-        //         console.log(gameId)
-
-        //         await fetchReviews()
-        //     } catch (err) {
-        //         console.log(`Erro ao inicializar review: ${err}`)
-        //     } finally {
-        //         if (mounded) setIsLoading(false)
-        //     }
-        // }
-
-        // init()
-        // return () => { mounded = false }
-        // setReviewsData([])
-        // setAvgGame([])
         fetchReviews()
-    
     }, [id])
 
-    // const deleteRev = async (revId) => {
-    //     try {
-    //         await deleteReviews(revId)
-    //         setReviewsData(prev => prev.filter(r => r.id !== revId))
-    //         console.log("Deletado com sucesso!")
-    //     } catch (err) {
-    //         console.log(`Erro ao deletar avaliação: ${err}`)
-    //     }
-    // }
-
-    // const handleEditReview = (rat, comment) => {}
-
-    // if (games.length === 0) {
-    //     return <p className="text-white">Carregando...</p>
-    // }
-
-    if (isLoading) {
+    if (isLoadingGame) {
         return (
             <section className="w-full flex justify-center items-start min-h-screen">
                 <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
@@ -110,9 +51,7 @@ function ReviewGame() {
     }
 
     const game = games.find((g) => g.id === gameId)
-    console.log(games)
-    console.log("------------------------------------")
-    console.log(game)
+    console.log(avgGame)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
