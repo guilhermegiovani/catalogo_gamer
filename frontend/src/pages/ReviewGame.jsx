@@ -51,7 +51,7 @@ function ReviewGame() {
     }
 
     const game = games.find((g) => g.id === gameId)
-    console.log(avgGame)
+    console.log(reviewsData)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
