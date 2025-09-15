@@ -35,48 +35,44 @@ function ReviewGame() {
     }
 
     useEffect(() => {
-        // let mounded = true
+        let mounded = true
 
-        // const init = async () => {
-        //     setIsLoading(true)
+        const init = async () => {
+            setIsLoading(true)
 
-        //     try {
-        //         let localGames = games
-        //         if (!localGames || localGames.length === 0) {
-        //             const res = await getGames()
-        //             localGames = res.data
+            try {
+                let localGames = games
+                if (!localGames || localGames.length === 0) {
+                    const res = await getGames()
+                    localGames = res.data
 
-        //             if (mounded) setGames(localGames)
-        //         }
+                    if (mounded) setGames(localGames)
+                }
 
-        //         const found = localGames.fing(g => g.id === gameId)
-        //         if (!found) {
-        //             if (mounded) {
-        //                 setIsLoading(false)
-        //                 setReviewsData([])
-        //                 setAvgGame(null)
-        //             }
+                const found = localGames.fing(g => g.id === gameId)
+                if (!found) {
+                    if (mounded) {
+                        setIsLoading(false)
+                        setReviewsData([])
+                        setAvgGame(null)
+                    }
 
-        //             return
-        //         }
+                    return
+                }
 
-        //         await fetchReviews(found.id)
-        //     } catch (err) {
-        //         console.log(`Erro ao inicializar review: ${err}`)
-        //     } finally {
-        //         if (mounded) setIsLoading(false)
-        //     }
-        // }
+                await fetchReviews(found.id)
+            } catch (err) {
+                console.log(`Erro ao inicializar review: ${err}`)
+            } finally {
+                if (mounded) setIsLoading(false)
+            }
+        }
 
-        // init()
-        // return () => { mounded = false }
+        init()
+        return () => { mounded = false }
         // setReviewsData([])
         // setAvgGame([])
-        const init = async() => {
-            await fetchReviews(id)
-
-        }
-        init()
+    
     }, [id])
 
     // const deleteRev = async (revId) => {
