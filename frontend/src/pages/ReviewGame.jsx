@@ -18,13 +18,14 @@ function ReviewGame() {
     // const gameId = game?.id
 
     const fetchReviews = async () => {
+        if(!gameId) return
         try {
-            const res = await getReviewsByGame(game.id)
+            const res = await getReviewsByGame(gameId)
             setReviewsData(res.data.reviews)
             console.log(res.data.reviews)
             // console.log(userId)
 
-            const avg = averages.filter(avg => avg.gameId === game.id)
+            const avg = averages.filter(avg => avg.gameId === gameId)
             // console.log(avg)
             setAvgGame(avg[0])
         } catch (err) {
@@ -51,7 +52,7 @@ function ReviewGame() {
                     if (mounded) setGames(localGames)
                 }
 
-                const found = localGames.fing(g => g.id === gameId)
+                const found = localGames.find(g => g.id === gameId)
                 if (!found) {
                     if (mounded) {
                         setIsLoading(false)
