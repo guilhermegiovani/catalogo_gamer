@@ -152,7 +152,7 @@ router.get("/search", async (req, res) => {
 
 // Pegar todos os jogos
 router.get("/", async (req, res) => {
-    const results = await queryDB("select * from games;")
+    const results = await queryDB("SELECT * FROM games ORDER BY id ASC;")
 
     if (results.length === 0) return res.status(404).json({ erro: "Nenhum dado encontrado" })
 
