@@ -125,7 +125,7 @@ function ReviewGame() {
                                         {rev.comment}
                                     </p>
 
-                                    {rev.idUser === userId ?
+                                    {Number(rev.idUser) === Number(userId) ?
                                         <div className="flex gap-3 mt-5">
                                             <Button
                                                 text={<PencilIcon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
@@ -135,7 +135,7 @@ function ReviewGame() {
                                                 text={<Trash2Icon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
                                                 handleClick={() => deleteRev(rev.id)}
                                             />
-                                        </div> : ""
+                                        </div> : null
                                     }
                                 </article>
                             </li>
