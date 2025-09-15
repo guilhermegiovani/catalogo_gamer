@@ -29,10 +29,15 @@ function ReviewGame() {
             
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
-    
+            
+            const tes = games.find((g) => g.id === gameId)
+            console.log(tes)
+
             setAvgGame(avg)
             setIsLoadingGame(false)
         } catch (err) {
+            const tes = games.find((g) => g.id === gameId)
+            console.log(tes)
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
             setReviewsData([])
             setAvgGame(null)
