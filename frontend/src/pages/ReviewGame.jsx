@@ -28,7 +28,7 @@ function ReviewGame() {
             console.log("-------------PAROU AQUI 2-------------------")
             setGames(resGame.data)
             console.log(gameId)
-            console.log("-------------PAROU AQUI 3-------------------")
+            console.log("-------------PAROU AQUIII 3-------------------")
             const res = await getReviewsByGame(gameId)
             // if (res?.data?.reviews) {
             //     setReviewsData(res.data.reviews)
