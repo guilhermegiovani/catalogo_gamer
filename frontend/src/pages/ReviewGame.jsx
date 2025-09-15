@@ -125,8 +125,8 @@ function ReviewGame() {
                                         {rev.comment}
                                     </p>
 
-                                    <p>{`rev.idUser: ${rev.idUser}, userId: ${userId}`}</p>
-                                    {rev.idUser == userId ? (
+                                    <p>{`rev.idUser: ${rev.iduser}, userId: ${userId}`}</p>
+                                    {rev.iduser == userId ? (
                                         <div className="flex gap-3 mt-5">
                                             <Button
                                                 text={<PencilIcon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
