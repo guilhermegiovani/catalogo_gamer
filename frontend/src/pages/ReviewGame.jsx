@@ -4,13 +4,13 @@ import { useAuth } from "../hooks/useAuth"
 import { Star, PencilIcon, Trash2Icon } from "lucide-react"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
-import { getGames, getReviewsByGame } from "../services/routes"
+import { getGames, getReviewsAvgs, getReviewsByGame } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
 import toast from "react-hot-toast"
 
 function ReviewGame() {
     const { id } = useParams()
-    const { games, setGames, averages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
+    const { games, setGames, averages, setAverages, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
     const [avgGame, setAvgGame] = useState()
     const [isLoadingGame, setIsLoadingGame] = useState(true)
 
@@ -23,13 +23,17 @@ function ReviewGame() {
         try {
             const resGame = await getGames()
             setGames(resGame.data)
-
+            
             const res = await getReviewsByGame(gameId)
             setReviewsData(res.data.reviews)
-
+            
+            const resAvg = await getReviewsAvgs()
             const avg = averages.filter(avg => avg.gameId === gameId)
-            console.log(avg)
             setAvgGame(avg[0])
+            
+            console.log(resAvg.data)
+            console.log(averages)
+
             setIsLoadingGame(false)
         } catch (err) {
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
