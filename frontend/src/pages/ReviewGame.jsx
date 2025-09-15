@@ -31,9 +31,9 @@ function ReviewGame() {
     }
 
     useEffect(() => {
-        fetchReviews()
         setReviewsData([])
         setAvgGame([])
+        fetchReviews()
     }, [game])
 
     // const deleteRev = async (revId) => {
