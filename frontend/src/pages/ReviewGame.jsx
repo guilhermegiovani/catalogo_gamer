@@ -29,11 +29,8 @@ function ReviewGame() {
             
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
-            console.log(resAvg.data)
-            console.log(avg)
+    
             setAvgGame(avg)
-
-
             setIsLoadingGame(false)
         } catch (err) {
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
@@ -55,7 +52,6 @@ function ReviewGame() {
     }
 
     const game = games.find((g) => g.id === gameId)
-    console.log(avgGame)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
