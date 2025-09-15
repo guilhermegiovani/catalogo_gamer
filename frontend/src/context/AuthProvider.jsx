@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { AuthContext } from "./AuthContext"
-import { deleteFavorites, deleteReviews, getFavorites, getGames, getReviewsAvgs, getUser, loginUser, newUser, postFavorites } from "../services/routes"
+import { deleteFavorites, deleteReviews, getFavorites, getGames, getReviewsAvgs, getReviewsByGame, getReviewsByUser, getUser, loginUser, newUser, postFavorites } from "../services/routes"
 import { jwtDecode } from "jwt-decode"
 import toast from "react-hot-toast"
 
@@ -237,9 +237,10 @@ export function AuthProvider({ children }) {
 
 
 
-    const handleEditReview = (uId, rId) => {
+    const handleEditReview = async(uId, rId) => {
+        const res = await getReviewsByUser(uId)
         const review = reviewsData.filter(r => r.idUser === uId)
-        console.log(review)
+        console.log(res.data)
         const dataRev = { comment: review[0].comment, rating: review[0].rating }
         setRating(dataRev.rating)
         setComment(dataRev.comment)
