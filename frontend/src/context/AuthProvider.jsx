@@ -238,8 +238,12 @@ export function AuthProvider({ children }) {
     const handleEditReview = async(uId, rId) => {
         console.log(uId, rId)
         console.log(reviewsData)
+        console.log("-----------------------------------------")
         const review = reviewsData.find(r => r.iduser === uId)
+        console.log(review)
+        console.log("--------------------------------------------------------")
         const dataRev = { comment: review[0].comment, rating: review[0].rating }
+        console.log(dataRev)
         setRating(dataRev.rating)
         setComment(dataRev.comment)
         setIsEditing(true)
