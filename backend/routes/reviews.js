@@ -62,7 +62,8 @@ router.get('/game/:id', async (req, res) => {
 
     console.log("_______PAROU AQUI 1_________")
 
-    if (results.length === 0) return res.status(404).json({ erro: "Jogo não encontrado ou não foi avaliado!" })
+    if (results.length === 0) return res.json({ reviews: [] })
+    // res.status(404).json({ erro: "Jogo não encontrado ou não foi avaliado!" })
 
     const formattedDate = results.map(review => {
         const format = (dateString) => {

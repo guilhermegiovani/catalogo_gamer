@@ -200,8 +200,8 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     const { id } = req.params
     let img_portrait, img_landscape
 
-    console.log("FILES:", req.files)
-    console.log("BODY:", req.body)
+    // console.log("FILES:", req.files)
+    // console.log("BODY:", req.body)
 
     if (req.files["img-portrait"]) {
         img_portrait = await handleUpload(
@@ -222,10 +222,10 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
     if (img_portrait) req.body.img_portrait = img_portrait
     if (img_landscape) req.body.img_landscape = img_landscape
 
-    console.log("FILES:", req.files)
-    console.log("BODY:", req.body)
-    console.log("Portrait:", req.body.img_portrait)
-    console.log("Landscape:", req.body.img_landscape)
+    // console.log("FILES:", req.files)
+    // console.log("BODY:", req.body)
+    // console.log("Portrait:", req.body.img_portrait)
+    // console.log("Landscape:", req.body.img_landscape)
 
     if (Object.keys(req.body).length === 0) return res.status(400).json({ erro: "Nenhum campo enviado para atualização!" })
 
@@ -254,17 +254,17 @@ router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
 
 })
 
-router.get("/db-test", async (req, res) => {
-    try {
-        const result = await queryDB("SELECT NOW();");
-        res.json({ message: "Banco conectado!", now: result });
-        console.log("Usando o banco na neon com postgres")
-        console.log("NODE_ENV:", process.env.NODE_ENV);
-        console.log("Conectando ao DB:", isProd ? "Neon (Postgres)" : "MySQL (dev)");
-    } catch (err) {
-        console.log("Usando o mysql")
-        res.status(500).json({ error: err.message });
-    }
-});
+// router.get("/db-test", async (req, res) => {
+//     try {
+//         const result = await queryDB("SELECT NOW();");
+//         res.json({ message: "Banco conectado!", now: result });
+//         console.log("Usando o banco na neon com postgres")
+//         console.log("NODE_ENV:", process.env.NODE_ENV);
+//         console.log("Conectando ao DB:", isProd ? "Neon (Postgres)" : "MySQL (dev)");
+//     } catch (err) {
+//         console.log("Usando o mysql")
+//         res.status(500).json({ error: err.message });
+//     }
+// });
 
 export default router
