@@ -54,7 +54,7 @@ export const getGameById = (id) => {
 
 // Função pra pegar os jogos pesquisados
 export const getGameSearch = (dados) => {
-    return api.get(`/games/search`, { params: { titulo: dados } })
+    return api.get(`/games/search`, { params: { title: dados } })
 }
 
 // Deletar jogo (apenas admin)
