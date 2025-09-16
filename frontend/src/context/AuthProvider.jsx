@@ -54,11 +54,9 @@ export function AuthProvider({ children }) {
         if (storedToken) {
             try {
                 const decoded = jwtDecode(storedToken)
-                console.log(`decoded: ${JSON.stringify(decoded)}`)
                 setToken(storedToken)
                 setRoleUser(decoded.role || "")
                 setUserId(decoded.id || 0)
-                console.log(`IdUser: ${decoded.id}`)
 
             } catch (err) {
                 console.error("Token inválido ou corrompido", err);

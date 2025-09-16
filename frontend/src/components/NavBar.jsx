@@ -23,6 +23,13 @@ function NavBar() {
     //         console.log(`Erro ao pegar os dados: ${err}`)
     //     }
     // }
+    useEffect(() => {
+        if (userId > 0) {
+            console.log(`userId: ${userId}`)
+            getEditProfilePhoto(userId)
+            console.log(`img: ${imgPerfil}`)
+        }
+    }, [userId])
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -30,10 +37,9 @@ function NavBar() {
                 setIsOpen(false)
             }
         }
-
-        console.log(`userId: ${userId}`)
+        
         getEditProfilePhoto(userId)
-        console.log(`img: ${imgPerfil}`)
+        
         setMenuOpen(false)
         document.addEventListener("click", handleClickOutside)
         return () => document.removeEventListener("click", handleClickOutside)
