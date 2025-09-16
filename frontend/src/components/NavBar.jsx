@@ -32,12 +32,13 @@ function NavBar() {
         }
 
         getEditProfilePhoto(userId)
+        console.log(imgPerfil)
         setMenuOpen(false)
         document.addEventListener("click", handleClickOutside)
         return () => document.removeEventListener("click", handleClickOutside)
     }, [])
 
-    // console.log(imgPerfil)
+    console.log(imgPerfil)
 
     return (
         <nav className={clsx(
