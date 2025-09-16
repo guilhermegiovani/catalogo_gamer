@@ -150,6 +150,7 @@ export function AuthProvider({ children }) {
             if (err.response?.status === 404) {
                 setFavorites([])
                 setFavoritesIdGame([])
+                toast.error("Email ou senha inválida! Tente Novamente.")
             } else {
                 console.log(`Erro ao fazer login: ${err}`)
                 toast.error("Email ou senha inválida! Tente Novamente.")
