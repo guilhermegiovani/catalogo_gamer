@@ -3,6 +3,7 @@ import { AuthContext } from "./AuthContext"
 import { deleteFavorites, deleteReviews, getFavorites, getGames, getReviewsAvgs, getReviewsByGame, getReviewsByUser, getUser, loginUser, newUser, postFavorites } from "../services/routes"
 import { jwtDecode } from "jwt-decode"
 import toast from "react-hot-toast"
+import { useActionData } from "react-router-dom"
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
@@ -57,6 +58,7 @@ export function AuthProvider({ children }) {
                 setToken(storedToken)
                 setRoleUser(decoded.role || "")
                 setUserId(decoded.id || 0)
+                console.log(`IdUser: ${userId}`)
 
             } catch (err) {
                 console.error("Token inválido ou corrompido", err);
@@ -274,6 +276,7 @@ export function AuthProvider({ children }) {
     }
 
     const getEditProfilePhoto = async (id) => {
+        console.log(`id: ${userId}`)
         try {
             const res = await getUser(id)
             const userData = res.data
