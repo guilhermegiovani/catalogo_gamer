@@ -134,32 +134,42 @@ export function AuthProvider({ children }) {
             localStorage.setItem("userId", userId)
             localStorage.setItem("token", token)
 
-            // Buscar favoritos e outras infos do usuário
-            const fav = await getFavorites()
-            setFavorites(fav.data)
-
-            const idGame = fav.data.map(fav => fav.id)
-            setFavoritesIdGame(idGame)
-
-            getProfilePhoto(userId)
-
             toast.success("Logado com sucesso!")
 
+            // Buscar favoritos e outras infos do usuário
+            try {
+                const fav = await getFavorites()
+                setFavorites(fav.data)
+
+                const idGame = fav.data.map(fav => fav.id)
+                setFavoritesIdGame(idGame)
+
+
+            } catch (err) {
+                if (err.response?.status === 404) {
+                    setFavorites([])
+                    setFavoritesIdGame([])
+                } else {
+                    console.log("Erro ao buscar favoritos:", err)
+                    toast.error("Erro ao carregar favoritos")
+                }
+            }
+
+            getProfilePhoto(userId)
         } catch (err) {
 
-            if (err.response?.status === 404) {
+            if (err.response?.status === 404 || err.response?.status === 401) {
                 setFavorites([])
                 setFavoritesIdGame([])
                 toast.error("Email ou senha inválida! Tente Novamente.")
             } else {
                 console.log(`Erro ao fazer login: ${err}`)
-                toast.error("Email ou senha inválida! Tente Novamente.")
+                toast.error("Erro inesperado")
             }
         }
     }
 
     const logout = () => {
-        console.log(roleUser)
         setUser(null)
         setToken("")
         setUserId(0)
@@ -170,7 +180,6 @@ export function AuthProvider({ children }) {
         localStorage.removeItem("user")
         localStorage.removeItem("token")
         localStorage.removeItem("userId")
-        console.log("Deslogado com sucesso")
     }
 
     const getFavoritesUser = async () => {
@@ -237,7 +246,7 @@ export function AuthProvider({ children }) {
         }
     }
 
-    const handleEditReview = async(uId, rId) => {
+    const handleEditReview = async (uId, rId) => {
         // console.log(uId, rId)
         // console.log(reviewsData)
         // console.log("-----------------------------------------")
