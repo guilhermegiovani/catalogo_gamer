@@ -276,6 +276,7 @@ export function AuthProvider({ children }) {
         try {
             const res = await getUser(id)
             const userData = res.data[0]
+            console.log(userData)
             setImgPerfil(userData.profile_photo)
 
         } catch (err) {
