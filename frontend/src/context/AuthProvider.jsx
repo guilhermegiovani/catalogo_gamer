@@ -53,6 +53,7 @@ export function AuthProvider({ children }) {
         if (storedToken) {
             try {
                 const decoded = jwtDecode(storedToken)
+                console.log(`decoded: ${decoded}`)
                 setToken(storedToken)
                 setRoleUser(decoded.role || "")
                 setUserId(decoded.id || 0)
@@ -287,19 +288,19 @@ export function AuthProvider({ children }) {
 
     }
 
-    // const getProfilePhoto = async (id) => {
-    //     try {
-    //         const res = await getUser(id)
-    //         const userData = res.data[0]
-    //         setImgPerfil(userData.profile_photo)
+    const getProfilePhoto = async (id) => {
+        try {
+            const res = await getUser(id)
+            const userData = res.data[0]
+            setImgPerfil(userData.profile_photo)
 
-    //         // console.log(userData)
+            // console.log(userData)
 
-    //     } catch (err) {
-    //         console.log(`Erro ao pegar os dados do usuário: ${err}`)
-    //     }
+        } catch (err) {
+            console.log(`Erro ao pegar os dados do usuário: ${err}`)
+        }
 
-    // }
+    }
 
     return (
         <AuthContext.Provider value={{
