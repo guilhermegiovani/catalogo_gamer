@@ -14,6 +14,7 @@ function NavBar() {
     const [isOpen, setIsOpen] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
     const dropdownref = useRef(null)
+    const [localImg, setLocalImg] = useState(imgPerfil)
 
     // const getUserData = async (id) => {
     //     try {
@@ -25,11 +26,13 @@ function NavBar() {
     // }
     useEffect(() => {
         if (userId > 0) {
-            console.log(`userId: ${userId}`)
             getEditProfilePhoto(userId)
-            console.log(`img: ${imgPerfil}`)
         }
     }, [userId])
+
+    useEffect(() => {
+        setLocalImg(imgPerfil)
+    }, [imgPerfil])
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -115,7 +118,7 @@ function NavBar() {
                     <div ref={dropdownref} className="relative">
 
                         <img
-                            src={baseURL + imgPerfil}
+                            src={baseURL + localImg}
                             alt="avatar"
                             className="rounded-full shadow-sm w-10 h-10 lg:w-15 lg:h-15 cursor-pointer object-cover"
                             onClick={() => setIsOpen(!isOpen)}
@@ -240,50 +243,6 @@ function NavBar() {
                         ) : ""} */}
                     </div>
                 )}
-
-                {/* {user ? (
-
-                    <div ref={dropdownref} className="relative">
-                        <img
-                            src={`http://localhost:8000${imgPerfil}`}
-                            alt="avatar"
-                            className="rounded-full shadow-sm w-10 h-10 lg:w-15 lg:h-15 cursor-pointer"
-                            onClick={() => setIsOpen(!isOpen)}
-                        />
-
-                        {isOpen ? (
-                            <div className="absolute space-y-2 left-1/2 -translate-x-1/2 bg-white/5 rounded-lg shadow-lg px-5 py-3 flex flex-col justify-center items-center shadow-black/50 z-10">
-                                <NavLink
-                                    to="/profile"
-                                    className={clsx(
-                                        "text-lg",
-                                        "hover:text-blue-500"
-                                    )}
-                                    onClick={() => {
-                                        setIsOpen(false)
-                                    }}
-                                >
-                                    Perfil
-                                </NavLink>
-
-                                <NavLink
-                                    className={clsx(
-                                        "text-lg",
-                                        "hover:text-blue-500",
-                                    )}
-                                    onClick={() => {
-                                        logout()
-                                        setIsOpen(false)
-                                        return navigate("/login")
-                                    }}
-                                >
-                                    Sair
-                                </NavLink>
-                            </div>
-                        ) : ""}
-                    </div>
-
-                ) : ""} */}
             </div>
 
         </nav>
