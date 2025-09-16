@@ -274,12 +274,11 @@ export function AuthProvider({ children }) {
     }
 
     const getEditProfilePhoto = async (id) => {
-        console.log(`id: ${userId}`)
         try {
             const res = await getUser(id)
-            const userData = res.data
+            const userData = res.data[0]
             console.log(`id: ${id}`)
-            console.log(`res: ${res.data}`)
+            console.log(`res: ${JSON.stringify(res.data)}`)
             console.log(`user: ${userData}`)
             setImgPerfil(userData.profile_photo)
 
