@@ -276,8 +276,9 @@ export function AuthProvider({ children }) {
         try {
             const res = await getUser(id)
             const userData = res.data
-            console.log(res.data)
-            console.log(userData)
+            console.log(`id: ${id}`)
+            console.log(`res: ${res.data}`)
+            console.log(`user: ${userData}`)
             setImgPerfil(userData.profile_photo)
 
         } catch (err) {
@@ -286,21 +287,19 @@ export function AuthProvider({ children }) {
 
     }
 
-    const getProfilePhoto = async (id) => {
-        try {
-            const res = await getUser(id)
-            const userData = res.data[0]
-            setImgPerfil(userData.profile_photo)
+    // const getProfilePhoto = async (id) => {
+    //     try {
+    //         const res = await getUser(id)
+    //         const userData = res.data[0]
+    //         setImgPerfil(userData.profile_photo)
 
-            // console.log(userData)
+    //         // console.log(userData)
 
-        } catch (err) {
-            console.log(`Erro ao pegar os dados do usuário: ${err}`)
-        }
+    //     } catch (err) {
+    //         console.log(`Erro ao pegar os dados do usuário: ${err}`)
+    //     }
 
-    }
-
-
+    // }
 
     return (
         <AuthContext.Provider value={{
