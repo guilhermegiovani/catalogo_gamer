@@ -58,7 +58,7 @@ export function AuthProvider({ children }) {
                 setToken(storedToken)
                 setRoleUser(decoded.role || "")
                 setUserId(decoded.id || 0)
-                console.log(`IdUser: ${userId}`)
+                console.log(`IdUser: ${decoded.id}`)
 
             } catch (err) {
                 console.error("Token inválido ou corrompido", err);
