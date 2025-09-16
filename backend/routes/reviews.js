@@ -56,7 +56,7 @@ router.get('/game/:id', async (req, res) => {
     const { id } = req.params
 
     const results = await queryDB(
-        "select r.id, u.id as idUser, u.name, r.rating, r.comment, review_date, edit_date from reviews as r join users as u on r.user_id = u.id where r.game_id = ?;",
+        "select r.id, u.id as idUser, u.name, r.rating, r.comment, review_date, edit_date from reviews as r left join users as u on r.user_id = u.id where r.game_id = ?;",
         [id]
     )
 
