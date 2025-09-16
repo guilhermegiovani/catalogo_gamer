@@ -102,7 +102,7 @@ router.get('/game/:id', async (req, res) => {
         statistics.totReviews = resultsAvgCount[0].totReviews
     }
 
-    return res.status(200).json({ reviews: formattedDate, statistics: resultsAvgCount[0] })
+    return res.status(200).json({ reviews: formattedDate, statistics: statistics })
 })
 
 router.get("/averages", async (req, res) => {
