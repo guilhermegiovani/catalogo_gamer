@@ -60,6 +60,8 @@ router.get('/game/:id', async (req, res) => {
         [id]
     )
 
+    console.log("_______PAROU AQUI 1_________")
+
     if (results.length === 0) return res.status(404).json({ erro: "Jogo não encontrado ou não foi avaliado!" })
 
     const formattedDate = results.map(review => {
@@ -78,6 +80,8 @@ router.get('/game/:id', async (req, res) => {
             return `${day}/${month}/${year} ${hours}:${minutes}`
         }
 
+        console.log("_______PAROU AQUI 2_________")
+
         return {
             ...review,
             review_date: format(review.review_date),
@@ -87,6 +91,8 @@ router.get('/game/:id', async (req, res) => {
     })
 
     const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where game_id = ?;", [id])
+
+    console.log("_______PAROU AQUI 3_________")
 
     let statistics = {
         avgGrade: null,
@@ -101,6 +107,10 @@ router.get('/game/:id', async (req, res) => {
 
         statistics.totReviews = resultsAvgCount[0].totReviews
     }
+
+    console.log("_______PAROU AQUI 4_________")
+    console.log(`reviews: ${formattedDate}`)
+    console.log(`stas: ${statistics}`)
 
     return res.status(200).json({ reviews: formattedDate, statistics: statistics })
 })
