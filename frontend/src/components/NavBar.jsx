@@ -74,8 +74,7 @@ function NavBar() {
                     </NavLink>
 
                     {user ? "" : (
-                        <NavLink to="/login" className={({ isActive }) => clsx(
-                            "text-blue-500", "hover:text-blue-500", isActive && "text-blue-500"
+                        <NavLink to="/login" className={({ isActive }) => clsx("hover:text-blue-500", isActive && "text-blue-500"
                         )}>
                             Login
                         </NavLink>
@@ -173,8 +172,7 @@ function NavBar() {
                         </NavLink>
 
                         {user ? "" : (
-                            <NavLink to="/login" className={({ isActive }) => clsx(
-                                "text-blue-500", "hover:text-blue-500", isActive && "text-blue-500"
+                            <NavLink to="/login" className={({ isActive }) => clsx("hover:text-blue-500", isActive && "text-blue-500"
                             )}>
                                 Login
                             </NavLink>
