@@ -8,9 +8,11 @@ import { Link, useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc.js"
 import timezone from "dayjs/plugin/timezone.js"
+import customParseFormat from "dayjs/plugin/customParseFormat"
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
+dayjs.extend(customParseFormat)
 
 function Profile() {
     const navigate = useNavigate()
@@ -39,9 +41,10 @@ function Profile() {
         fetchUserData()
     }, [])
 
-    const createAccountDate = dayjs.utc(profileUser.created_account).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    const createAccountDate = dayjs.utc(profileUser.created_account, "DD/MM/YYYY HH:mm").tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
 
     console.log("Data: " + profileUser.created_account)
+    console.log(createAccountDate)
 
     return (
         <section className="min-h-screen w-full flex justify-center py-12 px-4 text-gray-100">
