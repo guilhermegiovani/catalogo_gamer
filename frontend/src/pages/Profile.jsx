@@ -40,10 +40,14 @@ function Profile() {
                 <div className="flex flex-col items-center space-y-3">
                     <div className="relative w-28 h-28 lg:w-32 lg:h-32 rounded-full border-4 border-violet-500 shadow-[0_0_25px_rgba(139,92,246,0.6)] overflow-hidden">
                         {/* Aqui entra a imagem do usuário */}
-                        <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
+                        <span className={clsx(
+                            "absolute inset-0 text-gray-400 text-sm"
+                            // flex items-center justify-center
+                        )}>
                             <img
                                 src={baseURL + profileUser.profile_photo}
                                 alt="foto_perfil"
+                                className="object-contain"
                             />
 
                         </span>
@@ -57,7 +61,9 @@ function Profile() {
                         /> */}
                     </div>
                     <h1 className="text-xl lg:text-3xl font-bold">{profileUser.name}</h1>
-                    <h3 className="text-gray-400 text-base lg:text-lg">{profileUser.nickname}</h3>
+                    <h3 className="text-gray-400 text-base lg:text-lg">
+                        {profileUser.nickname === null ? "Apelido" : profileUser.nickname}
+                    </h3>
 
                     <Button
                         text="EDITAR PERFIL"

@@ -204,6 +204,8 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
 
     })
 
+    console.log(formattedDate)
+
     return res.status(200).json({ message: "Usuário atualizado com sucesso", userData: formattedDate })
 
 })
