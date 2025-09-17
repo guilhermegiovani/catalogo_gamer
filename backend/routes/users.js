@@ -37,13 +37,15 @@ router.post('/', async (req, res) => {
         [name, emailSanitizado, senhaCripto]
     )
 
+    const infoUser = await queryDB("select * from users where email = ?;", [emailSanitizado])
+
     const newUser = {
         name: resInsert.name,
         email: resInsert.emailSanitizado,
         password: resInsert.password
     }
 
-    console.log(`Info: ${resInsert}`)
+    console.log(`Info: ${infoUser}`)
 
     return res.status(201).json({ message: "Usuário criado com sucesso!", id: newUserId, newUser: newUser })
 
