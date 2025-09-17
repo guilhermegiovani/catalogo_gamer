@@ -39,15 +39,16 @@ router.post('/', async (req, res) => {
 
     if (results.length > 0) return res.status(409).json({ erro: "Email já existe!" })
 
-    const resInsert = await queryDB("insert into users(name, email, password) values (?, ?, ?);",
+    // const resInsert = 
+    await queryDB("insert into users(name, email, password) values (?, ?, ?);",
         [name, emailSanitizado, senhaCripto]
     )
 
-    const newUser = {
-        name: resInsert.name,
-        email: resInsert.emailSanitizado,
-        password: resInsert.password
-    }
+    // const newUser = {
+    //     name: resInsert.name,
+    //     email: resInsert.emailSanitizado,
+    //     password: resInsert.password
+    // }
 
     const infoUser = await queryDB("select * from users where email = ?;", [emailSanitizado])
 
@@ -64,9 +65,9 @@ router.post('/', async (req, res) => {
 
     })
 
-    console.log(formattedDate)
+    // console.log(formattedDate)
 
-    return res.status(201).json({ message: "Usuário criado com sucesso!", newUser: newUser })
+    return res.status(201).json({ message: "Usuário criado com sucesso!", newUser: formattedDate })
     // id: newUserId
 
 })
