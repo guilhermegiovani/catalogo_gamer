@@ -190,9 +190,21 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
 
     const fieldsNames = Object.keys(req.body).join(", ");
     const getUserData = await queryDB(`select ${fieldsNames} from users where id = ?`, valuesReqBody)
-    console.log(getUserData)
 
-    return res.status(200).json({ message: "Usuário atualizado com sucesso", userData: getUserData })
+    const formattedDate = getUserData.map(user => {
+        const format = (dateString) => {
+            if (!dateString) return null
+            return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+        }
+
+        return {
+            ...user,
+            created_account: format(user.created_account)
+        }
+
+    })
+
+    return res.status(200).json({ message: "Usuário atualizado com sucesso", userData: formattedDate })
 
 })
 
