@@ -45,9 +45,10 @@ router.post('/', async (req, res) => {
         password: resInsert.password
     }
 
-    console.log(`Info: ${infoUser}`)
+    console.log(`Info: ${JSON.stringify(infoUser)}`)
 
-    return res.status(201).json({ message: "Usuário criado com sucesso!", id: newUserId, newUser: newUser })
+    return res.status(201).json({ message: "Usuário criado com sucesso!", newUser: newUser })
+    // id: newUserId
 
 })
 
