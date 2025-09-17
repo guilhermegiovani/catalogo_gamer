@@ -188,8 +188,8 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
     const results = await queryDB(query, valuesReqBody)
     if (results.length === 0) return res.status(404).json({ erro: "Usuário não encontrado!" })
 
-    const fieldsNames = Object.keys(req.body).join(", ");
-    const getUserData = await queryDB(`select ${fieldsNames} from users where id = ?`, valuesReqBody)
+    // const fieldsNames = Object.keys(req.body).join(", ");
+    const getUserData = await queryDB(`select * from users where id = ?`, id)
 
     const formattedDate = getUserData.map(user => {
         const format = (dateString) => {
