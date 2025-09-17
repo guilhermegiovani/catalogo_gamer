@@ -17,6 +17,7 @@ function Profile() {
         try {
             const resUser = await getUser(userId)
             setProfileUser(resUser.data[0])
+            console.log(resUser[0])
 
             const resFav = await getFavorites()
             setFavUser(resFav.data)
@@ -31,6 +32,8 @@ function Profile() {
     useEffect(() => {
         fetchUserData()
     }, [])
+
+    console.log("Data: " + profileUser.created_account)
 
     return (
         <section className="min-h-screen w-full flex justify-center py-12 px-4 text-gray-100">
