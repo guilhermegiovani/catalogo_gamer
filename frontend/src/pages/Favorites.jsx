@@ -24,7 +24,8 @@ function Favorites() {
                 setFavoritesIdGame(idGame)
 
                 const resAvgs = await getReviewsAvgs()
-                setAvgsFavorites(resAvgs.data.filter(avg => idGame.includes(avg.gameId)))
+                console.log(resAvgs.data)
+                setAvgsFavorites(resAvgs.data.filter(avg => idGame.includes(avg.gameid)))
                 
             } catch (err) {
                 console.log(`Erro ao pegar dados: ${err}`)
@@ -47,6 +48,7 @@ function Favorites() {
 
     // if(!avgsFavorites) return <p>Carregando...</p>
     const avgsFavMap = Object.fromEntries(avgsFavorites.map(avg => [avg.gameid, avg.rating]))
+    console.log(avgsFavMap)
 
     return (
         <section className={clsx("px-4 py-10 max-w-6xl mx-auto")}>
