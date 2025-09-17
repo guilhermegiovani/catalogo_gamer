@@ -5,6 +5,12 @@ import { getFavorites, getReviewsByUser, getUser } from "../services/routes"
 import { useEffect, useState } from "react"
 import { Star } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc.js"
+import timezone from "dayjs/plugin/timezone.js"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 function Profile() {
     const navigate = useNavigate()
@@ -32,6 +38,8 @@ function Profile() {
     useEffect(() => {
         fetchUserData()
     }, [])
+
+    const createAccountDate = dayjs.utc(profileUser.created_account).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
 
     console.log("Data: " + profileUser.created_account)
 
@@ -95,7 +103,7 @@ function Profile() {
                             </div>
                             <div className="flex justify-between text-gray-300 text-sm lg:text-lg">
                                 <span>Membro desde:</span>
-                                <span className="font-medium text-white">{profileUser.created_account}</span>
+                                <span className="font-medium text-white">{createAccountDate}</span>
                             </div>
                         </div>
                     </div>
