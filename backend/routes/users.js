@@ -37,15 +37,28 @@ router.post('/', async (req, res) => {
         [name, emailSanitizado, senhaCripto]
     )
 
-    const infoUser = await queryDB("select * from users where email = ?;", [emailSanitizado])
-
     const newUser = {
         name: resInsert.name,
         email: resInsert.emailSanitizado,
         password: resInsert.password
     }
 
-    console.log(`Info: ${JSON.stringify(infoUser)}`)
+    const infoUser = await queryDB("select * from users where email = ?;", [emailSanitizado])
+
+    const formattedDate = infoUser.map(user => {
+        const format = (dateString) => {
+            if (!dateString) return null
+            return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+        }
+
+        return {
+            ...user,
+            created_account: format(review.created_account)
+        }
+
+    })
+
+    console.log(formattedDate)
 
     return res.status(201).json({ message: "Usuário criado com sucesso!", newUser: newUser })
     // id: newUserId
