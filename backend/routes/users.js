@@ -43,6 +43,8 @@ router.post('/', async (req, res) => {
         password: resInsert.password
     }
 
+    console.log(`Info: ${resInsert}`)
+
     return res.status(201).json({ message: "Usuário criado com sucesso!", id: newUserId, newUser: newUser })
 
 })

@@ -2,8 +2,13 @@ import express from 'express'
 import { db, isProd } from '../db.js'
 import authMiddleware from '../middleware/authMiddleware.js'
 import { queryDB } from '../utils/dbQuery.js'
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc.js"
+import timezone from "dayjs/plugin/timezone.js"
 
 const router = express.Router()
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 router.use(express.json())
 router.use(authMiddleware)
@@ -66,17 +71,19 @@ router.get('/game/:id', async (req, res) => {
     const formattedDate = results.map(review => {
         const format = (dateString) => {
             // console.log(`data rev: ${dateString}`)
+            // if (!dateString) return null
+            // const date = new Date(dateString)
+
+            // const day = String(date.getDate()).padStart(2, '0')
+            // const month = String(date.getMonth() + 1).padStart(2, '0')
+            // const year = date.getFullYear()
+
+            // const hours = String(date.getHours()).padStart(2, '0')
+            // const minutes = String(date.getMinutes()).padStart(2, '0')
+
+            // return `${day}/${month}/${year} ${hours}:${minutes}`
             if (!dateString) return null
-            const date = new Date(dateString)
-
-            const day = String(date.getDate()).padStart(2, '0')
-            const month = String(date.getMonth() + 1).padStart(2, '0')
-            const year = date.getFullYear()
-
-            const hours = String(date.getHours()).padStart(2, '0')
-            const minutes = String(date.getMinutes()).padStart(2, '0')
-
-            return `${day}/${month}/${year} ${hours}:${minutes}`
+            return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
         }
 
         return {
@@ -94,7 +101,7 @@ router.get('/game/:id', async (req, res) => {
         totReviews: 0
     }
 
-    if (resultsAvgCount.length > 0)  {
+    if (resultsAvgCount.length > 0) {
         let average = Number(resultsAvgCount[0].avgGrade)
         if (!isNaN(average)) {
             statistics.avgGrade = Number(average.toFixed(1))
@@ -236,17 +243,19 @@ router.patch('/:id', async (req, res) => {
 
     const format = (dateString) => {
         // console.log(`data edit: ${dateString}`)
+        // if (!dateString) return null
+        // const date = new Date(dateString)
+
+        // const day = String(date.getDate()).padStart(2, '0')
+        // const month = String(date.getMonth() + 1).padStart(2, '0')
+        // const year = date.getFullYear()
+
+        // const hours = String(date.getHours()).padStart(2, '0')
+        // const minutes = String(date.getMinutes()).padStart(2, '0')
+
+        // return `${day}/${month}/${year} ${hours}:${minutes}`
         if (!dateString) return null
-        const date = new Date(dateString)
-
-        const day = String(date.getDate()).padStart(2, '0')
-        const month = String(date.getMonth() + 1).padStart(2, '0')
-        const year = date.getFullYear()
-
-        const hours = String(date.getHours()).padStart(2, '0')
-        const minutes = String(date.getMinutes()).padStart(2, '0')
-
-        return `${day}/${month}/${year} ${hours}:${minutes}`
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
     }
 
     updateReview[0].edit_date = format(updateReview[0].edit_date)
