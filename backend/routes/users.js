@@ -8,9 +8,15 @@ import { db, isProd } from '../db.js'
 import { queryDB } from '../utils/dbQuery.js'
 import { uploadToCloudinary } from '../utils/cloudinary.js'
 import handleUpload from '../utils/uploadHander.js'
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc.js"
+import timezone from "dayjs/plugin/timezone.js"
 
 const router = express.Router()
 router.use(express.json())
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 router.post('/', async (req, res) => {
     const { name, email, password } = req.body
