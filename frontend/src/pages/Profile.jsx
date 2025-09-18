@@ -102,7 +102,6 @@ function Profile() {
                             )}
                             handleClick={async () => {
                                 try {
-                                    console.log(userId)
                                     await deleteUser(userId)
                                     toast.success("Conta deletada com sucesso")
                                     navigate("/")

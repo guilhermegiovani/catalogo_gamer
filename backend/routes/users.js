@@ -108,7 +108,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
     return res.status(200).json(formattedDate)
 })
 
-router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params
 
     // const results = await queryDB(
