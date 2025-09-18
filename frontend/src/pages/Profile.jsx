@@ -17,7 +17,7 @@ dayjs.extend(customParseFormat)
 
 function Profile() {
     const navigate = useNavigate()
-    const { userId, baseURL } = useAuth()
+    const { userId, baseURL, logout } = useAuth()
     const [profileUser, setProfileUser] = useState([])
     const [favUser, setFavUser] = useState([])
     const [revUser, setRevUser] = useState([])
@@ -104,6 +104,7 @@ function Profile() {
                                 try {
                                     await deleteUser(userId)
                                     toast.success("Conta deletada com sucesso")
+                                    logout()
                                     navigate("/")
                                 } catch (err) {
                                     console.log(`Não foi possível excluir a conta: ${err}`)
