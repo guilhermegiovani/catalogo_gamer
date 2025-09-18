@@ -50,7 +50,7 @@ function ChangePassword() {
             await patchUserPassword(userPassword)
 
         } catch (err) {
-            console.log(`Erro ao editar perfil: ${err}.`)
+            console.log(`Erro ao alterar a senha: ${err}.`)
         }
 
     }
@@ -127,10 +127,9 @@ function ChangePassword() {
                         // type="submit"
                         handleClick={() => {
                             handleChangePassword(userId).then(() => {
-                                toast.success("senha alterada com sucesso!")
-                                // if(fileImgPerfil.name !== null && fileImgPerfil.name !== undefined) {
-                                //     setImgPerfil(fileImgPerfil.name)
-                                // }
+                                if(password || newPassword || confNewPassword) {
+                                    toast.success("senha alterada com sucesso!")
+                                }
                                 navigate("/profile")
                             }).catch((err) => {
                                 toast.error("Erro ao alterar senha!")
