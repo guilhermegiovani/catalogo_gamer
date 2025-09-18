@@ -8,7 +8,6 @@ import reviewsRoutes from './routes/reviews.js'
 import cors from 'cors'
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { SpeedInsights } from "@vercel/speed-insights/next" // next.js
 // import bcrypt from 'bcryptjs';
 
 // const senha = "12345"; // coloque a senha que você quer
