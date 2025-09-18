@@ -18,11 +18,11 @@ export const queryDB = async (query, values = []) => {
             const pgQueryBase = pgQuery.trim().replace(/;$/, "")
             const pgQueryWithReturn = pgQueryBase + " RETURNING id;"
             const result = await db.query(pgQueryWithReturn, values)
-            console.log(pgQueryWithReturn)
+            // console.log(pgQueryWithReturn)
             return result.rows
         } else {
             const result = await db.query(pgQuery, values)
-            console.log(pgQuery)
+            // console.log(pgQuery)
             return result.rows
         }
 

@@ -117,6 +117,8 @@ router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     //     : "delete from usuarios where id = ?;",
     //     [id]
     // )
+    const userData = await queryDB("select * from users where id = ?;", [id])
+    console.log(userData[0])
 
     const resDelete = await queryDB("delete from users where id = ?;", [id])
     if (resDelete.length === 0) return res.status(404).json({ erro: "Usuário não encontrado!" })
@@ -190,7 +192,7 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
 
     // const fieldsNames = Object.keys(req.body).join(", ");
     const getUserData = await queryDB(`select * from users where id = ?`, [id])
-    console.log(JSON.stringify(getUserData))
+    // console.log(JSON.stringify(getUserData))
 
     const formattedDate = getUserData.map(user => {
         const format = (dateString) => {
@@ -205,7 +207,7 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
 
     })
 
-    console.log(formattedDate)
+    // console.log(formattedDate)
 
     return res.status(200).json({ message: "Usuário atualizado com sucesso", userData: formattedDate })
 

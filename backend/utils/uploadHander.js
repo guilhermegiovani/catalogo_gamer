@@ -8,12 +8,12 @@ async function handleUpload(file, folder, name) {
 
         if (!isProd) {
             // Salva caminho local
-            console.log(file.filename)
+            // console.log(file.filename)
             return `/uploads/${file.filename}`;
         } else {
             // Envia para Cloudinary
             const result = await uploadToCloudinary(file.buffer, folder, name);
-            console.log(`Resultado: ${result.secure_url}`)
+            // console.log(`Resultado: ${result.secure_url}`)
             return result.secure_url;
         }
     } catch(err) {

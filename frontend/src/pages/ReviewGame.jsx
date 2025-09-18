@@ -21,33 +21,21 @@ function ReviewGame() {
     const fetchReviews = async () => {
         if (!gameId) return
         try {
-            console.log(gameId)
             const resGame = await getGames()
-            console.log(gameId)
             setGames(resGame.data)
-            console.log(gameId)
             const res = await getReviewsByGame(gameId)
             // if (res?.data?.reviews) {
             //     setReviewsData(res.data.reviews)
             // } else {
             //     setReviewsData([])
             // }
-            console.log(res.data)
             setReviewsData(res.data.reviews)
-            console.log(gameId)
 
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
-            console.log(gameId)
-            const tes = games.find((g) => g.id === gameId)
-            console.log(tes)
-            console.log(gameId)
             setAvgGame(avg)
             setIsLoadingGame(false)
-            console.log(gameId)
         } catch (err) {
-            const tes = games.find((g) => g.id === gameId)
-            console.log(tes)
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
             setReviewsData([])
             setAvgGame(null)

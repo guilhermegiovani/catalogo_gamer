@@ -5,6 +5,11 @@ export const newUser = (dados) => {
     return api.post("/users", dados)
 }
 
+// Deletar Usuário
+export const deleteUser = (id) => {
+    return api.delete(`users/${id}`)
+}
+
 // Pegar todos os usuários
 export const getUsers = () => {
     return api.get("/users")

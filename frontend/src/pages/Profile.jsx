@@ -1,7 +1,7 @@
 import Button from "../components/Button"
 import clsx from "clsx"
 import { useAuth } from "../hooks/useAuth"
-import { getFavorites, getReviewsByUser, getUser } from "../services/routes"
+import { deleteUser, getFavorites, getReviewsByUser, getUser } from "../services/routes"
 import { useEffect, useState } from "react"
 import { Star } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
@@ -9,6 +9,7 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc.js"
 import timezone from "dayjs/plugin/timezone.js"
 import customParseFormat from "dayjs/plugin/customParseFormat"
+import toast from "react-hot-toast"
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -43,8 +44,8 @@ function Profile() {
 
     const createAccountDate = dayjs.utc(profileUser.created_account, "DD/MM/YYYY HH:mm").tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
 
-    console.log("Data: " + profileUser.created_account)
-    console.log(createAccountDate)
+    // console.log("Data: " + profileUser.created_account)
+    // console.log(createAccountDate)
 
     return (
         <section className="min-h-screen w-full flex justify-center py-12 px-4 text-gray-100">
@@ -79,16 +80,39 @@ function Profile() {
                         {profileUser.nickname === null ? "Apelido" : profileUser.nickname}
                     </h3>
 
-                    <Button
-                        text="EDITAR PERFIL"
-                        className={clsx(
-                            "mt-4 px-6 py-2 bg-violet-700 hover:bg-violet-600",
-                            "text-white font-medium rounded-xl shadow-lg",
-                            "cursor-pointer transition-all duration-200",
-                            "text-xs lg:text-lg"
-                        )}
-                        handleClick={() => navigate("/profile/edit")}
-                    />
+                    <div className="flex gap-5">
+                        <Button
+                            text="EDITAR PERFIL"
+                            className={clsx(
+                                "mt-4 px-6 py-2 bg-violet-700 hover:bg-violet-600",
+                                "text-white font-medium rounded-xl shadow-lg",
+                                "cursor-pointer transition-all duration-200",
+                                "text-xs lg:text-lg"
+                            )}
+                            handleClick={() => navigate("/profile/edit")}
+                        />
+
+                        <Button
+                            text="EXCLUIR PERFIL"
+                            className={clsx(
+                                "mt-4 px-6 py-2 bg-red-700/90 hover:bg-red-600",
+                                "text-white font-medium rounded-xl shadow-lg",
+                                "cursor-pointer transition-all duration-200",
+                                "text-xs lg:text-lg"
+                            )}
+                            handleClick={async () => {
+                                try {
+                                    await deleteUser(userId)
+                                    toast.success("Conta deletada com sucesso")
+                                    navigate("/")
+                                } catch (err) {
+                                    console.log(`Não foi possível excluir a conta: ${err}`)
+                                    toast.error("Erro ao excluir conta!")
+                                }
+                                
+                            }}
+                        />
+                    </div>
                 </div>
 
                 <article className="space-y-6">
