@@ -134,10 +134,12 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
     const userData = await queryDB("select * from users where id = ?", [userId])
 
     if(!currentPassword || !newPassword || !confNewPassword) {
+        console.log("Preencha todos os campos!")
         return res.status(400).json({ erro: "Preencha todos os campos!" })
     }
 
     if(newPassword !== confNewPassword) {
+        console.log("Nova senha e a confirmação de senha deve ser iguais")
         return res.status(400).json({ erro: "Nova senha e a confirmação de senha deve ser iguais" })
     }
 
