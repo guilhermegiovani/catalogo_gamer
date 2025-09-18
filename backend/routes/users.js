@@ -132,12 +132,28 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
     const userId = req.userId
 
     const userData = await queryDB("select * from users where id = ?", [userId])
+
+    if(!currentPassword || !newPassword || !confNewPassword) {
+        return res.status(400).json({ erro: "Preencha todos os campos!" })
+    }
+
+    if(newPassword !== confNewPassword) {
+        return res.status(400).json({ erro: "Nova senha e a confirmação de senha deve ser iguais" })
+    }
+
+    const match = await bcrypt.compare(newPassword, userData[0].password)
+
+    if(match) {
+        console.log("A nova senha tem que ser diferente da atual")
+    }
     
     console.log(`Senha atual ${currentPassword}`)
     console.log(`Senha nova ${newPassword}`)
     console.log(`Confirmar senha nova ${confNewPassword}`)
     console.log(`Id user: ${userId}`)
-    console.log(userData)
+    console.log(userData[0])
+
+    console.log("SUCESSO...")
 
     return res.status(200).json({ message: "Senha atualizado com sucesso" })
 })
