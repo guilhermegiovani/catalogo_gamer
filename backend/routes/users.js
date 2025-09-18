@@ -213,4 +213,16 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
 
 })
 
+router.patch('/newPassword', authMiddleware, async (req, res) => {
+    const { currentPassword, newPassword, confNewPassword } = req.body
+    const userId = req.user.id
+    
+    console.log(`Senha atual ${currentPassword}`)
+    console.log(`Senha nova ${newPassword}`)
+    console.log(`Confirmar senha nova ${confNewPassword}`)
+    console.log(`Id user: ${userId}`)
+})
+
+router.patch('/resetPassword', authMiddleware, async (req, res) => {})
+
 export default router

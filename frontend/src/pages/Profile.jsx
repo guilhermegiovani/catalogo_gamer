@@ -93,6 +93,17 @@ function Profile() {
                         />
 
                         <Button
+                            text="MUDAR SENHA"
+                            className={clsx(
+                                "mt-4 px-6 py-2 bg-violet-700 hover:bg-violet-600",
+                                "text-white font-medium rounded-xl shadow-lg",
+                                "cursor-pointer transition-all duration-200",
+                                "text-xs lg:text-lg"
+                            )}
+                            handleClick={() => navigate("/profile/edit")}
+                        />
+
+                        <Button
                             text="EXCLUIR PERFIL"
                             className={clsx(
                                 "mt-4 px-6 py-2 bg-red-700/90 hover:bg-red-600",

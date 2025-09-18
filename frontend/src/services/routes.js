@@ -27,6 +27,10 @@ export const patchUsers = (id, dados) => {
     })
 }
 
+export const patchUserPassword = (dados) => { // talvez precise o id
+    return api.patch(`/newPassword`, dados)
+}
+
 // Função para logar usuário
 export const loginUser = (dados) => {
     return api.post("/login", dados)

@@ -173,34 +173,6 @@ function EditProfile() {
                     </div>
                 )}
 
-                {/* <Input
-                        textLabel={"Senha: "}
-                        type="password"
-                        id="senha"
-                        name="senha"
-                        required
-                        classNameInput={clsx(
-                            "px-4 py-2 rounded-md",
-                            "bg-[#2a264f] text-white placeholder:text-gray-400",
-                            "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]",
-                            "transition-all duration-200"
-                        )}
-                    />
-
-                    <Input
-                        textLabel={"Confirmar senha: "}
-                        type="password"
-                        id="confSenha"
-                        name="confSenha"
-                        required
-                        classNameInput={clsx(
-                            "px-4 py-2 rounded-md",
-                            "bg-[#2a264f] text-white placeholder:text-gray-400",
-                            "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]",
-                            "transition-all duration-200"
-                        )}
-                    /> */}
-
                 <div className="w-full flex justify-center gap-5">
                     <Button
                         text="Editar perfil"
