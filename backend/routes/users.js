@@ -11,6 +11,7 @@ import handleUpload from '../utils/uploadHander.js'
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc.js"
 import timezone from "dayjs/plugin/timezone.js"
+import { use } from 'react'
 
 const router = express.Router()
 router.use(express.json())
@@ -128,15 +129,16 @@ router.delete('/:id', authMiddleware, async (req, res) => {
 })
 
 router.patch('/newPassword', authMiddleware, async (req, res) => {
-    console.log("req.user =>", req.user)
-
     const { currentPassword, newPassword, confNewPassword } = req.body
     const userId = req.userId
+
+    const userData = await queryDB("select * from users where id = ?", [userId])
     
     console.log(`Senha atual ${currentPassword}`)
     console.log(`Senha nova ${newPassword}`)
     console.log(`Confirmar senha nova ${confNewPassword}`)
     console.log(`Id user: ${userId}`)
+    console.log(userData)
 
     return res.status(200).json({ message: "Senha atualizado com sucesso" })
 })
