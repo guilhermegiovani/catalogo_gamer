@@ -127,6 +127,20 @@ router.delete('/:id', authMiddleware, async (req, res) => {
 
 })
 
+router.patch('/newPassword', authMiddleware, async (req, res) => {
+    const { currentPassword, newPassword, confNewPassword } = req.body
+    const userId = req.user.id
+    
+    console.log(`Senha atual ${currentPassword}`)
+    console.log(`Senha nova ${newPassword}`)
+    console.log(`Confirmar senha nova ${confNewPassword}`)
+    console.log(`Id user: ${userId}`)
+
+    return res.status(200).json({ message: "Senha atualizado com sucesso" })
+})
+
+router.patch('/resetPassword', authMiddleware, async (req, res) => {})
+
 const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
     destination: "uploads/",
     filename: (req, file, cb) => {
@@ -212,19 +226,5 @@ router.patch('/:id', authMiddleware, upload.single("img-profile"), async (req, r
     return res.status(200).json({ message: "Usuário atualizado com sucesso", userData: formattedDate })
 
 })
-
-router.patch('/newPassword', authMiddleware, async (req, res) => {
-    const { currentPassword, newPassword, confNewPassword } = req.body
-    const userId = req.user.id
-    
-    console.log(`Senha atual ${currentPassword}`)
-    console.log(`Senha nova ${newPassword}`)
-    console.log(`Confirmar senha nova ${confNewPassword}`)
-    console.log(`Id user: ${userId}`)
-
-    return res.status(200).json({ message: "Senha atualizado com sucesso" })
-})
-
-router.patch('/resetPassword', authMiddleware, async (req, res) => {})
 
 export default router
