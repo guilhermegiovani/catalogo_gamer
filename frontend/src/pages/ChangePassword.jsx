@@ -33,7 +33,6 @@ function ChangePassword() {
         try {
             if(!password || !newPassword || !confNewPassword) {
                 toast.error("Preencha todos os campos")
-                navigate("/profile")
                 return
             }
 
@@ -127,7 +126,7 @@ function ChangePassword() {
                         // type="submit"
                         handleClick={() => {
                             handleChangePassword(userId).then(() => {
-                                if(password || newPassword || confNewPassword) {
+                                if(password && newPassword && confNewPassword) { // não testei
                                     toast.success("senha alterada com sucesso!")
                                 }
                                 navigate("/profile")
