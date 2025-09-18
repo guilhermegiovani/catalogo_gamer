@@ -62,7 +62,7 @@ function Profile() {
                             <img
                                 src={baseURL + profileUser.profile_photo}
                                 alt="foto_perfil"
-                                className="object-contain"
+                                className="w-full h-full object-cover object-top"
                             />
 
                         </span>
@@ -103,8 +103,8 @@ function Profile() {
                             handleClick={async () => {
                                 try {
                                     await deleteUser(userId)
-                                    toast.success("Conta deletada com sucesso")
                                     logout()
+                                    toast.success("Conta deletada com sucesso")
                                     navigate("/")
                                 } catch (err) {
                                     console.log(`Não foi possível excluir a conta: ${err}`)
