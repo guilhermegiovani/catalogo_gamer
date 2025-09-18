@@ -13,6 +13,7 @@ import AdminGame from "../pages/AdminGame";
 import AdminNewGame from "../pages/AdminNewGame";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
+import ChangePassword from "../pages/changePassword";
 
 export default function Router() {
 
@@ -43,6 +44,7 @@ export default function Router() {
                 {/* Perfil */}
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profile/edit" element={<EditProfile />} />
+                <Route path="/profile/changePassword" element={<ChangePassword />} />
             </Route>
         </Routes>
     )
