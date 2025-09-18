@@ -139,15 +139,15 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
         return
     }
 
-    if(newPassword !== confNewPassword) {
-        console.log("Nova senha e a confirmação de senha deve ser iguais")
-        // return res.status(400).json({ erro: "Nova senha e a confirmação de senha deve ser iguais" })
-        return
-    }
-
     const match = await bcrypt.compare(currentPassword, userData[0].password)
     if(!match) {
         console.log("Senha atual incorreta.")
+        return
+    }
+
+    if(newPassword !== confNewPassword) {
+        console.log("Nova senha e a confirmação de senha deve ser iguais")
+        // return res.status(400).json({ erro: "Nova senha e a confirmação de senha deve ser iguais" })
         return
     }
 
