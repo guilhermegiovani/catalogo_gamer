@@ -158,8 +158,7 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
         return
     }
 
-
-    // const senhaCripto = await bcrypt.hash(password, 10)
+    // const passwordCripto = await bcrypt.hash(newPassword, 10)
     
     console.log(`Senha atual ${currentPassword}`)
     console.log(`Senha nova ${newPassword}`)

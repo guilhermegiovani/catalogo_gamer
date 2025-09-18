@@ -33,7 +33,6 @@ function ChangePassword() {
         try {
             if(!password || !newPassword || !confNewPassword) {
                 toast.error("Preencha todos os campos")
-                return
             }
 
             console.log(`Atual: ${password}`)
