@@ -44,7 +44,7 @@ export default function Router() {
                 {/* Perfil */}
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profile/edit" element={<EditProfile />} />
-                <Route path="/profile/changePassword" element={<ChangePassword />} />
+                <Route path="/profile/changepassword" element={<ChangePassword />} />
             </Route>
         </Routes>
     )

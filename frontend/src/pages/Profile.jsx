@@ -100,7 +100,7 @@ function Profile() {
                                 "cursor-pointer transition-all duration-200",
                                 "text-xs lg:text-lg"
                             )}
-                            handleClick={() => navigate("/profile/edit")}
+                            handleClick={() => navigate("/profile/changepassword")}
                         />
 
                         <Button
