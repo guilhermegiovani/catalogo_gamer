@@ -131,7 +131,7 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
     console.log("req.user =>", req.user)
 
     const { currentPassword, newPassword, confNewPassword } = req.body
-    const userId = req.user?.id
+    const userId = req.userId
     
     console.log(`Senha atual ${currentPassword}`)
     console.log(`Senha nova ${newPassword}`)

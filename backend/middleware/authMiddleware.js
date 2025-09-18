@@ -17,6 +17,7 @@ export default function(req, res, next) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         // Adiciona o id do usuário na requisição (pode usar depois nas rotas)
+
         req.userId = decoded.id
 
         // Verificar se é Admin
