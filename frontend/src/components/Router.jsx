@@ -13,7 +13,7 @@ import AdminGame from "../pages/AdminGame";
 import AdminNewGame from "../pages/AdminNewGame";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
-import ChangePassword from "../pages/changePassword";
+import ChangePassword from "../pages/ChangePassword";
 
 export default function Router() {
 
