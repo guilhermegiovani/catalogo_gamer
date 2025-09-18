@@ -7,7 +7,7 @@ export const newUser = (dados) => {
 
 // Deletar Usuário
 export const deleteUser = (id) => {
-    return api.delete(`users/${id}`)
+    return api.delete(`/users/${id}`)
 }
 
 // Pegar todos os usuários
@@ -17,7 +17,7 @@ export const getUsers = () => {
 
 // Pegar todos os usuários
 export const getUser = (id) => {
-    return api.get(`users/${id}`)
+    return api.get(`/users/${id}`)
 }
 
 // Editar usuários
@@ -28,7 +28,7 @@ export const patchUsers = (id, dados) => {
 }
 
 export const patchUserPassword = (dados) => { // talvez precise o id
-    return api.patch(`/newPassword`, dados)
+    return api.patch(`/users/newPassword`, dados)
 }
 
 // Função para logar usuário

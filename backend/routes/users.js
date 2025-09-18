@@ -221,6 +221,8 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
     console.log(`Senha nova ${newPassword}`)
     console.log(`Confirmar senha nova ${confNewPassword}`)
     console.log(`Id user: ${userId}`)
+
+    return res.status(200).json({ message: "Senha atualizado com sucesso" })
 })
 
 router.patch('/resetPassword', authMiddleware, async (req, res) => {})

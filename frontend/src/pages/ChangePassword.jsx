@@ -33,6 +33,7 @@ function ChangePassword() {
         try {
             if(!password || !newPassword || !confNewPassword) {
                 toast.error("Preencha todos os campos")
+                navigate("/profile")
                 return
             }
 
