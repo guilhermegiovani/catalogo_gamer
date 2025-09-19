@@ -58,6 +58,7 @@ function CheckEmail() {
                 handleSubmit={(e) => {
                     e.preventDefault()
                     handleCheckEmail()
+                    console.log(tokenResetPassword)
                     if(tokenResetPassword) {
                         navigate("/resetpassword")
                     }
