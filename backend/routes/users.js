@@ -195,6 +195,7 @@ router.post('/forgotPassword', async (req, res) => {
 
 router.post('/resetPassword/:token', async (req, res) => {
     const { token } = req.params
+    const { newPassword, confNewPassword } = req.body
 
     let userData = await queryDB("select * from users where reset_token = ?;", [token])
 
@@ -203,9 +204,21 @@ router.post('/resetPassword/:token', async (req, res) => {
     console.log(JSON.stringify(userData[0]))
     const userId = userData[0].id
 
+    const match = await bcrypt.compare(newPassword, userData[0].password)
+    if (!match) {
+        console.log("A nova senha tem que ser diferente da atual.")
+        return res.status(400).json({ erro: "A nova senha tem que ser diferente da atual." })
+    }
+
+    if(newPassword !== confNewPassword) {
+        console.log("Senhas não conferem.")
+    }
+
+    const passwordCripto = await bcrypt.hash(newPassword, 10)
+
     userData = await queryDB(
-        "UPDATE users SET reset_token = NULL, reset_token_expires = NULL WHERE id = ?",
-        [userId]
+        "UPDATE users SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?",
+        [passwordCripto, userId]
     )
 
     console.log(JSON.stringify(userData))

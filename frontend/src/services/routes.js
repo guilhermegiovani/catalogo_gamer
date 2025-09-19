@@ -38,8 +38,8 @@ export const checkEmailUser = (email) => {
 }
 
 // Redefinir senha
-export const resetUserPassword = (token) => {
-    return api.post(`/users/resetPassword/${token}`)
+export const resetUserPassword = (token, dados) => {
+    return api.post(`/users/resetPassword/${token}`, dados)
 }
 
 // Função para logar usuário

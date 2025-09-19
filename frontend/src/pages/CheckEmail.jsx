@@ -4,13 +4,13 @@ import Input from "../components/Input"
 import Button from "../components/Button"
 import Form from "../components/Form"
 import toast from "react-hot-toast"
-import { checkEmailUser, getUser, getUsers } from "../services/routes"
+import { checkEmailUser, getUsers } from "../services/routes"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { useAuth } from "../hooks/useAuth"
 
 function CheckEmail() {
-    const { setTokenResetPassword } = useAuth()
+    const { tokenResetPassword, setTokenResetPassword } = useAuth()
     const [email, setEmail] = useState("")
     const navigate = useNavigate()
 
@@ -34,8 +34,9 @@ function CheckEmail() {
         
         console.log("Email: " + email)
         await checkEmailUser(email)
-        
+
         const user = await userData(email)
+        setTokenResetPassword(user.reset_token)
         console.log(user)
 
         toast.success("Email verificado.")
@@ -57,6 +58,9 @@ function CheckEmail() {
                 handleSubmit={(e) => {
                     e.preventDefault()
                     handleCheckEmail()
+                    if(tokenResetPassword) {
+                        navigate("/resetpassword")
+                    }
                 }}
             >
                 <p className="text-gray-400 italic">Coloque o mesmo email que utilizou na criação da conta!</p>

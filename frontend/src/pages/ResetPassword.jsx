@@ -8,17 +8,14 @@ import toast from "react-hot-toast"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { resetUserPassword } from "../services/routes"
+import { useAuth } from "../hooks/useAuth"
 
 function ResetPassword() {
+    const { tokenResetPassword } = useAuth()
     const [newPassword, setNewPassword] = useState("")
     const [confNewPassword, setConfNewPassword] = useState("")
     const navigate = useNavigate()
 
-    // const user = async () => {
-    //     try {
-    //         const res = getUser
-    //     }
-    // }
 
     const handleResetPassword = async () => {
         if (!newPassword || !confNewPassword) {
@@ -29,7 +26,7 @@ function ResetPassword() {
         console.log("Nova Senha: " + newPassword)
         console.log("Confirmar senha: " + newPassword)
 
-        await resetUserPassword()
+        await resetUserPassword(tokenResetPassword, { newPassword, confNewPassword })
         toast.success("Senha redefinida.")
     }
 
