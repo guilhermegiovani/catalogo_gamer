@@ -39,7 +39,7 @@ function Login() {
                 "bg-[#1e1b38]",
                 "rounded-2xl shadow-md sm:shadow-lg w-full p-6 max-w-xl lg:max-w-2xl space-y-6",
                 "landscape:sm:space-y-4 landscape:sm:p-4 landscape:lg:p-5 landscape:xl:p-10",
-                "flex flex-col items-center",
+                "flex flex-col items-center gap-2",
                 "border border-[#4f46e5]/20"
             )}>
 
@@ -112,16 +112,29 @@ function Login() {
 
 
 
-                <p className={clsx(
-                    "text-center text-gray-300 text-sm xl:text-base"
-                )}>
-                    Não tem uma conta?{" "}
-                    <Link
-                        to="/register"
-                        className="text-[#6c63ff] hover:underline hover:text-[#8b84ff] transition-colors">
-                        Crie uma agora!
-                    </Link>
-                </p>
+                <div className="flex flex-col gap-1">
+                    <p className={clsx(
+                        "text-center text-gray-300 text-sm xl:text-base"
+                    )}>
+                        Não tem uma conta?{" "}
+                        <Link
+                            to="/register"
+                            className="text-[#6c63ff] hover:underline hover:text-[#8b84ff] transition-colors">
+                            Crie uma agora!
+                        </Link>
+                    </p>
+                    
+                    <p className={clsx(
+                        "text-center text-gray-300 text-sm xl:text-base"
+                    )}>
+                        Esqueceu sua senha?{" "}
+                        <Link
+                            to="/checkemail"
+                            className="text-[#6c63ff] hover:underline hover:text-[#8b84ff] transition-colors">
+                            Redefinir senha!
+                        </Link>
+                    </p>
+                </div>
             </div>
 
         </div>

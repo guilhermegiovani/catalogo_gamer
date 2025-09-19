@@ -11,6 +11,7 @@ import handleUpload from '../utils/uploadHander.js'
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc.js"
 import timezone from "dayjs/plugin/timezone.js"
+import crypto from "crypto"
 
 const router = express.Router()
 router.use(express.json())
@@ -131,56 +132,62 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
     const { currentPassword, newPassword, confNewPassword } = req.body
     const userId = req.userId
 
-    let userData = await queryDB("select * from users where id = ?", [userId])
-
-    if(!currentPassword || !newPassword || !confNewPassword) {
+    if (!currentPassword || !newPassword || !confNewPassword) {
         console.log("Preencha todos os campos!")
-        // return res.status(400).json({ erro: "Preencha todos os campos!" })
-        return
+        return res.status(400).json({ erro: "Preencha todos os campos!" })
     }
 
     const match = await bcrypt.compare(currentPassword, userData[0].password)
-    if(!match) {
+    if (!match) {
         console.log("Senha atual incorreta.")
-        return
+        return res.status(400).json({ erro: "Senha atual incorreta." })
     }
 
-    if(newPassword !== confNewPassword) {
+    if (newPassword !== confNewPassword) {
         console.log("Nova senha e a confirmação de senha deve ser iguais")
-        // return res.status(400).json({ erro: "Nova senha e a confirmação de senha deve ser iguais" })
-        return
+        return res.status(400).json({ erro: "Nova senha e a confirmação de senha deve ser iguais" })
     }
 
     const matchNewPassword = await bcrypt.compare(newPassword, userData[0].password)
 
-    if(matchNewPassword) {
+    if (matchNewPassword) {
         console.log("A nova senha tem que ser diferente da atual")
-        return
+        return res.status(400).json({ erro: "A nova senha tem que ser diferente da atual" })
     }
 
     const passwordCripto = await bcrypt.hash(newPassword, 10)
 
     const results = await queryDB("update users set password = ? where id = ?;", [passwordCripto, userId])
-    
-    console.log(`Senha atual ${currentPassword}`)
-    console.log(`Senha nova ${newPassword}`)
-    console.log(`Confirmar senha nova ${confNewPassword}`)
-    console.log(`Senha nova criptografada ${passwordCripto}`)
-    console.log(`Id user: ${userId}`)
-    console.log(userData[0])
-    console.log(results[0])
 
-    // Senha da conta akaza: $2b$10$zVA6DZTUYl859EyVVCxprel4zy6A7bokKlnree88OcrEx1ywMCCwm
-
-    userData = await queryDB("select * from users where id = ?", [userId])
-    console.log("Senha atualizada" + JSON.stringify(userData[0]))
-
-    console.log("SUCESSO...")
+    if (results.length === 0) return res.status(404).json({ erro: "Credenciais inválidas" })
 
     return res.status(200).json({ message: "Senha atualizado com sucesso" })
 })
 
-router.patch('/resetPassword', authMiddleware, async (req, res) => {})
+router.post('/forgotPassword', async (req, res) => {
+    const { email } = req.body
+
+    const user = await queryDB("select * from users where email = ?", [email])
+    const userId = user[0].id
+
+    if (!user[0]) {
+        return res.status(200).json({ erro: "Se houver uma conta com esse email, enviamos instruções" })
+    }
+
+    const token = crypto.randomBytes(32).toString("hex")
+    const expires = Date.now() + 3600 * 1000
+
+    console.log("Token gerado:", token)
+    console.log("Expira em:", new Date(expires).toLocaleString())
+
+    // const results = await queryDB(
+    //     "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?",
+    //     [token, expires, userId]
+    // )
+
+})
+
+router.patch('/resetPassword', authMiddleware, async (req, res) => { })
 
 const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
     destination: "uploads/",

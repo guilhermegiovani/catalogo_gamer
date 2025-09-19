@@ -30,7 +30,9 @@ function CreateAccountForm() {
 
                 handleCreateAccount({ name, email, password })
                     .then(() => {
-                        toast.success("Conta criada com sucesso! Faça login.")
+                        if(name && email && password && confPassword) {
+                            toast.success("Conta criada com sucesso! Faça login.")
+                        }
 
                         setName("")
                         setEmail("")
@@ -112,16 +114,28 @@ function CreateAccountForm() {
                     )}
                 />
 
-                <Button
-                    text="Criar conta"
-                    className={clsx(
-                        " w-50 text-white font-semibold py-2 rounded-md mt-4",
-                        "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
-                        "hover:brightness-130 transition-all duration-200",
-                        "cursor-pointer"
-                    )}
-                    type="submit"
-                />
+                <div className="flex gap-4">
+                    <Button
+                        text="Criar conta"
+                        className={clsx(
+                            "w-40 text-white font-semibold py-2 rounded-md mt-4",
+                            "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
+                            "hover:brightness-130 transition-all duration-200",
+                            "cursor-pointer lg:text-lg"
+                        )}
+                        type="submit"
+                    />
+                    <Button
+                        text="Cancelar"
+                        className={clsx(
+                            "w-40 text-white font-semibold py-2 rounded-md mt-4",
+                            "bg-red-700",
+                            "hover:brightness-130 transition-all duration-200",
+                            "cursor-pointer lg:text-lg"
+                        )}
+                        handleClick={() => navigate("/login")}
+                    />
+                </div>
             </Form>
 
         </div>

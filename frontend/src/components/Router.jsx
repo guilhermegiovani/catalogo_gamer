@@ -14,6 +14,7 @@ import AdminNewGame from "../pages/AdminNewGame";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
 import ChangePassword from "../pages/ChangePassword";
+import CheckEmail from "../pages/CheckEmail";
 
 export default function Router() {
 
@@ -23,6 +24,8 @@ export default function Router() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<CreateAccount />} />
+            <Route path="/checkemail" element={<CheckEmail />} />
+            {/* <Route path="/checkemail" element={<CreateAccount />} /> */}
 
             {/* Rotas privadas */}
             <Route element={<PrivateRouter />}>
