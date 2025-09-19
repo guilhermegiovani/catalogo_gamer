@@ -46,6 +46,8 @@ function ResetPassword() {
                 handleSubmit={(e) => {
                     e.preventDefault()
                     handleResetPassword()
+                    setNewPassword("")
+                    setConfNewPassword("")
                 }}
             >
                 <p className="text-gray-400 italic">A nova senha tem que ser diferente da atual.</p>
