@@ -131,7 +131,7 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
     const { currentPassword, newPassword, confNewPassword } = req.body
     const userId = req.userId
 
-    const userData = await queryDB("select * from users where id = ?", [userId])
+    let userData = await queryDB("select * from users where id = ?", [userId])
 
     if(!currentPassword || !newPassword || !confNewPassword) {
         console.log("Preencha todos os campos!")
@@ -158,13 +158,22 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
         return
     }
 
-    // const passwordCripto = await bcrypt.hash(newPassword, 10)
+    const passwordCripto = await bcrypt.hash(newPassword, 10)
+
+    // const results = await queryDB("update users set password = ? where id = ?;", [passwordCripto, userId])
     
     console.log(`Senha atual ${currentPassword}`)
     console.log(`Senha nova ${newPassword}`)
     console.log(`Confirmar senha nova ${confNewPassword}`)
+    console.log(`Senha nova criptografada ${passwordCripto}`)
     console.log(`Id user: ${userId}`)
     console.log(userData[0])
+    // console.log(results[0])
+
+    // Senha da conta akaza: $2b$10$zVA6DZTUYl859EyVVCxprel4zy6A7bokKlnree88OcrEx1ywMCCwm
+
+    // userData = await queryDB("select * from users where id = ?", [userId])
+    // console.log("Senha atualizada" + userData[0])
 
     console.log("SUCESSO...")
 
