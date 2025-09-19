@@ -33,7 +33,7 @@ export const patchUserPassword = (dados) => { // talvez precise o id
 }
 
 export const checkEmailUser = (email) => {
-    return api.post(`/users/forgotPassword`, email)
+    return api.post(`/users/forgotPassword`, {email})
 }
 
 // Função para logar usuário

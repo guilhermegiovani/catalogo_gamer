@@ -5,12 +5,14 @@ import Button from "../components/Button"
 import Form from "../components/Form"
 import toast from "react-hot-toast"
 import { checkEmailUser } from "../services/routes"
+import { useNavigate } from "react-router-dom"
 
 function CheckEmail() {
     const [email, setEmail] = useState("")
+    const navigate = useNavigate()
 
     const handleCheckEmail = async () => {
-        if(!email) {
+        if (!email) {
             toast.error("Preencha todos os campos")
             return
         }
@@ -58,20 +60,32 @@ function CheckEmail() {
                     )}
                 />
 
-                <Button
-                    text="Enviar código"
-                    className={clsx(
-                        "w-30 sm:w-35 text-white font-semibold p-1.5 rounded-md mt-2 sm:mt-4",
-                        "text-sm",
-                        "landscape:sm:text-sm landscape:sm:w-35",
-                        "landscape:lg:text-base landscape:lg:w-40",
-                        "landscape:xl:text-lg landscape:xl:w-50",
-                        "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
-                        "hover:brightness-130 transition-all duration-200",
-                        "cursor-pointer"
-                    )}
-                    type="submit"
-                />
+                <div className="flex gap-4">
+                    <Button
+                        text="Enviar código"
+                        className={clsx(
+                            "w-30 sm:w-35 text-white font-semibold p-1.5 rounded-md mt-2 sm:mt-4",
+                            "text-sm",
+                            "landscape:sm:text-sm landscape:sm:w-35",
+                            "landscape:lg:text-base landscape:lg:w-40",
+                            "landscape:xl:text-lg landscape:xl:w-50",
+                            "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
+                            "hover:brightness-130 transition-all duration-200",
+                            "cursor-pointer"
+                        )}
+                        type="submit"
+                    />
+                    <Button
+                        text="Cancelar"
+                        className={clsx(
+                            "w-40 text-white font-semibold p-1.5 rounded-md mt-4",
+                            "bg-red-700",
+                            "hover:brightness-130 transition-all duration-200",
+                            "cursor-pointer lg:text-lg"
+                        )}
+                        handleClick={() => navigate("/login")}
+                    />
+                </div>
             </Form>
         </section>
     )
