@@ -1,42 +1,36 @@
+
 import clsx from "clsx"
 import { useState } from "react"
 import Input from "../components/Input"
 import Button from "../components/Button"
 import Form from "../components/Form"
 import toast from "react-hot-toast"
-import { checkEmailUser, getUser, getUsers } from "../services/routes"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
-import { useAuth } from "../hooks/useAuth"
+import { resetUserPassword } from "../services/routes"
 
-function CheckEmail() {
-    const { setTokenResetPassword } = useAuth()
-    const [email, setEmail] = useState("")
+function ResetPassword() {
+    const [newPassword, setNewPassword] = useState("")
+    const [confNewPassword, setConfNewPassword] = useState("")
     const navigate = useNavigate()
 
-    const userData = async (emailUser) => {
-        try {
-            const res = await getUsers()
-            const user = res.data.find((u) => u.email === emailUser)
-            return user
-        } catch(err) {
-            console.log(`Erro: ${err}`)
-        }
+    // const user = async () => {
+    //     try {
+    //         const res = getUser
+    //     }
+    // }
 
-    }
-
-    const handleCheckEmail = async () => {
-        if (!email) {
+    const handleResetPassword = async () => {
+        if (!newPassword || !confNewPassword) {
             toast.error("Preencha todos os campos")
             return
         }
 
-        const user = await userData(email)
-        console.log(user)
+        console.log("Nova Senha: " + newPassword)
+        console.log("Confirmar senha: " + newPassword)
 
-        console.log("Email: " + email)
-        await checkEmailUser(email)
-        toast.success("Email verificado.")
+        await resetUserPassword()
+        toast.success("Senha redefinida.")
     }
 
     return (
@@ -54,32 +48,46 @@ function CheckEmail() {
                 )}
                 handleSubmit={(e) => {
                     e.preventDefault()
-                    handleCheckEmail()
+                    handleResetPassword()
                 }}
             >
-                <p className="text-gray-400 italic">Coloque o mesmo email que utilizou na criação da conta!</p>
+                <p className="text-gray-400 italic">A nova senha tem que ser diferente da atual.</p>
 
                 <Input
-                    textLabel={"Email: "}
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    handleChange={(e) => setEmail(e.target.value)}
+                    textLabel={"Nova senha: "}
+                    type="password"
+                    id="novaSenha"
+                    name="novaSenha"
+                    value={newPassword}
                     required
+                    handleChange={(e) => setNewPassword(e.target.value)}
                     classNameInput={clsx(
                         "px-4 py-2 rounded-md",
-                        "text-xs sm:text-sm",
-                        "landscape:sm:text-xs landscape:lg:text-base landscape:xl:text-lg"
-                        // "bg-[#2a264f] text-white placeholder:text-gray-400",
-                        // "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]",
-                        // "transition-all duration-200"
+                        "bg-[#2a264f] text-white placeholder:text-gray-400",
+                        "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]",
+                        "transition-all duration-200"
+                    )}
+                />
+
+                <Input
+                    textLabel={"Confirma nova senha: "}
+                    type="password"
+                    id="confNovaSenha"
+                    name="confNovaSenha"
+                    value={confNewPassword}
+                    required
+                    handleChange={(e) => setConfNewPassword(e.target.value)}
+                    classNameInput={clsx(
+                        "px-4 py-2 rounded-md",
+                        "bg-[#2a264f] text-white placeholder:text-gray-400",
+                        "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]",
+                        "transition-all duration-200"
                     )}
                 />
 
                 <div className="flex gap-4">
                     <Button
-                        text="Enviar código"
+                        text="Confirmar"
                         className={clsx(
                             "w-30 sm:w-35 text-white font-semibold p-1.5 rounded-md mt-2 sm:mt-4",
                             "text-sm",
@@ -103,20 +111,9 @@ function CheckEmail() {
                         handleClick={() => navigate("/login")}
                     />
                 </div>
-
-                <p className={clsx(
-                    "text-center text-gray-300 text-sm xl:text-base"
-                )}>
-                    Testar reset senha: {" "}
-                    <Link
-                        to="/resetpassword"
-                        className="text-[#6c63ff] hover:underline hover:text-[#8b84ff] transition-colors">
-                        Clique aqui!
-                    </Link>
-                </p>
             </Form>
         </section>
     )
 }
 
-export default CheckEmail
+export default ResetPassword

@@ -32,8 +32,14 @@ export const patchUserPassword = (dados) => { // talvez precise o id
     return api.patch(`/users/newPassword`, dados)
 }
 
+// Verificar email pra redefinir senha
 export const checkEmailUser = (email) => {
     return api.post(`/users/forgotPassword`, {email})
+}
+
+// Redefinir senha
+export const resetUserPassword = (token) => {
+    return api.post(`/users/resetPassword/${token}`)
 }
 
 // Função para logar usuário

@@ -73,7 +73,8 @@ router.post('/', async (req, res) => {
 
 })
 
-router.get('/', authMiddleware, async (req, res) => {
+// authMiddleware
+router.get('/', async (req, res) => {
     const results = await queryDB("select * from users;")
 
     if (results.length === 0) return res.status(404).json({ erro: "Nenhum usuário encontrado!" })
@@ -180,14 +181,37 @@ router.post('/forgotPassword', async (req, res) => {
     console.log("Token gerado:", token)
     console.log("Expira em:", new Date(expires).toLocaleString())
 
-    // const results = await queryDB(
-    //     "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?",
-    //     [token, expires, userId]
-    // )
+    const results = await queryDB(
+        "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?",
+        [token, expires, userId]
+    )
+
+    if (results.length === 0) return res.status(400).json({ erro: "Não foi possível gerar o token" })
+
+    return res.status(200).json({ message: "Se houver uma conta com esse email, enviamos instruções" })
 
 })
 
-router.patch('/resetPassword', authMiddleware, async (req, res) => { })
+router.post('/resetPassword/:token', async (req, res) => {
+    const { token } = req.params
+
+    let userData = await queryDB("select * from users where reset_token = ?;", [token])
+
+    if (!userData[0]) return console.log("Erro ao pegar dados do usuário.")
+
+    console.log(JSON.stringify(userData[0]))
+    const userId = userData[0].id
+
+    userData = await queryDB(
+        "UPDATE users SET reset_token = NULL, reset_token_expires = NULL WHERE id = ?",
+        [userId]
+    )
+
+    console.log(JSON.stringify(userData))
+
+    return res.status(200).json({ message: "SUCESSO" })
+
+})
 
 const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
     destination: "uploads/",

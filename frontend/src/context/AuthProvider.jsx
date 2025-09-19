@@ -32,6 +32,8 @@ export function AuthProvider({ children }) {
     const [previewImgPerfil, setPreviewImgPerfil] = useState(null)
     const baseURL = import.meta.env.VITE_API_URL === "http://localhost:8000" ? "http://localhost:8000" : ""
 
+    const [tokenResetPassword, setTokenResetPassword] = useState("")
+
     // const storedToken = localStorage.getItem("token")
     // let initialRole = ""
     // let initialUserId = 0
@@ -311,7 +313,7 @@ export function AuthProvider({ children }) {
 
     return (
         <AuthContext.Provider value={{
-            user, handleLogin, logout, favorites, setFavorites, favoritesIdGame, setFavoritesIdGame, handleFavorites, getFavoritesUser, games, setGames, averages, setAverages, avgsFavorites, setAvgsFavorites, reviews, setReviews, reviewsData, setReviewsData, userId, reviewEdit, setReviewEdit, handleEditReview, isEditing, setIsEditing, rating, setRating, comment, setComment, reviewId, setReviewId, isLoading, deleteRev, handleCreateAccount, roleUser, gamesAdmin, fetchGame, imgPerfil, setImgPerfil, imgsGames, setImgsGames, searchGame, setSearchGame, isSearch, setIsSearch, previewImgPerfil, setPreviewImgPerfil, getEditProfilePhoto, baseURL
+            user, handleLogin, logout, favorites, setFavorites, favoritesIdGame, setFavoritesIdGame, handleFavorites, getFavoritesUser, games, setGames, averages, setAverages, avgsFavorites, setAvgsFavorites, reviews, setReviews, reviewsData, setReviewsData, userId, reviewEdit, setReviewEdit, handleEditReview, isEditing, setIsEditing, rating, setRating, comment, setComment, reviewId, setReviewId, isLoading, deleteRev, handleCreateAccount, roleUser, gamesAdmin, fetchGame, imgPerfil, setImgPerfil, imgsGames, setImgsGames, searchGame, setSearchGame, isSearch, setIsSearch, previewImgPerfil, setPreviewImgPerfil, getEditProfilePhoto, baseURL, tokenResetPassword, setTokenResetPassword
         }}>
             {children}
         </AuthContext.Provider>

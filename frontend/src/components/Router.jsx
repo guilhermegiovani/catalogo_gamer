@@ -15,6 +15,7 @@ import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
 import ChangePassword from "../pages/ChangePassword";
 import CheckEmail from "../pages/CheckEmail";
+import ResetPassword from "../pages/ResetPassword";
 
 export default function Router() {
 
@@ -25,7 +26,7 @@ export default function Router() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<CreateAccount />} />
             <Route path="/checkemail" element={<CheckEmail />} />
-            {/* <Route path="/checkemail" element={<CreateAccount />} /> */}
+            <Route path="/resetpassword" element={<ResetPassword />} />
 
             {/* Rotas privadas */}
             <Route element={<PrivateRouter />}>

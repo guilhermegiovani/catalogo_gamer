@@ -134,6 +134,17 @@ function Login() {
                             Redefinir senha!
                         </Link>
                     </p>
+
+                    {/* <p className={clsx(
+                        "text-center text-gray-300 text-sm xl:text-base"
+                    )}>
+                        Testar reset senha{" "}
+                        <Link
+                            to="/resetpassword"
+                            className="text-[#6c63ff] hover:underline hover:text-[#8b84ff] transition-colors">
+                            Clique aqui!
+                        </Link>
+                    </p> */}
                 </div>
             </div>
 
