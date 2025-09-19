@@ -173,7 +173,7 @@ router.patch('/newPassword', authMiddleware, async (req, res) => {
     // Senha da conta akaza: $2b$10$zVA6DZTUYl859EyVVCxprel4zy6A7bokKlnree88OcrEx1ywMCCwm
 
     userData = await queryDB("select * from users where id = ?", [userId])
-    console.log("Senha atualizada" + userData[0])
+    console.log("Senha atualizada" + JSON.stringify(userData[0]))
 
     console.log("SUCESSO...")
 
