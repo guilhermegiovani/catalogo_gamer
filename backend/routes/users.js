@@ -176,7 +176,7 @@ router.post('/forgotPassword', async (req, res) => {
     }
 
     const token = crypto.randomBytes(32).toString("hex")
-    const expires = Date.now() + 3600 * 1000
+    const expires = new Date(Date.now() + 3600 * 1000)
 
     console.log("Token gerado:", token)
     console.log("Expira em:", new Date(expires).toLocaleString())
