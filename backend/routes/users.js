@@ -185,8 +185,9 @@ router.post('/forgotPassword', async (req, res) => {
         "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?",
         [token, expires, userId]
     )
-
+    
     if (results.length === 0) return res.status(400).json({ erro: "Não foi possível gerar o token" })
+    console.log("Adicionou")
 
     return res.status(200).json({ message: "Se houver uma conta com esse email, enviamos instruções" })
 

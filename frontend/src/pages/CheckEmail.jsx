@@ -31,11 +31,13 @@ function CheckEmail() {
             return
         }
 
+        
+        console.log("Email: " + email)
+        await checkEmailUser(email)
+        
         const user = await userData(email)
         console.log(user)
 
-        console.log("Email: " + email)
-        await checkEmailUser(email)
         toast.success("Email verificado.")
     }
 
