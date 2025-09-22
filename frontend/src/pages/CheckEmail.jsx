@@ -19,7 +19,7 @@ function CheckEmail() {
             const res = await getUsers()
             const user = res.data.find((u) => u.email === emailUser)
             return user
-        } catch(err) {
+        } catch (err) {
             console.log(`Erro: ${err}`)
         }
 
@@ -31,7 +31,7 @@ function CheckEmail() {
             return
         }
 
-        
+
         console.log("Email: " + email)
         await checkEmailUser(email)
 
@@ -40,6 +40,10 @@ function CheckEmail() {
         console.log(user)
 
         toast.success("Email verificado.")
+
+        if (user?.reset_token) {
+            navigate("/resetpassword")
+        }
     }
 
     return (
@@ -59,9 +63,6 @@ function CheckEmail() {
                     e.preventDefault()
                     handleCheckEmail()
                     console.log(tokenResetPassword)
-                    if(tokenResetPassword) {
-                        navigate("/resetpassword")
-                    }
                 }}
             >
                 <p className="text-gray-400 italic">Coloque o mesmo email que utilizou na criação da conta!</p>
