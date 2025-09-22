@@ -187,8 +187,10 @@ router.post('/forgotPassword', async (req, res) => {
             html: `
             <p>Você solicitou redefinição de senha.</p>
             <p>Clique no link abaixo para criar uma nova senha.</p>
-            <p>Se não abrir automaticamente, segure <strong>Ctrl</strong> e clique no link ou copie e cole em outra aba do navegador:</p>
+            <p>Se não abrir automaticamente, segure <strong>Ctrl</strong> e clique no link</p>
             <a href="${link}" target="_blank" rel="noopener noreferrer">Redefinir senha</a>
+            <p>Ou copie e cole em outra aba do navegador:</p>
+            <p>${link}</p>
             <p>O link expira em 30 minutos.</p>
         `
         });

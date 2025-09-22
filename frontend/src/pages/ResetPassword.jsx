@@ -106,10 +106,14 @@ function ResetPassword() {
                     <Button
                         text="Cancelar"
                         className={clsx(
-                            "w-40 text-white font-semibold p-1.5 rounded-md mt-4",
+                            "w-30 sm:w-35 text-white font-semibold p-1.5 rounded-md mt-2 sm:mt-4",
+                            "text-sm",
+                            "landscape:sm:text-sm landscape:sm:w-35",
+                            "landscape:lg:text-base landscape:lg:w-40",
+                            "landscape:xl:text-lg landscape:xl:w-50",
                             "bg-red-700",
                             "hover:brightness-130 transition-all duration-200",
-                            "cursor-pointer lg:text-lg"
+                            "cursor-pointer"
                         )}
                         handleClick={() => navigate("/login")}
                     />
