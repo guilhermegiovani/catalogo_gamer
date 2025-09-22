@@ -16,8 +16,11 @@ import EditProfile from "../pages/EditProfile";
 import ChangePassword from "../pages/ChangePassword";
 import CheckEmail from "../pages/CheckEmail";
 import ResetPassword from "../pages/ResetPassword";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Router() {
+    const { tokenResetPassword } = useAuth()
+    console.log(tokenResetPassword)
 
     return (
         <Routes>
@@ -26,7 +29,7 @@ export default function Router() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<CreateAccount />} />
             <Route path="/checkemail" element={<CheckEmail />} />
-            <Route path="/resetpassword" element={<ResetPassword />} />
+            <Route path={`/resetpassword/${tokenResetPassword}`} element={<ResetPassword />} />
 
             {/* Rotas privadas */}
             <Route element={<PrivateRouter />}>
