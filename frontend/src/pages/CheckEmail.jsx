@@ -10,7 +10,7 @@ import { useEffect } from "react"
 import { useAuth } from "../hooks/useAuth"
 
 function CheckEmail() {
-    const { tokenResetPassword, setTokenResetPassword } = useAuth()
+    const { setTokenResetPassword } = useAuth()
     const [email, setEmail] = useState("")
     const navigate = useNavigate()
 
@@ -110,17 +110,6 @@ function CheckEmail() {
                         handleClick={() => navigate("/login")}
                     />
                 </div>
-
-                <p className={clsx(
-                    "text-center text-gray-300 text-sm xl:text-base"
-                )}>
-                    Testar reset senha: {" "}
-                    <Link
-                        to="/resetpassword"
-                        className="text-[#6c63ff] hover:underline hover:text-[#8b84ff] transition-colors">
-                        Clique aqui!
-                    </Link>
-                </p>
             </Form>
         </section>
     )

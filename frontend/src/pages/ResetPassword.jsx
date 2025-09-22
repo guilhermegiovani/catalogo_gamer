@@ -18,16 +18,22 @@ function ResetPassword() {
 
 
     const handleResetPassword = async () => {
-        if (!newPassword || !confNewPassword) {
-            toast.error("Preencha todos os campos")
-            return
+        try{
+            if (!newPassword || !confNewPassword) {
+                toast.error("Preencha todos os campos")
+                return
+            }
+    
+            console.log("Nova Senha: " + newPassword)
+            console.log("Confirmar senha: " + newPassword)
+    
+            await resetUserPassword(tokenResetPassword, { newPassword, confNewPassword })
+            toast.success("Senha redefinida.")
+            navigate("/login")
+        } catch(err) {
+            console.log(`Não foi possivel redefinir a senha: ${err}`)
+            toast.error("Erro ao redefinir a senha.")
         }
-
-        console.log("Nova Senha: " + newPassword)
-        console.log("Confirmar senha: " + newPassword)
-
-        await resetUserPassword(tokenResetPassword, { newPassword, confNewPassword })
-        toast.success("Senha redefinida.")
     }
 
     return (
