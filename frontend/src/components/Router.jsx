@@ -29,8 +29,8 @@ export default function Router() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<CreateAccount />} />
             <Route path="/checkemail" element={<CheckEmail />} />
-            {/* <Route path={`/resetpassword/${tokenResetPassword}`} element={<ResetPassword />} /> */}
-            <Route path="resetpassword" element={<ResetPassword />} />
+            <Route path={`/resetpassword/${tokenResetPassword}`} element={<ResetPassword />} />
+            {/* <Route path="resetpassword" element={<ResetPassword />} /> */}
 
             {/* Rotas privadas */}
             <Route element={<PrivateRouter />}>
