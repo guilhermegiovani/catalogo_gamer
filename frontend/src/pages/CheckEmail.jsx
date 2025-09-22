@@ -62,7 +62,6 @@ function CheckEmail() {
                 handleSubmit={(e) => {
                     e.preventDefault()
                     handleCheckEmail()
-                    console.log(tokenResetPassword)
                 }}
             >
                 <p className="text-gray-400 italic">Coloque o mesmo email que utilizou na criação da conta!</p>

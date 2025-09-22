@@ -205,7 +205,7 @@ router.post('/resetPassword/:token', async (req, res) => {
     const userId = userData[0].id
 
     const match = await bcrypt.compare(newPassword, userData[0].password)
-    if (!match) {
+    if (match) {
         console.log("A nova senha tem que ser diferente da atual.")
         return res.status(400).json({ erro: "A nova senha tem que ser diferente da atual." })
     }
