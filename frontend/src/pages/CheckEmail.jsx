@@ -41,7 +41,7 @@ function CheckEmail() {
         toast.success("Verifique seu email.")
 
         if (user?.reset_token) {
-            navigate("/resetpassword")
+            navigate(`/resetpassword/:${user.reset_token}`)
         }
     }
 
