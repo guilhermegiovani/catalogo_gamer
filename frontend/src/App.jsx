@@ -82,57 +82,8 @@ function App() {
                 color: "#fff",
               },
             },
-            warning: {
-              style: {
-                background: "#facc15", // amarelo Tailwind (warning)
-                color: "#000",
-              },
-              iconTheme: {
-                primary: "#000",
-                secondary: "#facc15",
-              },
-            },
           }}
         />
-
-        {/* <Toaster
-          position="top-center"
-          toastOptions={{
-            // estilo padrão
-            style: {
-              background: "#2a264f", // fundo igual ao seu input
-              color: "#fff",
-              borderRadius: "12px",
-              padding: "12px 16px",
-            },
-            success: {
-              style: {
-                background: "#22c55e", // verde Tailwind (success)
-                color: "#fff",
-              },
-              iconTheme: {
-                primary: "#fff",
-                secondary: "#22c55e",
-              },
-            },
-            error: {
-              style: {
-                background: "#ef4444", // vermelho Tailwind (error)
-                color: "#fff",
-              },
-              iconTheme: {
-                primary: "#fff",
-                secondary: "#ef4444",
-              },
-            },
-            loading: {
-              style: {
-                background: "#6c63ff", // roxo do seu tema
-                color: "#fff",
-              },
-            },
-          }}
-        /> */}
       </section>
 
       {/* Detalhes geométricos */}
