@@ -180,6 +180,8 @@ router.post('/forgotPassword', async (req, res) => {
     const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
 
     try {
+        // <p>Ou copie e cole em outra aba do navegador:</p>
+        // <p>${link}</p>
         await resend.emails.send({
             from: "onboarding@resend.dev",
             to: email,
@@ -189,8 +191,6 @@ router.post('/forgotPassword', async (req, res) => {
             <p>Clique no link abaixo para criar uma nova senha.</p>
             <p>Se não abrir automaticamente, segure <strong>Ctrl</strong> e clique no link</p>
             <a href="${link}" target="_blank" rel="noopener noreferrer">Redefinir senha</a>
-            <p>Ou copie e cole em outra aba do navegador:</p>
-            <p>${link}</p>
             <p>O link expira em 30 minutos.</p>
         `
         });

@@ -32,7 +32,7 @@ function ResetPassword() {
             navigate("/login")
         } catch(err) {
             console.log(`Não foi possivel redefinir a senha: ${err}`)
-            toast.error("Erro ao redefinir a senha.")
+            toast.error("Erro ao redefinir a senha: senhas não coferem ou senhas igual a atual.")
         }
     }
 

@@ -60,7 +60,7 @@ function CheckEmail() {
                     handleCheckEmail()
                 }}
             >
-                <p className="text-gray-400 italic">Coloque o mesmo email que utilizou na criação da conta!</p>
+                <p className="text-sm lg:text-base text-gray-400 italic">Coloque o mesmo email que utilizou na criação da conta!</p>
 
                 <Input
                     textLabel={"Email: "}
