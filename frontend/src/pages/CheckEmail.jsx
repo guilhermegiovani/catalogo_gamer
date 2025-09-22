@@ -6,7 +6,6 @@ import Form from "../components/Form"
 import toast from "react-hot-toast"
 import { checkEmailUser, getUsers } from "../services/routes"
 import { Link, useNavigate } from "react-router-dom"
-import { useEffect } from "react"
 import { useAuth } from "../hooks/useAuth"
 
 function CheckEmail() {
