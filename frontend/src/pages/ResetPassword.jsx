@@ -5,7 +5,7 @@ import Input from "../components/Input"
 import Button from "../components/Button"
 import Form from "../components/Form"
 import toast from "react-hot-toast"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { resetUserPassword } from "../services/routes"
 import { useAuth } from "../hooks/useAuth"
@@ -15,6 +15,8 @@ function ResetPassword() {
     const [newPassword, setNewPassword] = useState("")
     const [confNewPassword, setConfNewPassword] = useState("")
     const navigate = useNavigate()
+    const { token } = useParams()
+    const tokenFinal = token || tokenResetPassword
 
 
     const handleResetPassword = async () => {
@@ -27,8 +29,11 @@ function ResetPassword() {
             console.log("Nova Senha: " + newPassword)
             console.log("Confirmar senha: " + newPassword)
     
-            await resetUserPassword(tokenResetPassword, { newPassword, confNewPassword })
+            await resetUserPassword(tokenFinal, { newPassword, confNewPassword })
+            // await resetUserPassword(tokenResetPassword, { newPassword, confNewPassword })
             toast.success("Senha redefinida.")
+            setNewPassword("")
+            setConfNewPassword("")
             navigate("/login")
         } catch(err) {
             console.log(`Não foi possivel redefinir a senha: ${err}`)
@@ -52,8 +57,6 @@ function ResetPassword() {
                 handleSubmit={(e) => {
                     e.preventDefault()
                     handleResetPassword()
-                    setNewPassword("")
-                    setConfNewPassword("")
                 }}
             >
                 <p className="text-gray-400 italic">A nova senha tem que ser diferente da atual.</p>
