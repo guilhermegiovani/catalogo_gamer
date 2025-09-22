@@ -175,13 +175,8 @@ router.post('/forgotPassword', async (req, res) => {
     }
 
     const userId = user[0].id
-
     const token = crypto.randomBytes(32).toString("hex")
     const expires = new Date(Date.now() + 1800 * 1000)
-
-    // console.log("Token gerado:", token)
-    // console.log("Expira em:", new Date(expires).toLocaleString())
-
     const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
 
     try {
@@ -191,14 +186,13 @@ router.post('/forgotPassword', async (req, res) => {
             subject: "Redefinição de senha",
             html: `
             <p>Você solicitou redefinição de senha.</p>
-            <p>Clique no link abaixo para criar uma nova senha:</p>
-            <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
+            <p>Clique no link abaixo para criar uma nova senha.</p>
+            <p>Se não abrir automaticamente, segure <strong>Ctrl</strong> e clique no link ou copie e cole em outra aba do navegador:</p>
+            <a href="${link}" target="_blank" rel="noopener noreferrer">Redefinir senha</a>
             <p>O link expira em 30 minutos.</p>
         `
         });
-        console.log("Email enviado.")
     } catch (err) {
-        console.error("Erro ao enviar e-mail:", err);
         return res.status(500).json({ erro: "Não foi possível enviar o e-mail" });
     }
 
@@ -208,7 +202,6 @@ router.post('/forgotPassword', async (req, res) => {
     )
 
     if (results.length === 0) return res.status(400).json({ erro: "Não foi possível gerar o token" })
-    console.log("Adicionou")
 
     return res.status(200).json({ message: "Se houver uma conta com esse email, enviamos instruções" })
 
@@ -218,31 +211,38 @@ router.post('/resetPassword/:token', async (req, res) => {
     const { token } = req.params
     const { newPassword, confNewPassword } = req.body
 
-    let userData = await queryDB("select * from users where reset_token = ?;", [token])
+    const userData = await queryDB("select * from users where reset_token = ?;", [token])
 
-    if (!userData[0]) return console.log("Erro ao pegar dados do usuário.")
+    if (!userData[0]) {
+        return res.status(400).json({ erro: "Token inválido ou expirado." })
+    }
 
-    console.log(JSON.stringify(userData[0]))
     const userId = userData[0].id
 
     const match = await bcrypt.compare(newPassword, userData[0].password)
     if (match) {
-        console.log("A nova senha tem que ser diferente da atual.")
         return res.status(400).json({ erro: "A nova senha tem que ser diferente da atual." })
     }
 
     if (newPassword !== confNewPassword) {
-        console.log("Senhas não conferem.")
+        return res.status(400).json({ erro: "As senhas não conferem." })
     }
 
     const passwordCripto = await bcrypt.hash(newPassword, 10)
 
-    userData = await queryDB(
+    // userData = await queryDB(
+    //     "UPDATE users SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?",
+    //     [passwordCripto, userId]
+    // )
+
+    const updateResult = await queryDB(
         "UPDATE users SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?",
         [passwordCripto, userId]
     )
 
-    console.log(JSON.stringify(userData))
+    if (updateResult.length === 0) {
+        return res.status(500).json({ erro: "Não foi possível atualizar a senha." })
+    }
 
     return res.status(200).json({ message: "SUCESSO" })
 

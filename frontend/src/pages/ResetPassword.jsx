@@ -6,7 +6,6 @@ import Button from "../components/Button"
 import Form from "../components/Form"
 import toast from "react-hot-toast"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { useEffect } from "react"
 import { resetUserPassword } from "../services/routes"
 import { useAuth } from "../hooks/useAuth"
 
@@ -26,11 +25,7 @@ function ResetPassword() {
                 return
             }
     
-            console.log("Nova Senha: " + newPassword)
-            console.log("Confirmar senha: " + newPassword)
-    
             await resetUserPassword(tokenFinal, { newPassword, confNewPassword })
-            // await resetUserPassword(tokenResetPassword, { newPassword, confNewPassword })
             toast.success("Senha redefinida.")
             setNewPassword("")
             setConfNewPassword("")
