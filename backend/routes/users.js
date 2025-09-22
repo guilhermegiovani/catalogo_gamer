@@ -182,7 +182,8 @@ router.post('/forgotPassword', async (req, res) => {
     // console.log("Token gerado:", token)
     // console.log("Expira em:", new Date(expires).toLocaleString())
 
-    const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
+    const link = `https://vercel.com/guilhermegiovanis-projects`
+    // const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
 
     try {
         await resend.emails.send({
