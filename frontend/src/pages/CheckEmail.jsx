@@ -40,9 +40,9 @@ function CheckEmail() {
 
         toast.success("Verifique seu email.")
 
-        // if (user?.reset_token) {
-        //     navigate("/resetpassword")
-        // }
+        if (user?.reset_token) {
+            navigate("/resetpassword")
+        }
     }
 
     return (

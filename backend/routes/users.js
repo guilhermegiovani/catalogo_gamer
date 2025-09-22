@@ -183,7 +183,6 @@ router.post('/forgotPassword', async (req, res) => {
     // console.log("Expira em:", new Date(expires).toLocaleString())
 
     const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
-    console.log(resend)
 
     try {
         await resend.emails.send({
