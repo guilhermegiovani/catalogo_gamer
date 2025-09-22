@@ -183,6 +183,7 @@ router.post('/forgotPassword', async (req, res) => {
     // console.log("Expira em:", new Date(expires).toLocaleString())
 
     const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
+    console.log(resend)
 
     try {
         await resend.emails.send({
@@ -196,6 +197,7 @@ router.post('/forgotPassword', async (req, res) => {
             <p>O link expira em 30 minutos.</p>
         `
         });
+        console.log("Email enviado.")
     } catch (err) {
         console.error("Erro ao enviar e-mail:", err);
         return res.status(500).json({ erro: "Não foi possível enviar o e-mail" });
