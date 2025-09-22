@@ -12,6 +12,7 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc.js"
 import timezone from "dayjs/plugin/timezone.js"
 import crypto from "crypto"
+import { resend } from '../utils/resend.js'
 
 const router = express.Router()
 router.use(express.json())
@@ -169,23 +170,42 @@ router.post('/forgotPassword', async (req, res) => {
     const { email } = req.body
 
     const user = await queryDB("select * from users where email = ?", [email])
-    const userId = user[0].id
-
     if (!user[0]) {
         return res.status(200).json({ erro: "Se houver uma conta com esse email, enviamos instruções" })
     }
 
-    const token = crypto.randomBytes(32).toString("hex")
-    const expires = new Date(Date.now() + 3600 * 1000)
+    const userId = user[0].id
 
-    console.log("Token gerado:", token)
-    console.log("Expira em:", new Date(expires).toLocaleString())
+    const token = crypto.randomBytes(32).toString("hex")
+    const expires = new Date(Date.now() + 1800 * 1000)
+
+    // console.log("Token gerado:", token)
+    // console.log("Expira em:", new Date(expires).toLocaleString())
+
+    const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
+
+    try {
+        await resend.emails.send({
+            from: "onboarding@resend.dev",
+            to: email,
+            subject: "Redefinição de senha",
+            html: `
+            <p>Você solicitou redefinição de senha.</p>
+            <p>Clique no link abaixo para criar uma nova senha:</p>
+            <a href="${link}">${link}</a>
+            <p>O link expira em 30 minutos.</p>
+        `
+        });
+    } catch (err) {
+        console.error("Erro ao enviar e-mail:", err);
+        return res.status(500).json({ erro: "Não foi possível enviar o e-mail" });
+    }
 
     const results = await queryDB(
         "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?",
         [token, expires, userId]
     )
-    
+
     if (results.length === 0) return res.status(400).json({ erro: "Não foi possível gerar o token" })
     console.log("Adicionou")
 
@@ -210,7 +230,7 @@ router.post('/resetPassword/:token', async (req, res) => {
         return res.status(400).json({ erro: "A nova senha tem que ser diferente da atual." })
     }
 
-    if(newPassword !== confNewPassword) {
+    if (newPassword !== confNewPassword) {
         console.log("Senhas não conferem.")
     }
 

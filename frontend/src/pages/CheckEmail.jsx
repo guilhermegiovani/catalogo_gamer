@@ -39,11 +39,11 @@ function CheckEmail() {
         setTokenResetPassword(user.reset_token)
         console.log(user)
 
-        toast.success("Email verificado.")
+        toast.warning("Verifique seu email.")
 
-        if (user?.reset_token) {
-            navigate("/resetpassword")
-        }
+        // if (user?.reset_token) {
+        //     navigate("/resetpassword")
+        // }
     }
 
     return (
