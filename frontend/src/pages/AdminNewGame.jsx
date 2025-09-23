@@ -76,31 +76,32 @@ function AdminNewGame() {
                 handleSubmit={async (e) => {
                     e.preventDefault()
 
-                    handleSubmitNewGame().then(() => {
-                        if (titleGame && descriptionGame && genderGame && platformGame && studioGame) {
-                            toast.success("Jogo criado com sucesso!")
-                        } else {
-                            toast.error("Adição de jogo cancelada!")
-                        }
-                    }).catch((err) => {
-                        toast.error("Erro ao criar jogo!")
-                        console.log(err)
-                    })
-
-                    // try {
-                    //     await handleSubmitNewGame()
-                    //     if(titleGame && descriptionGame && genderGame && platformGame && studioGame) {
+                    // handleSubmitNewGame().then(() => {
+                    //     if (titleGame && descriptionGame && genderGame && platformGame && studioGame) {
                     //         toast.success("Jogo criado com sucesso!")
-                    //         await fetchGame()
                     //     } else {
                     //         toast.error("Adição de jogo cancelada!")
                     //     }
-
-                    // } catch(err) {
+                    // }).catch((err) => {
                     //     toast.error("Erro ao criar jogo!")
                     //     console.log(err)
-                    // }
-                    fetchGame()
+                    // })
+
+                    try {
+                        await handleSubmitNewGame()
+                        if(titleGame && descriptionGame && genderGame && platformGame && studioGame) {
+                            toast.success("Jogo criado com sucesso!")
+                            await fetchGame()
+                        } else {
+                            toast.error("Adição de jogo cancelada!")
+                        }
+
+                    } catch(err) {
+                        toast.error("Erro ao criar jogo!")
+                        console.log(err)
+                    }
+
+                    
                     navigate("/admin")
                 }}
                 className={clsx(
