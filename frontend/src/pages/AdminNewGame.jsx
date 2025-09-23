@@ -75,21 +75,32 @@ function AdminNewGame() {
             <Form
                 handleSubmit={async (e) => {
                     e.preventDefault()
-                    
-                    try {
-                        await handleSubmitNewGame()
-                        if(titleGame && descriptionGame && genderGame && platformGame && studioGame) {
+
+                    handleSubmitNewGame().then(() => {
+                        if (titleGame && descriptionGame && genderGame && platformGame && studioGame) {
                             toast.success("Jogo criado com sucesso!")
-                            await fetchGame()
                         } else {
                             toast.error("Adição de jogo cancelada!")
                         }
-                        
-                    } catch(err) {
+                    }).catch((err) => {
                         toast.error("Erro ao criar jogo!")
                         console.log(err)
-                    }
+                    })
 
+                    // try {
+                    //     await handleSubmitNewGame()
+                    //     if(titleGame && descriptionGame && genderGame && platformGame && studioGame) {
+                    //         toast.success("Jogo criado com sucesso!")
+                    //         await fetchGame()
+                    //     } else {
+                    //         toast.error("Adição de jogo cancelada!")
+                    //     }
+
+                    // } catch(err) {
+                    //     toast.error("Erro ao criar jogo!")
+                    //     console.log(err)
+                    // }
+                    await fetchGame()
                     navigate("/admin")
                 }}
                 className={clsx(
