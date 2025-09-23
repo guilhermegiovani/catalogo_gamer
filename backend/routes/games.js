@@ -40,8 +40,8 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             return res.status(400).json({ erro: "Preencha todos os campos" })
         }
 
-        console.log("REQ.BODY:", req.body);
-        console.log("REQ.FILES:", req.files);
+        console.log("REQ_BODY:", req.body);
+        console.log("REQ_FILES:", req.files);
 
         const results = await queryDB(
             "select * from games where title = ?;",
