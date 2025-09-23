@@ -100,7 +100,7 @@ function AdminNewGame() {
                     //     toast.error("Erro ao criar jogo!")
                     //     console.log(err)
                     // }
-                    await fetchGame()
+                    fetchGame()
                     navigate("/admin")
                 }}
                 className={clsx(
