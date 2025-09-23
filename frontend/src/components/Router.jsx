@@ -16,11 +16,8 @@ import EditProfile from "../pages/EditProfile";
 import ChangePassword from "../pages/ChangePassword";
 import CheckEmail from "../pages/CheckEmail";
 import ResetPassword from "../pages/ResetPassword";
-import { useAuth } from "../hooks/useAuth";
 
 export default function Router() {
-    const { tokenResetPassword } = useAuth()
-    console.log(tokenResetPassword)
 
     return (
         <Routes>

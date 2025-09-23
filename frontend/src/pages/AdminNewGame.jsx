@@ -76,7 +76,12 @@ function AdminNewGame() {
                 handleSubmit={(e) => {
                     e.preventDefault()
                     handleSubmitNewGame().then(() => {
-                        toast.success("Jogo criado com sucesso!")
+                        if(titleGame && descriptionGame && genderGame && platformGame && studioGame) {
+                            toast.success("Jogo criado com sucesso!")
+                        } else {
+                            toast.error("Adição de jogo cancelada!")
+                        }
+
                     }).catch((err) => {
                         toast.error("Erro ao criar jogo!")
                         console.log(err)
@@ -272,17 +277,29 @@ function AdminNewGame() {
                     </div>
                 )}
 
-                <Button
-                    text="Confirmar novo jogo"
-                    className={clsx(
-                        "w-50 text-white lg:text-lg font-semibold py-2 rounded-md mt-4",
-                        "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
-                        "hover:brightness-130 transition-all duration-200",
-                        "cursor-pointer"
-                    )}
-                    // handleClick={() => navigate("/admin")}
-                    type="submit"
-                />
+                <div className="flex gap-4">
+                    <Button
+                        text="Adicionar novo jogo"
+                        className={clsx(
+                            "w-50 text-white lg:text-lg font-semibold py-2 rounded-md mt-4",
+                            "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
+                            "hover:brightness-130 transition-all duration-200",
+                            "cursor-pointer"
+                        )}
+                        // handleClick={() => navigate("/admin")}
+                        type="submit"
+                    />
+                    <Button
+                        text="Cancelar"
+                        className={clsx(
+                            "w-40 text-white lg:text-lg font-semibold py-2 rounded-md mt-4",
+                            "bg-red-700",
+                            "hover:brightness-130 transition-all duration-200",
+                            "cursor-pointer"
+                        )}
+                        handleClick={() => navigate("/admin")}
+                    />
+                </div>
             </Form>
         </div>
     )

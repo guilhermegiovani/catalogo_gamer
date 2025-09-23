@@ -35,7 +35,9 @@ function CheckEmail() {
         const user = await userData(email)
         setTokenResetPassword(user.reset_token)
 
-        toast.success("Verifique seu email!")
+        toast.success("Verifique seu email!", {
+            duration: 5000
+        })
 
         // if (user?.reset_token) {
         //     navigate(`/resetpassword/${user.reset_token}`)

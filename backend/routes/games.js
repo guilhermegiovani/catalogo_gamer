@@ -32,7 +32,9 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
 ]), async (req, res) => {
     try {
         const { title, description, genre, platform, studio } = req.body
-        let { img_portrait, img_landscape } = req.body
+        // let { img_portrait, img_landscape } = req.body
+        let img_portrait
+        let img_landscape
 
         if (!title || !description || !genre || !platform || !studio) {
             return res.status(400).json({ erro: "Preencha todos os campos" })
