@@ -89,6 +89,9 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             }
         }
 
+        console.log(`IMG-RETRATO: ${img_portrait}`)
+        console.log(`IMG-PAISAGEM: ${img_landscape}`)
+
         const updates = [];
         const values = [];
 
@@ -112,6 +115,9 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
         //         [img_portrait, img_landscape, gameId]
         //     )
         // }
+
+        console.log(`IMG-RETRATO: ${img_portrait}`)
+        console.log(`IMG-PAISAGEM: ${img_landscape}`)
 
         return res.status(201).json({ message: "Jogo cadastrado com sucesso!", id: gameId })
     } catch (err) {

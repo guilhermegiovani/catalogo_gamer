@@ -4,3 +4,4 @@ node_modules
 
 # pasta de uploads locais
 uploads/
+.vercel
