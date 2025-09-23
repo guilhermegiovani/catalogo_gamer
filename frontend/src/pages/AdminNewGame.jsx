@@ -73,21 +73,24 @@ function AdminNewGame() {
     return (
         <div className="flex justify-center w-full">
             <Form
-                handleSubmit={(e) => {
+                handleSubmit={async (e) => {
                     e.preventDefault()
-                    handleSubmitNewGame().then(() => {
+
+                    try {
                         if(titleGame && descriptionGame && genderGame && platformGame && studioGame) {
+                            await handleSubmitNewGame()
                             toast.success("Jogo criado com sucesso!")
                         } else {
                             toast.error("Adição de jogo cancelada!")
                         }
 
-                    }).catch((err) => {
+                    } catch(err) {
                         toast.error("Erro ao criar jogo!")
                         console.log(err)
-                    })
+                    }
+                    
+                    await fetchGame()
                     navigate("/admin")
-                    fetchGame()
                 }}
                 className={clsx(
                     "bg-[#1e1b38]",
