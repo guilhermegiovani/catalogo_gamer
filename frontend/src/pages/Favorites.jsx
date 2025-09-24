@@ -49,7 +49,7 @@ function Favorites() {
     const avgsFavMap = Object.fromEntries(avgsFavorites.map(avg => [avg.gameid, avg.rating]))
 
     return (
-        <section className={clsx("px-4 py-10 max-w-6xl mx-auto")}>
+        <section className={clsx("px-4 py-10 max-w-[90rem] mx-auto")}>
             <h1
                 className={clsx(
                     "text-3xl sm:text-4xl font-semibold text-center mb-10 text-white drop-shadow"

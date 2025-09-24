@@ -19,7 +19,7 @@ function Admin() {
     const avgMap = Object.fromEntries(averages.map(a => [a.gameid, a.rating]))
 
     return (
-        <section className={clsx("px-2 sm:px-4 py-6 sm:py-10 max-w-8xl mx-auto")}>
+        <section className={clsx("px-2 sm:px-4 py-6 sm:py-10 max-w-[90rem] mx-auto")}>
             <h1
                 className={clsx(
                     "text-2xl sm:text-3xl lg:text-4xl font-semibold text-center mb-6 sm:mb-10 text-white drop-shadow"
@@ -42,7 +42,7 @@ function Admin() {
 
             <div className={clsx(
                 // "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-stretch"
-                "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
             )}>
                 {gamesAdmin.map((game) => (
                     <GameCard

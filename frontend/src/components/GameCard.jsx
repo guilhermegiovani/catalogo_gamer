@@ -25,7 +25,7 @@ function GameCard({ game, isFavorite, to, avgGame }) {
                     src={baseURL + game.img_portrait}
                     alt={game.title}
                     className={clsx(
-                        "w-full h-64 md:h-76 bg-gradient-to-br from-[#222] to-[#111] rounded-lg mb-3 object-cover object-top"
+                        "w-full h-64 md:h-90 bg-gradient-to-br from-[#222] to-[#111] rounded-lg mb-3 object-cover object-top"
                     )}
                     // aspect-[4/3]
                 />
