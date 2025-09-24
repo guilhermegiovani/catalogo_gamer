@@ -61,11 +61,11 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
 
         console.log(`Game: ${JSON.stringify(resInsert[0])}`)
 
-        const gameId = resInsert.insertId
+        const gameId = resInsert.id
 
         console.log("ID game: " + gameId)
         console.log("ID game: " + resInsert.insertId)
-        
+
         if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
 
         console.log("PAROU AQUI 3")
