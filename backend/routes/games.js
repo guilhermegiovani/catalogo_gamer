@@ -40,37 +40,21 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             return res.status(400).json({ erro: "Preencha todos os campos" })
         }
 
-        console.log("REQ_BODY:", req.body);
-        console.log("REQ_FILES:", req.files);
-
         const results = await queryDB(
             "select * from games where title = ?;",
             [title]
         )
 
-        console.log("PAROU AQUI 1")
-
         if (results.length > 0) return res.status(409).json({ erro: "Jogo já existe!" })
-
-        console.log("PAROU AQUI 2")
 
         const resInsert = await queryDB(
             "insert into games(title, description, genre, platform, studio) values(?, ?, ?, ?, ?);",
             [title, description, genre, platform, studio] // img_portrait, img_landscape
         )
 
-        console.log(`Game: ${JSON.stringify(resInsert[0])}`)
-
         const gameId = resInsert[0].id
-
-        console.log("ID game: " + gameId)
-        console.log("ID game: " + resInsert[0].insertId)
-        console.log("ID game: " + resInsert[0].id)
         
-
         if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
-
-        console.log("PAROU AQUI 3")
 
         if (req.files["img-portrait"]) {
             try {
@@ -88,8 +72,6 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
 
         }
 
-        console.log("PAROU AQUI 4")
-
         if (req.files["img-landscape"]) {
             try {
                 img_landscape = await handleUpload(
@@ -104,10 +86,6 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
                 return res.status(500).json({ erro: "Falha ao enviar imagem retrato", detalhe: err.message })
             }
         }
-
-        console.log("PAROU AQUI 5")
-        console.log(`IMG-RETRATO: ${img_portrait}`)
-        console.log(`IMG-PAISAGEM: ${img_landscape}`)
 
         const updates = [];
         const values = [];
@@ -133,9 +111,6 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
         //         [img_portrait, img_landscape, gameId]
         //     )
         // }
-
-        console.log(`IMG-RETRATO: ${img_portrait}`)
-        console.log(`IMG-PAISAGEM: ${img_landscape}`)
 
         return res.status(201).json({ message: "Jogo cadastrado com sucesso!", id: gameId })
     } catch (err) {
