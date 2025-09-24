@@ -48,7 +48,11 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             [title]
         )
 
+        console.log("PAROU AQUI 1")
+
         if (results.length > 0) return res.status(409).json({ erro: "Jogo já existe!" })
+
+        console.log("PAROU AQUI 2")
 
         const resInsert = await queryDB(
             "insert into games(title, description, genre, platform, studio) values(?, ?, ?, ?, ?);",
@@ -57,6 +61,8 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
 
         const gameId = resInsert.insertId
         if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
+
+        console.log("PAROU AQUI 3")
 
         if (req.files["img-portrait"]) {
             try {
@@ -74,6 +80,8 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
 
         }
 
+        console.log("PAROU AQUI 4")
+
         if (req.files["img-landscape"]) {
             try {
                 img_landscape = await handleUpload(
@@ -89,6 +97,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             }
         }
 
+        console.log("PAROU AQUI 5")
         console.log(`IMG-RETRATO: ${img_portrait}`)
         console.log(`IMG-PAISAGEM: ${img_landscape}`)
 
@@ -99,6 +108,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             updates.push("img_portrait = ?");
             values.push(img_portrait);
         }
+        
         if (img_landscape) {
             updates.push("img_landscape = ?");
             values.push(img_landscape);
