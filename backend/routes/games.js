@@ -59,7 +59,13 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             [title, description, genre, platform, studio] // img_portrait, img_landscape
         )
 
+        console.log(`Game: ${JSON.stringify(resInsert[0])}`)
+
         const gameId = resInsert.insertId
+
+        console.log("ID game: " + gameId)
+        console.log("ID game: " + resInsert.insertId)
+        
         if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
 
         console.log("PAROU AQUI 3")
@@ -108,7 +114,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             updates.push("img_portrait = ?");
             values.push(img_portrait);
         }
-        
+
         if (img_landscape) {
             updates.push("img_landscape = ?");
             values.push(img_landscape);
