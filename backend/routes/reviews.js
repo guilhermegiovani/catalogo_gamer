@@ -13,6 +13,7 @@ dayjs.extend(timezone)
 router.use(express.json())
 router.use(authMiddleware)
 
+// Fazer uma avaliação do jogo
 router.post('/', async (req, res) => {
     const { gameId, note, comment } = req.body
     const userId = req.userId
@@ -57,6 +58,25 @@ router.post('/', async (req, res) => {
 
 })
 
+// Like reviews
+router.post('/:id/like', async (req, res) => {
+    const { id } = req.params
+    const userId = req.userId
+
+    console.log(`ID review: ${id}`)
+    console.log(`ID user: ${userId}`)
+})
+
+// Dislike reviews
+router.post('/:id/dislike', async (req, res) => {
+    const { id } = req.params
+    const userId = req.userId
+
+    console.log(`ID review: ${id}`)
+    console.log(`ID user: ${userId}`)
+})
+
+// Pegar reviews do jogo específico
 router.get('/game/:id', async (req, res) => {
     const { id } = req.params
 
@@ -113,6 +133,8 @@ router.get('/game/:id', async (req, res) => {
     return res.status(200).json({ reviews: formattedDate, statistics: statistics })
 })
 
+
+// Pegar médias das notas dos jogos
 router.get("/averages", async (req, res) => {
     const avgGames = await queryDB(
         "select g.id as gameId, coalesce(avgs.avgGrade, 0) as rating, coalesce(avgs.totReviews, 0) as totReviews from games g left join (select game_id, avg(rating) as avgGrade, count(*) as totReviews from reviews a group by game_id) avgs on g.id = avgs.game_id;"
@@ -133,6 +155,7 @@ router.get("/averages", async (req, res) => {
 
 })
 
+// Pegar jogos que o usuario avaliou
 router.get('/user/:id', async (req, res) => {
     const { id } = req.params
 
@@ -164,6 +187,7 @@ router.get('/user/:id', async (req, res) => {
 
 })
 
+// Pegar média das notas de um jogo
 router.get('/average/:id', async (req, res) => {
     const { id } = req.params
 
@@ -181,6 +205,7 @@ router.get('/average/:id', async (req, res) => {
 
 })
 
+// Deletar review
 router.delete('/:id', async (req, res) => {
     const { id } = req.params
 
@@ -191,6 +216,7 @@ router.delete('/:id', async (req, res) => {
     return res.status(200).json({ message: "Avaliação deletada com sucesso!" })
 })
 
+// Atualizar/editar review
 router.patch('/:id', async (req, res) => {
     const { id } = req.params
 

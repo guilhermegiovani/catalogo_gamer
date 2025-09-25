@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth"
 import { Star, PencilIcon, Trash2Icon, ThumbsUp, ThumbsDown } from "lucide-react"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
-import { getGames, getReviewsAvgs, getReviewsByGame } from "../services/routes"
+import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
 import toast from "react-hot-toast"
 
@@ -14,9 +14,55 @@ function ReviewGame() {
     const [avgGame, setAvgGame] = useState()
     const [isLoadingGame, setIsLoadingGame] = useState(true)
 
-    // const game = games.find((g) => g.id === Number(id))
+    // const [liked, setLiked] = useState(false)
+    // const [likes, setLikes] = useState({})
+
+    // const [disliked, setDisliked] = useState(false)
+    // const [dislikes, setDislikes] = useState({})
+
+    // const toggleLike = (id) => {
+    //     setLikes(prev => ({
+    //         ...prev,
+    //         [id]: !prev[id]
+    //     }))
+
+    //     if (disliked[id]) {
+    //         setDislikes(prev => ({
+    //             ...prev,
+    //             [id]: !prev[id]
+    //         }))
+    //     }
+
+
+    //     // if (liked) {
+    //     //     setLiked(false)
+    //     //     setLike(l => l - 1)
+    //     // } else {
+    //     //     setLiked(true)
+    //     //     setLike(l => l + 1)
+    //     //     if (disliked) {
+    //     //         setDisliked(false)
+    //     //         setDislike(d => d - 1)
+    //     //     }
+    //     // }
+    // }
+
+    // const toggleDislike = (id) => {
+
+    //     if (disliked) {
+    //         setDisliked(false)
+    //         setDislikes(d => d - 1)
+    //     } else {
+    //         setDisliked(true)
+    //         setDislikes(d => d + 1)
+    //         if (liked) {
+    //             setLiked(false)
+    //             setLikes(l => l - 1)
+    //         }
+    //     }
+    // }
+
     const gameId = Number(id)
-    // const gameId = game?.id
 
     const fetchReviews = async () => {
         if (!gameId) return
@@ -39,6 +85,22 @@ function ReviewGame() {
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
             setReviewsData([])
             setAvgGame(null)
+        }
+    }
+
+    const fetchLike = async (id) => {
+        try {
+            await likeReview(id)
+        } catch (err) {
+            console.log(`Erro ao dar like na review: ${err}`)
+        }
+    }
+
+    const fetchDisLike = async (id) => {
+        try {
+            await dislikeReview(id)
+        } catch (err) {
+            console.log(`Erro ao dar dislike na review: ${err}`)
         }
     }
 
@@ -139,15 +201,34 @@ function ReviewGame() {
                                                 handleClick={() => deleteRev(rev.id)}
                                             />
                                         </div> : (
-                                            <div className="flex gap-3 mt-5">
-                                                <Button
-                                                    text={<ThumbsUp size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
-                                                    // handleClick={() => handleEditReview(userId, rev.id)}
-                                                />
-                                                <Button
-                                                    text={<ThumbsDown size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
-                                                    // handleClick={() => deleteRev(rev.id)}
-                                                />
+                                            <div className="flex gap-4 mt-5">
+                                                <div className="flex gap-1">
+                                                    <Button
+                                                        text={<ThumbsUp
+                                                            size={20} fill="currentColor"
+                                                            className={clsx(
+                                                                "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
+                                                                // liked ? "text-blue-500/30" : ""
+                                                            )}
+                                                        />}
+                                                        handleClick={() => fetchLike(rev.id)}
+                                                    />
+                                                    <p>0</p>
+                                                </div>
+
+                                                <div className="flex gap-1">
+                                                    <Button
+                                                        text={<ThumbsDown
+                                                            size={20} fill="currentColor"
+                                                            className={clsx(
+                                                                "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
+                                                                // disliked ? "text-red-500/30" : ""
+                                                            )}
+                                                        />}
+                                                        handleClick={() => fetchDisLike(rev.id)}
+                                                    />
+                                                    <p>0</p>
+                                                </div>
                                             </div>
                                         )
                                     }

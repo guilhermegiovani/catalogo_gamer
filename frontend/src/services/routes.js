@@ -117,6 +117,7 @@ export const getReviewsByUser = (id) => {
     return api.get(`/reviews/user/${id}`)
 }
 
+// Pegar médias de notas dos jogos
 export const getReviewsAvgs = () => {
     return api.get(`/reviews/averages`)
 }
@@ -124,4 +125,14 @@ export const getReviewsAvgs = () => {
 // Deletar avaliação
 export const deleteReviews = (id) => {
     return api.delete(`/reviews/${id}`)
+}
+
+// Like review
+export const likeReview = (id) => {
+    return api.post(`/reviews/${id}/like`)
+}
+
+// Dislike review
+export const dislikeReview = (id) => {
+    return api.post(`/reviews/${id}/dislike`)
 }
