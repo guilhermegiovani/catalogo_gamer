@@ -90,7 +90,10 @@ function ReviewGame() {
 
     const fetchLike = async (id) => {
         try {
-            await likeReview(id)
+            const res = await likeReview(id)
+            const reaction = res.data.usersReactions
+
+            console.log(reaction)
         } catch (err) {
             console.log(`Erro ao dar like na review: ${err}`)
         }
@@ -98,7 +101,10 @@ function ReviewGame() {
 
     const fetchDisLike = async (id) => {
         try {
-            await dislikeReview(id)
+            const res = await dislikeReview(id)
+            const reaction = res.data.usersReactions
+
+            console.log(reaction)
         } catch (err) {
             console.log(`Erro ao dar dislike na review: ${err}`)
         }

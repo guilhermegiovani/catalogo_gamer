@@ -114,6 +114,8 @@ router.post('/:id/dislike', async (req, res) => {
 
     console.log(`ID review: ${id}`)
     console.log(`ID user: ${userId}`)
+
+    res.status(200).json({ usersReactions: results[0] })
 })
 
 // Pegar reviews do jogo específico
