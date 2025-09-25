@@ -94,6 +94,7 @@ function ReviewGame() {
             const reaction = res.data.usersReactions
 
             console.log(reaction)
+            console.log(res.data)
         } catch (err) {
             console.log(`Erro ao dar like na review: ${err}`)
         }
@@ -105,6 +106,7 @@ function ReviewGame() {
             const reaction = res.data.usersReactions
 
             console.log(reaction)
+            console.log(res.data)
         } catch (err) {
             console.log(`Erro ao dar dislike na review: ${err}`)
         }
