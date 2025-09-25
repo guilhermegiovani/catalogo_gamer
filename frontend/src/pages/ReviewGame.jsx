@@ -74,12 +74,12 @@ function ReviewGame() {
            
             setReviewsData(res.data.reviews)
 
-            const reactionsData = {}
-            for(let review of res.data.review) {
-                const r = reactionsReviews(review.id)
-                reactionsData[review.id] = r.data
-            }
-            setReactions(reactionsData)
+            // const reactionsData = {}
+            // for(let review of res.data.review) {
+            //     const r = reactionsReviews(review.id)
+            //     reactionsData[review.id] = r.data
+            // }
+            // setReactions(reactionsData)
 
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
