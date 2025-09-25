@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { json } from 'express'
 import { db, isProd } from '../db.js'
 import authMiddleware from '../middleware/authMiddleware.js'
 import { queryDB } from '../utils/dbQuery.js'
@@ -63,6 +63,10 @@ router.post('/:id/like', async (req, res) => {
     const { id } = req.params
     const userId = req.userId
 
+    const results = queryDB("select * from review_reactions where review_id = ? and user_id = ?;", [id, userId])
+
+    console.log(JSON.stringify(results))
+
     console.log(`ID review: ${id}`)
     console.log(`ID user: ${userId}`)
 })
@@ -71,6 +75,10 @@ router.post('/:id/like', async (req, res) => {
 router.post('/:id/dislike', async (req, res) => {
     const { id } = req.params
     const userId = req.userId
+
+    const results = queryDB("select * from review_reactions where review_id = ? and user_id = ?;", [id, userId])
+
+    console.log(JSON.stringify(results))
 
     console.log(`ID review: ${id}`)
     console.log(`ID user: ${userId}`)
