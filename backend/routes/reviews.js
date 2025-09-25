@@ -62,10 +62,14 @@ router.post('/', async (req, res) => {
 router.post('/:id/like', async (req, res) => {
     const { id } = req.params
     const userId = req.userId
+    const like = "like"
 
-    const results = queryDB("select * from review_reactions where review_id = ? and user_id = ?;", [id, userId])
+    const results = await queryDB("select * from review_reactions where review_id = ? and user_id = ?;", [id, userId])
+
+    const userLike = !results ? await queryDB("insert into review_reactions(review_id, user_id, reaction) values(?, ?, ?);", [id, userId, like]) : await queryDB("update review_reactions set reaction = ? where review_id = ? and user_id = ?;", [id, user_id, like])
 
     console.log(JSON.stringify(results))
+    console.log(JSON.stringify(userLike))
 
     console.log(`ID review: ${id}`)
     console.log(`ID user: ${userId}`)
@@ -75,10 +79,14 @@ router.post('/:id/like', async (req, res) => {
 router.post('/:id/dislike', async (req, res) => {
     const { id } = req.params
     const userId = req.userId
+    const dislike = "dislike"
 
-    const results = queryDB("select * from review_reactions where review_id = ? and user_id = ?;", [id, userId])
+    const results = await queryDB("select * from review_reactions where review_id = ? and user_id = ?;", [id, userId])
+
+    const userDislike = !results ? await queryDB("insert into review_reactions(review_id, user_id, reaction) values(?, ?, ?);", [id, userId, dislike]) : await queryDB("update review_reactions set reaction = ? where review_id = ? and user_id = ?;", [id, user_id, dislike])
 
     console.log(JSON.stringify(results))
+    console.log(JSON.stringify(userDislike))
 
     console.log(`ID review: ${id}`)
     console.log(`ID user: ${userId}`)
