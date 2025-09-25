@@ -236,13 +236,12 @@ function AdminNewGame() {
                         <Button
                             text="Remover imagem"
                             className={clsx(
-                                " w-40 text-white font-semibold py-2 rounded-md mt-4",
+                                "w-40 text-white font-semibold py-2 rounded-md mt-4",
                                 "bg-red-700/90",
                                 "hover:brightness-130 transition-all duration-200",
                                 "cursor-pointer"
                             )}
                             handleClick={() => {
-                                console.log(fileImgGame)
                                 URL.revokeObjectURL(previewImg)
                                 setPreviewImg(null)
                                 setFileImgGame(null)
@@ -277,13 +276,12 @@ function AdminNewGame() {
                         <Button
                             text="Remover imagem"
                             className={clsx(
-                                " w-40 text-white font-semibold py-2 rounded-md mt-4",
+                                "w-40 text-white font-semibold py-2 rounded-md mt-4",
                                 "bg-red-700/90",
                                 "hover:brightness-130 transition-all duration-200",
                                 "cursor-pointer"
                             )}
                             handleClick={() => {
-                                console.log(fileImgGamePaisagem)
                                 URL.revokeObjectURL(previewImgPaisagem)
                                 setPreviewImgPaisagem(null)
                                 setFileImgGamePaisagem(null)

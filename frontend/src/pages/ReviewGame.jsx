@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { useParams } from "react-router-dom"
 import { useAuth } from "../hooks/useAuth"
-import { Star, PencilIcon, Trash2Icon } from "lucide-react"
+import { Star, PencilIcon, Trash2Icon, ThumbsUp, ThumbsDown } from "lucide-react"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
 import { getGames, getReviewsAvgs, getReviewsByGame } from "../services/routes"
@@ -138,7 +138,18 @@ function ReviewGame() {
                                                 text={<Trash2Icon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
                                                 handleClick={() => deleteRev(rev.id)}
                                             />
-                                        </div> : null
+                                        </div> : (
+                                            <div className="flex gap-3 mt-5">
+                                                <Button
+                                                    text={<ThumbsUp size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
+                                                    // handleClick={() => handleEditReview(userId, rev.id)}
+                                                />
+                                                <Button
+                                                    text={<ThumbsDown size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
+                                                    // handleClick={() => deleteRev(rev.id)}
+                                                />
+                                            </div>
+                                        )
                                     }
                                 </article>
                             </li>
