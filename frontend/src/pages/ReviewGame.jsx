@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth"
 import { Star, PencilIcon, Trash2Icon, ThumbsUp, ThumbsDown } from "lucide-react"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
-import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview } from "../services/routes"
+import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview, reactionsReviews } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
 import toast from "react-hot-toast"
 
@@ -13,6 +13,7 @@ function ReviewGame() {
     const { games, setGames, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
     const [avgGame, setAvgGame] = useState()
     const [isLoadingGame, setIsLoadingGame] = useState(true)
+    const [reactions, setReactions] = useState({})
 
     // const [liked, setLiked] = useState(false)
     // const [likes, setLikes] = useState({})
@@ -70,12 +71,15 @@ function ReviewGame() {
             const resGame = await getGames()
             setGames(resGame.data)
             const res = await getReviewsByGame(gameId)
-            // if (res?.data?.reviews) {
-            //     setReviewsData(res.data.reviews)
-            // } else {
-            //     setReviewsData([])
-            // }
+           
             setReviewsData(res.data.reviews)
+
+            const reactionsData = {}
+            for(let review of res.data.review) {
+                const r = reactionsReviews(review.id)
+                reactionsData[review.id] = r.data
+            }
+            setReactions(reactionsData)
 
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
@@ -93,6 +97,11 @@ function ReviewGame() {
             const res = await likeReview(id)
             const reaction = res.data.usersReactions
 
+            setReactions(prev => ({
+                ...prev,
+                [id]: res.data
+            }))
+
             console.log(reaction)
             console.log(res.data)
         } catch (err) {
@@ -104,6 +113,11 @@ function ReviewGame() {
         try {
             const res = await dislikeReview(id)
             const reaction = res.data.usersReactions
+
+            setReactions(prev => ({
+                ...prev,
+                [id]: res.data
+            }))
 
             console.log(reaction)
             console.log(res.data)

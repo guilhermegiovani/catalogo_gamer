@@ -136,3 +136,8 @@ export const likeReview = (id) => {
 export const dislikeReview = (id) => {
     return api.post(`/reviews/${id}/dislike`)
 }
+
+// Pegar todas as reções
+export const reactionsReviews = (id) => {
+    return api.get(`/reviews/${id}/reactions`)
+}

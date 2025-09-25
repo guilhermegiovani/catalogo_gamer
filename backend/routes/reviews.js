@@ -118,6 +118,15 @@ router.post('/:id/dislike', async (req, res) => {
     res.status(200).json({ usersReactions: results[0] })
 })
 
+// Pegar todas as reações
+router.get("/:id/reactions", async (req, res) => {
+    const results = await queryDB("select * from review_reactions;")
+
+    console.log(`Todas reações: ${JSON.stringify(results)}`)
+
+    // res.status(200).json({  })
+})
+
 // Pegar reviews do jogo específico
 router.get('/game/:id', async (req, res) => {
     const { id } = req.params
