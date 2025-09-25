@@ -125,8 +125,8 @@ router.get("/:id/reactions", async (req, res) => {
     const usersDislike = results.filter(res => res.reaction === "dislike")
 
     console.log(`Todas reações: ${JSON.stringify(results)}`)
-    console.log(`Likes reações: ${usersLike}`)
-    console.log(`Dislikes reações: ${usersDislike}`)
+    console.log(`Likes reações: ${JSON.stringify(usersLike)}`)
+    console.log(`Dislikes reações: ${JSON.stringify(usersDislike)}`)
 
     // res.status(200).json({  })
 })
