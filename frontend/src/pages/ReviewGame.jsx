@@ -108,10 +108,10 @@ function ReviewGame() {
                 setReactionUser(res.data.usersReactions)
             }
 
-            setReactions(prev => ({
-                ...prev,
-                [id]: res.data
-            }))
+            // setReactions(prev => ({
+            //     ...prev,
+            //     [id]: res.data
+            // }))
 
             console.log(res.data)
         } catch (err) {
@@ -126,10 +126,10 @@ function ReviewGame() {
                 setReactionUser(res.data.usersReactions)
             }
 
-            setReactions(prev => ({
-                ...prev,
-                [id]: res.data
-            }))
+            // setReactions(prev => ({
+            //     ...prev,
+            //     [id]: res.data
+            // }))
 
             console.log(res.data)
         } catch (err) {
