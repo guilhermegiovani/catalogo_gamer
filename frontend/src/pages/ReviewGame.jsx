@@ -60,15 +60,15 @@ function ReviewGame() {
 
     const gameId = Number(id)
 
-    const usersReactionsData = async (reviews) => {
-        const dataReaction = {}
-        for (let review of reviews) {
-            const r = await reactionsReviews(review.id)
-            dataReaction[review.id] = r.data
-        }
+    // const usersReactionsData = async (reviews) => {
+    //     const dataReaction = {}
+    //     for (let review of reviews) {
+    //         const r = await reactionsReviews(review.id)
+    //         dataReaction[review.id] = r.data
+    //     }
 
-        return JSON.stringify(dataReaction)
-    }
+    //     return JSON.stringify(dataReaction)
+    // }
 
     const fetchReviews = async () => {
         if (!gameId) return
@@ -91,14 +91,14 @@ function ReviewGame() {
             //     reactionsData[review.id] = reactionsArray[index].data
             // })
 
-            // const reactionsData = {}
-            // for (let review of res.data.reviews) {
-            //     const r = await reactionsReviews(review.id)
-            //     reactionsData[review.id] = r.data
-            // }
-            const dataReaction = usersReactionsData(res.data.reviews)
+            const reactionsData = {}
+            for (let review of res.data.reviews) {
+                const r = await reactionsReviews(review.id)
+                reactionsData[review.id] = r.data
+            }
+            // const dataReaction = usersReactionsData(res.data.reviews)
 
-            setReactions(dataReaction)
+            setReactions(reactionsData)
 
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
@@ -153,10 +153,19 @@ function ReviewGame() {
     }, [id])
 
     useEffect(() => {
-        const dataReaction = usersReactionsData(reviewsData)
-        setReactions(dataReaction)
+        const test = async () => {
+            const reactionsData = {}
+            for (let review of res.data.reviews) {
+                const r = await reactionsReviews(review.id)
+                reactionsData[review.id] = r.data
+            }
+            return setReactions(reactionsData)
+        }
+
+        test()
+
         console.log(reactionUser)
-        console.log(dataReaction)
+        console.log(reactions)
     }, [reactionUser])
 
     if (isLoadingGame) {
