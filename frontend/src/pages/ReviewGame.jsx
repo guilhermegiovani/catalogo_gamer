@@ -14,6 +14,7 @@ function ReviewGame() {
     const [avgGame, setAvgGame] = useState()
     const [isLoadingGame, setIsLoadingGame] = useState(true)
     const [reactions, setReactions] = useState({})
+    const [reactionUser, setReactionUser] = useState({})
 
     // const toggleLike = (id) => {
     //     setLikes(prev => ({
@@ -102,17 +103,13 @@ function ReviewGame() {
     const fetchLike = async (id) => {
         try {
             const res = await likeReview(id)
-            const reaction = res.data.usersReactions
+            setReactionUser(res.data.usersReactions)
 
             setReactions(prev => ({
                 ...prev,
-                [id]: {
-                    ...prev[id],
-                    ...res.data
-                }
+                [id]: res.data
             }))
 
-            console.log(reaction)
             console.log(res.data)
         } catch (err) {
             console.log(`Erro ao dar like na review: ${err}`)
@@ -122,17 +119,13 @@ function ReviewGame() {
     const fetchDisLike = async (id) => {
         try {
             const res = await dislikeReview(id)
-            const reaction = res.data.usersReactions
+            setReactionUser(res.data.usersReactions)
 
             setReactions(prev => ({
                 ...prev,
-                [id]: {
-                    ...prev[id],
-                    ...res.data
-                }
+                [id]: res.data
             }))
 
-            console.log(reaction)
             console.log(res.data)
         } catch (err) {
             console.log(`Erro ao dar dislike na review: ${err}`)
@@ -244,7 +237,7 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
-                                                                Number(reactions[rev.id]?.idUser) === Number(userId) && reactions[rev.id]?.reaction === "like"
+                                                                Number(reactionUser.user_id) === Number(userId) && reactionUser.reaction === "like"
                                                                 ? "text-blue-500/30"
                                                                 : ""
                                                             )}
@@ -263,7 +256,7 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
-                                                                Number(reactions[rev.id]?.idUser) === Number(userId) && reactions[rev.id]?.reaction === "dislike"
+                                                                Number(reactionUser.user_id) === Number(userId) && reactionUser.reaction === "dislike"
                                                                 ? "text-red-500/30"
                                                                 : ""
                                                             )}
