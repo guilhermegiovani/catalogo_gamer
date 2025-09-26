@@ -158,6 +158,9 @@ function ReviewGame() {
     console.log(`Likes: ${reactions.likesReview}`)
     console.log(`Dislikes: ${reactions.dislikesReview}`)
 
+    const keysReactions = Object.keys(reactions)
+    console.log(keysReactions)
+
     return (
 
         <section className="space-y-10">
