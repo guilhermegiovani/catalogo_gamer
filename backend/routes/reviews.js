@@ -144,8 +144,8 @@ router.get("/:id/reactions", async (req, res) => {
     console.log(`Likes reações: ${JSON.stringify(usersLike)}`)
     console.log(`Dislikes reações: ${JSON.stringify(usersDislike)}`)
 
-    console.log(`Likes totais: ${ countLike[0].totLikes }`)
-    console.log(`Dislikes totais: ${countDislike[0].totDislikes }`)
+    console.log(`Likes totais: ${ countLike[0] }`)
+    console.log(`Dislikes totais: ${ countDislike[0] }`)
 
     res.status(200).json({ message: "SUCESSO" })
 })
