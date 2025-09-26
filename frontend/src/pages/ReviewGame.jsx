@@ -67,7 +67,7 @@ function ReviewGame() {
             dataReaction[review.id] = r.data
         }
 
-        return dataReaction
+        return JSON.stringify(dataReaction)
     }
 
     const fetchReviews = async () => {
