@@ -254,7 +254,10 @@ function ReviewGame() {
                                                         />}
                                                         handleClick={() => fetchLike(rev.id)}
                                                     />
-                                                    <p>0</p>
+                                                    <p>{reactions[rev.id].likesReview}</p>
+                                                    {/* {keysReactions.map((k) => (
+                                                        <p>{}</p>
+                                                    ))} */}
                                                 </div>
 
                                                 <div className="flex gap-1">
@@ -268,7 +271,7 @@ function ReviewGame() {
                                                         />}
                                                         handleClick={() => fetchDisLike(rev.id)}
                                                     />
-                                                    <p>0</p>
+                                                    <p>{reactions[rev.id].dislikesReview}</p>
                                                 </div>
                                             </div>
                                         )
