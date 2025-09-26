@@ -121,12 +121,12 @@ router.post('/:id/dislike', async (req, res) => {
 // Pegar todas as reações
 router.get("/:id/reactions", async (req, res) => {
     const results = await queryDB("select * from review_reactions;")
-    const usersLike = results.filter(res => res.reaction === "like")
-    const usersDislike = results.filter(res => res.reaction === "dislike")
+    const usersLike = results.map(res => res.reaction === "like")
+    const usersDislike = results.map(res => res.reaction === "dislike")
 
     console.log(`Todas reações: ${JSON.stringify(results)}`)
-    console.log(`Likes reações: ${JSON.stringify(usersLike)}`)
-    console.log(`Dislikes reações: ${JSON.stringify(usersDislike)}`)
+    console.log(`Likes reações: ${usersLike}`)
+    console.log(`Dislikes reações: ${usersDislike}`)
 
     // res.status(200).json({  })
 })
