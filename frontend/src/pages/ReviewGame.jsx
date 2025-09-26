@@ -154,6 +154,7 @@ function ReviewGame() {
     const game = games.find((g) => g.id === gameId)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
+    console.log(reactions)
 
     return (
 
