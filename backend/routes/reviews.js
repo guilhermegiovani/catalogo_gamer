@@ -147,7 +147,7 @@ router.get("/:id/reactions", async (req, res) => {
     console.log(`Likes totais: ${JSON.stringify(countLike)}`)
     console.log(`Dislikes totais: ${JSON.stringify(countDislike)}`)
 
-    // res.status(200).json({  })
+    res.status(200).json({ message: "SUCESSO" })
 })
 
 // Pegar reviews do jogo específico
