@@ -73,6 +73,7 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
            
             setReviewsData(res.data.reviews)
+            console.log(res.data.reviews)
 
             const reactionsArray = await Promise.all(
                 res.data.reviews.map((review) => reactionsReviews(review.id))
