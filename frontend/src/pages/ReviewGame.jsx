@@ -60,6 +60,16 @@ function ReviewGame() {
 
     const gameId = Number(id)
 
+    const usersReactionsData = async (reviews) => {
+        const dataReaction = {}
+        for (let review of reviews) {
+            const r = await reactionsReviews(review.id)
+            dataReaction[review.id] = r.data
+        }
+
+        return dataReaction
+    }
+
     const fetchReviews = async () => {
         if (!gameId) return
         try {
@@ -81,13 +91,14 @@ function ReviewGame() {
             //     reactionsData[review.id] = reactionsArray[index].data
             // })
 
-            const reactionsData = {}
-            for (let review of res.data.reviews) {
-                const r = await reactionsReviews(review.id)
-                reactionsData[review.id] = r.data
-            }
+            // const reactionsData = {}
+            // for (let review of res.data.reviews) {
+            //     const r = await reactionsReviews(review.id)
+            //     reactionsData[review.id] = r.data
+            // }
+            const dataReaction = usersReactionsData(res.data.reviews)
 
-            setReactions(reactionsData)
+            setReactions(dataReaction)
 
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
@@ -104,7 +115,7 @@ function ReviewGame() {
         try {
             const res = await likeReview(id)
 
-            if(reactionUser.reaction !== 'like') {
+            if (reactionUser.reaction !== 'like') {
                 setReactionUser(res.data.usersReactions)
             }
 
@@ -122,7 +133,7 @@ function ReviewGame() {
     const fetchDisLike = async (id) => {
         try {
             const res = await dislikeReview(id)
-            if(reactionUser.reaction !== 'dislike') {
+            if (reactionUser.reaction !== 'dislike') {
                 setReactionUser(res.data.usersReactions)
             }
 
@@ -142,8 +153,10 @@ function ReviewGame() {
     }, [id])
 
     useEffect(() => {
+        const dataReaction = usersReactionsData(reviewsData)
+        setReactions(dataReaction)
         console.log(reactionUser)
-        console.log(reactions)
+        console.log(dataReaction)
     }, [reactionUser])
 
     if (isLoadingGame) {
