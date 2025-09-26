@@ -155,7 +155,7 @@ function ReviewGame() {
     useEffect(() => {
         const test = async () => {
             const reactionsData = {}
-            for (let review of res.data.reviews) {
+            for (let review of reviewsData) {
                 const r = await reactionsReviews(review.id)
                 reactionsData[review.id] = r.data
             }
