@@ -71,21 +71,27 @@ function ReviewGame() {
             const resGame = await getGames()
             setGames(resGame.data)
             const res = await getReviewsByGame(gameId)
-           
+
             setReviewsData(res.data.reviews)
             console.log(res.data.reviews)
 
-            const reactionsArray = await Promise.all(
-                res.data.reviews.map((review) => {
-                    console.log(review.id)
-                    reactionsReviews(review.id)
-                })
-            )
+            // const reactionsArray = await Promise.all(
+            //     res.data.reviews.map((review) => {
+            //         reactionsReviews(review.id)
+            //     })
+            // )
+
+            // const reactionsData = {}
+            // res.data.reviews.forEach((review, index) => {
+            //     reactionsData[review.id] = reactionsArray[index].data
+            // })
 
             const reactionsData = {}
-            res.data.reviews.forEach((review, index) => {
-                reactionsData[review.id] = reactionsArray[index].data
-            }) 
+            for (let review of res.data.reviews) {
+                const r = await reactionsReviews(review.id)
+                reactionsData[review.id] = r.data
+            }
+
             setReactions(reactionsData)
 
             const resAvg = await getReviewsAvgs()
