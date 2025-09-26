@@ -103,7 +103,10 @@ function ReviewGame() {
     const fetchLike = async (id) => {
         try {
             const res = await likeReview(id)
-            setReactionUser(res.data.usersReactions)
+
+            if(reactionUser.reaction !== 'like') {
+                setReactionUser(res.data.usersReactions)
+            }
 
             setReactions(prev => ({
                 ...prev,
@@ -119,7 +122,9 @@ function ReviewGame() {
     const fetchDisLike = async (id) => {
         try {
             const res = await dislikeReview(id)
-            setReactionUser(res.data.usersReactions)
+            if(reactionUser.reaction !== 'dislike') {
+                setReactionUser(res.data.usersReactions)
+            }
 
             setReactions(prev => ({
                 ...prev,
@@ -135,6 +140,11 @@ function ReviewGame() {
     useEffect(() => {
         fetchReviews()
     }, [id])
+
+    useEffect(() => {
+        console.log(reactionUser)
+        console.log(reactions)
+    }, [reactionUser])
 
     if (isLoadingGame) {
         return (
@@ -237,9 +247,6 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
-                                                                Number(reactionUser.user_id) === Number(userId) && reactionUser.reaction === "like"
-                                                                ? "text-blue-500/30"
-                                                                : ""
                                                             )}
                                                         />}
                                                         handleClick={() => fetchLike(rev.id)}
@@ -256,9 +263,6 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
-                                                                Number(reactionUser.user_id) === Number(userId) && reactionUser.reaction === "dislike"
-                                                                ? "text-red-500/30"
-                                                                : ""
                                                             )}
                                                         />}
                                                         handleClick={() => fetchDisLike(rev.id)}
