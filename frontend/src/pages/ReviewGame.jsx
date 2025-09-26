@@ -76,7 +76,10 @@ function ReviewGame() {
             console.log(res.data.reviews)
 
             const reactionsArray = await Promise.all(
-                res.data.reviews.map((review) => reactionsReviews(review.id))
+                res.data.reviews.map((review) => {
+                    console.log(review.id)
+                    reactionsReviews(review.id)
+                })
             )
 
             const reactionsData = {}
