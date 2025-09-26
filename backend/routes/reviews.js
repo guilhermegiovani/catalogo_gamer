@@ -153,7 +153,7 @@ router.get("/:id/reactions", async (req, res) => {
     console.log(`Total like: ${totlikes}`)
     console.log(`Total dislike: ${totdislikes}`)
 
-    res.status(200).json({ likesReview: totlikes, dislikesReview: totdislikes })
+    res.status(200).json({ likesReview: totlikes, dislikesReview: totdislikes, idUser: userId })
 })
 
 // Pegar reviews do jogo específico
