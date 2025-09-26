@@ -140,8 +140,8 @@ router.get("/:id/reactions", async (req, res) => {
         [dislike, id]
     )
 
-    const { totLikes } = countLike
-    const { totDislikes } = countDislike
+    const { totlikes } = countLike[0]
+    const { totdislikes } = countDislike[0]
 
     console.log(`Todas reações: ${JSON.stringify(results)}`)
     console.log(`Likes reações: ${JSON.stringify(usersLike)}`)
@@ -150,8 +150,8 @@ router.get("/:id/reactions", async (req, res) => {
     console.log(`Likes totais: ${ JSON.stringify(countLike) }`)
     console.log(`Dislikes totais: ${ JSON.stringify(countDislike) }`)
 
-    console.log(`Total like: ${totLikes}`)
-    console.log(`Total dislike: ${totDislikes}`)
+    console.log(`Total like: ${totlikes}`)
+    console.log(`Total dislike: ${totdislikes}`)
 
     res.status(200).json({ message: "SUCESSO" })
 })
