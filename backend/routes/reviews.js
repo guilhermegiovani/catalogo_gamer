@@ -132,12 +132,12 @@ router.get("/:id/reactions", async (req, res) => {
 
     const countLike = await queryDB(
         "select count(*) from review_reactions where reaction = ? and review_id = ? and user_id = ?;",
-        [like]
+        [like, id, userId]
     )
 
     const countDislike = await queryDB(
         "select count(*) from review_reactions where reaction = ? and review_id = ? and user_id = ?;",
-        [dislike]
+        [dislike, id, userId]
     )
 
     console.log(`Todas reações: ${JSON.stringify(results)}`)
