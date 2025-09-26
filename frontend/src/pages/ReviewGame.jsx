@@ -115,9 +115,9 @@ function ReviewGame() {
         try {
             const res = await likeReview(id)
 
-            if (reactionUser.reaction !== 'like') {
-                setReactionUser(res.data.usersReactions)
-            }
+            setReactionUser(res.data.usersReactions)
+            // if (reactionUser.reaction !== 'like') {
+            // }
 
             // setReactions(prev => ({
             //     ...prev,
@@ -133,9 +133,9 @@ function ReviewGame() {
     const fetchDisLike = async (id) => {
         try {
             const res = await dislikeReview(id)
-            if (reactionUser.reaction !== 'dislike') {
-                setReactionUser(res.data.usersReactions)
-            }
+            // if (reactionUser.reaction !== 'dislike') {
+            // }
+            setReactionUser(res.data.usersReactions)
 
             // setReactions(prev => ({
             //     ...prev,
