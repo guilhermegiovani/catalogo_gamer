@@ -131,12 +131,12 @@ router.get("/:id/reactions", async (req, res) => {
     const usersDislike = results.filter(res => res.reaction === "dislike")
 
     const countLike = await queryDB(
-        "select count(*) from review_reactions where reaction = ? and review_id = ?;",
+        "select count(*) as totLikes from review_reactions where reaction = ? and review_id = ?;",
         [like, id]
     )
 
     const countDislike = await queryDB(
-        "select count(*) from review_reactions where reaction = ? and review_id = ?;",
+        "select count(*) as totDislikes from review_reactions where reaction = ? and review_id = ?;",
         [dislike, id]
     )
 
@@ -144,8 +144,8 @@ router.get("/:id/reactions", async (req, res) => {
     console.log(`Likes reações: ${JSON.stringify(usersLike)}`)
     console.log(`Dislikes reações: ${JSON.stringify(usersDislike)}`)
 
-    console.log(`Likes totais: ${JSON.stringify(countLike)}`)
-    console.log(`Dislikes totais: ${JSON.stringify(countDislike)}`)
+    console.log(`Likes totais: ${ countLike[0].totLikes }`)
+    console.log(`Dislikes totais: ${countDislike[0].totDislikes }`)
 
     res.status(200).json({ message: "SUCESSO" })
 })
