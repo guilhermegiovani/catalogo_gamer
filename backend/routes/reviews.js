@@ -120,13 +120,32 @@ router.post('/:id/dislike', async (req, res) => {
 
 // Pegar todas as reações
 router.get("/:id/reactions", async (req, res) => {
+    const { id } = req.params
+    const userId = req.userId
+
     const results = await queryDB("select * from review_reactions;")
-    const usersLike = results.map(res => res.reaction === "like")
-    const usersDislike = results.map(res => res.reaction === "dislike")
+    const like = "like"
+    const dislike = "dislike"
+
+    const usersLike = results.filter(res => res.reaction === "like")
+    const usersDislike = results.filter(res => res.reaction === "dislike")
+
+    const countLike = await queryDB(
+        "select count(*) from review_reactions where reaction = ? and review_id = ? and user_id = ?;",
+        [like]
+    )
+
+    const countDislike = await queryDB(
+        "select count(*) from review_reactions where reaction = ? and review_id = ? and user_id = ?;",
+        [dislike]
+    )
 
     console.log(`Todas reações: ${JSON.stringify(results)}`)
-    console.log(`Likes reações: ${usersLike}`)
-    console.log(`Dislikes reações: ${usersDislike}`)
+    console.log(`Likes reações: ${JSON.stringify(usersLike)}`)
+    console.log(`Dislikes reações: ${JSON.stringify(usersDislike)}`)
+
+    console.log(`Likes totais: ${countLike}`)
+    console.log(`Dislikes totais: ${countDislike}`)
 
     // res.status(200).json({  })
 })
