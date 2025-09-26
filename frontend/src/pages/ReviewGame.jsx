@@ -180,6 +180,7 @@ function ReviewGame() {
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     console.log(reactions)
+    console.log(`Raction User: ${reactionUser}`)
 
     return (
 
