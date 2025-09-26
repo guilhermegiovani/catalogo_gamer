@@ -155,8 +155,8 @@ function ReviewGame() {
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     console.log(reactions)
-    console.log(`Likes: ${reactions.rev.id.likesReview}`)
-    console.log(`Dislikes: ${reactions.rev.id.dislikesReview}`)
+    console.log(`Likes: ${reactions.likesReview}`)
+    console.log(`Dislikes: ${reactions.dislikesReview}`)
 
     return (
 
@@ -251,7 +251,7 @@ function ReviewGame() {
                                                         />}
                                                         handleClick={() => fetchLike(rev.id)}
                                                     />
-                                                    <p>{reactions.rev.id.likesReview}</p>
+                                                    <p>0</p>
                                                 </div>
 
                                                 <div className="flex gap-1">
@@ -265,7 +265,7 @@ function ReviewGame() {
                                                         />}
                                                         handleClick={() => fetchDisLike(rev.id)}
                                                     />
-                                                    <p>{reactions.rev.id.dislikesReview}</p>
+                                                    <p>0</p>
                                                 </div>
                                             </div>
                                         )
