@@ -113,9 +113,17 @@ function ReviewGame() {
 
     const fetchLike = async (id) => {
         try {
+            setReactions(prev => ({
+                ...prev,
+                [id]: {
+                    ...prev[id],
+                    likesReview: Number(prev[id]?.likesReview || 0) + 1
+                }
+            }))
+
             const res = await likeReview(id)
 
-            setReactionUser(res.data.usersReactions)
+            
             // if (reactionUser.reaction !== 'like' || !reactionUser || Object.keys(reactionUser).length === 0) {
             // }
 
@@ -123,6 +131,8 @@ function ReviewGame() {
                 ...prev,
                 [id]: res.data
             }))
+
+            setReactionUser(res.data.usersReactions)
 
             console.log(res.data)
         } catch (err) {
@@ -132,16 +142,24 @@ function ReviewGame() {
 
     const fetchDisLike = async (id) => {
         try {
+            setReactions(prev => ({
+                ...prev,
+                [id]: {
+                    ...prev[id],
+                    dislikesReview: Number(prev[id]?.dislikesReview || 0) + 1
+                }
+            }))
+
             const res = await dislikeReview(id)
             // if (reactionUser.reaction !== 'dislike' || !reactionUser || Object.keys(reactionUser).length === 0) {
             // }
-            setReactionUser(res.data.usersReactions)
-
+            
             setReactions(prev => ({
                 ...prev,
                 [id]: res.data
             }))
-
+            
+            setReactionUser(res.data.usersReactions)
             console.log(res.data)
         } catch (err) {
             console.log(`Erro ao dar dislike na review: ${err}`)
@@ -166,7 +184,7 @@ function ReviewGame() {
 
         console.log(reactionUser)
         console.log(reactions)
-    }, [])
+    }, [reactionUser])
 
     if (isLoadingGame) {
         return (
@@ -181,6 +199,9 @@ function ReviewGame() {
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     console.log(reactions)
     console.log(`Raction User: ${JSON.stringify(reactionUser)}`)
+    console.log(`Raction: ${reactionUser.reaction}`)
+    console.log(`Id user: ${reactionUser.user_id}`)
+    console.log(`Id review: ${reactionUser.review_id}`)
 
     return (
 
