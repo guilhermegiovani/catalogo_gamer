@@ -115,7 +115,7 @@ function ReviewGame() {
         try {
             const res = await likeReview(id)
 
-            if (reactionUser.reaction !== 'like' || !reactionUser) {
+            if (reactionUser.reaction !== 'like' || !reactionUser || Object.keys(reactionUser).length === 0) {
                 setReactionUser(res.data.usersReactions)
             }
 
@@ -133,7 +133,7 @@ function ReviewGame() {
     const fetchDisLike = async (id) => {
         try {
             const res = await dislikeReview(id)
-            if (reactionUser.reaction !== 'dislike' || !reactionUser) {
+            if (reactionUser.reaction !== 'dislike' || !reactionUser || Object.keys(reactionUser).length === 0) {
                 setReactionUser(res.data.usersReactions)
             }
 
