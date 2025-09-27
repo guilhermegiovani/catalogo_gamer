@@ -15,6 +15,8 @@ function ReviewGame() {
     const [isLoadingGame, setIsLoadingGame] = useState(true)
     const [reactions, setReactions] = useState({})
     const [reactionUser, setReactionUser] = useState({})
+    const [like, setLike] = useState(0)
+    const [dislike, setDislike] = useState(0)
 
     // const toggleLike = (id) => {
     //     setLikes(prev => ({
@@ -130,7 +132,7 @@ function ReviewGame() {
 
             setReactions(prev => ({
                 ...prev,
-                [id]: res.data
+                [id]: res.data.usersReactions
             }))
 
             setReactionUser(res.data.usersReactions)
@@ -158,7 +160,7 @@ function ReviewGame() {
             
             setReactions(prev => ({
                 ...prev,
-                [id]: res.data
+                [id]: res.data.usersReactions
             }))
             
             setReactionUser(res.data.usersReactions)
@@ -297,9 +299,12 @@ function ReviewGame() {
                                                                 reactionUser.user_id === userId && reactionUser.review_id === rev.id && reactionUser.reaction === 'like' ? "text-blue-500/30" : ""
                                                             )}
                                                         />}
-                                                        handleClick={() => fetchLike(rev.id)}
+                                                        handleClick={() => {
+                                                            fetchLike(rev.id)
+                                                            setLike(reactions[rev.id].likesReview)
+                                                        }}
                                                     />
-                                                    <p>{reactions[rev.id].likesReview}</p>
+                                                    <p>{like}</p>
                                                     {/* {keysReactions.map((k) => (
                                                         <p>{}</p>
                                                     ))} */}
@@ -314,9 +319,12 @@ function ReviewGame() {
                                                                 reactionUser.user_id === userId && reactionUser.review_id === rev.id && reactionUser.reaction === 'dislike' ? "text-red-500/30" : ""
                                                             )}
                                                         />}
-                                                        handleClick={() => fetchDisLike(rev.id)}
+                                                        handleClick={() => {
+                                                            fetchDisLike(rev.id)
+                                                            setDislike(prev => prev + reactions[rev.id].dislikesReview)
+                                                        }}
                                                     />
-                                                    <p>{reactions[rev.id].dislikesReview}</p>
+                                                    <p>{dislike}</p>
                                                 </div>
                                             </div>
                                         )
