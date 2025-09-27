@@ -15,50 +15,6 @@ function ReviewGame() {
     const [isLoadingGame, setIsLoadingGame] = useState(true)
     const [reactions, setReactions] = useState({})
     const [reactionUser, setReactionUser] = useState({})
-    const [like, setLike] = useState(0)
-    const [dislike, setDislike] = useState(0)
-
-    // const toggleLike = (id) => {
-    //     setLikes(prev => ({
-    //         ...prev,
-    //         [id]: !prev[id]
-    //     }))
-
-    //     if (disliked[id]) {
-    //         setDislikes(prev => ({
-    //             ...prev,
-    //             [id]: !prev[id]
-    //         }))
-    //     }
-
-
-    //     // if (liked) {
-    //     //     setLiked(false)
-    //     //     setLike(l => l - 1)
-    //     // } else {
-    //     //     setLiked(true)
-    //     //     setLike(l => l + 1)
-    //     //     if (disliked) {
-    //     //         setDisliked(false)
-    //     //         setDislike(d => d - 1)
-    //     //     }
-    //     // }
-    // }
-
-    // const toggleDislike = (id) => {
-
-    //     if (disliked) {
-    //         setDisliked(false)
-    //         setDislikes(d => d - 1)
-    //     } else {
-    //         setDisliked(true)
-    //         setDislikes(d => d + 1)
-    //         if (liked) {
-    //             setLiked(false)
-    //             setLikes(l => l - 1)
-    //         }
-    //     }
-    // }
 
     const gameId = Number(id)
 
@@ -299,12 +255,9 @@ function ReviewGame() {
                                                                 reactionUser.user_id === userId && reactionUser.review_id === rev.id && reactionUser.reaction === 'like' ? "text-blue-500/30" : ""
                                                             )}
                                                         />}
-                                                        handleClick={() => {
-                                                            fetchLike(rev.id)
-                                                            setLike(reactions[rev.id].likesReview)
-                                                        }}
+                                                        handleClick={() => fetchLike(rev.id)}
                                                     />
-                                                    <p>{like}</p>
+                                                    <p>{reactions[rev.id].likesReview}</p>
                                                     {/* {keysReactions.map((k) => (
                                                         <p>{}</p>
                                                     ))} */}
@@ -319,12 +272,9 @@ function ReviewGame() {
                                                                 reactionUser.user_id === userId && reactionUser.review_id === rev.id && reactionUser.reaction === 'dislike' ? "text-red-500/30" : ""
                                                             )}
                                                         />}
-                                                        handleClick={() => {
-                                                            fetchDisLike(rev.id)
-                                                            setDislike(prev => prev + reactions[rev.id].dislikesReview)
-                                                        }}
+                                                        handleClick={() => fetchDisLike(rev.id)}
                                                     />
-                                                    <p>{dislike}</p>
+                                                    <p>{reactions[rev.id].likesReview}</p>
                                                 </div>
                                             </div>
                                         )
