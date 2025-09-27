@@ -113,14 +113,14 @@ function ReviewGame() {
 
     const fetchLike = async (id) => {
         try {
-            setReactions(prev => ({
-                ...prev,
-                [id]: {
-                    ...prev[id],
-                    likesReview: Number(prev[id]?.likesReview || 0) + 1,
-                    dislikesReview: Number(prev[id]?.dislikesReview || 0) - 1
-                }
-            }))
+            // setReactions(prev => ({
+            //     ...prev,
+            //     [id]: {
+            //         ...prev[id],
+            //         likesReview: Number(prev[id]?.likesReview || 0) + 1,
+            //         dislikesReview: Number(prev[id]?.dislikesReview || 0) - 1
+            //     }
+            // }))
 
             const res = await likeReview(id)
 
@@ -143,14 +143,14 @@ function ReviewGame() {
 
     const fetchDisLike = async (id) => {
         try {
-            setReactions(prev => ({
-                ...prev,
-                [id]: {
-                    ...prev[id],
-                    dislikesReview: Number(prev[id]?.dislikesReview || 0) + 1,
-                    likesReview: Number(prev[id]?.likesReview || 0) - 1
-                }
-            }))
+            // setReactions(prev => ({
+            //     ...prev,
+            //     [id]: {
+            //         ...prev[id],
+            //         dislikesReview: Number(prev[id]?.dislikesReview || 0) + 1,
+            //         likesReview: Number(prev[id]?.likesReview || 0) - 1
+            //     }
+            // }))
 
             const res = await dislikeReview(id)
             // if (reactionUser.reaction !== 'dislike' || !reactionUser || Object.keys(reactionUser).length === 0) {
@@ -179,7 +179,7 @@ function ReviewGame() {
                 const r = await reactionsReviews(review.id)
                 reactionsData[review.id] = r.data
             }
-            
+
             setReactions(reactionsData)
         }
 
