@@ -172,21 +172,22 @@ function ReviewGame() {
         fetchReviews()
     }, [id])
 
-    // useEffect(() => {
-    //     const test = async () => {
-    //         const reactionsData = {}
-    //         for (let review of reviewsData) {
-    //             const r = await reactionsReviews(review.id)
-    //             reactionsData[review.id] = r.data
-    //         }
-    //         return setReactions(reactionsData)
-    //     }
+    useEffect(() => {
+        const test = async () => {
+            const reactionsData = {}
+            for (let review of reviewsData) {
+                const r = await reactionsReviews(review.id)
+                reactionsData[review.id] = r.data
+            }
+            
+            setReactions(reactionsData)
+        }
 
-    //     test()
+        test()
 
-    //     console.log(reactionUser)
-    //     console.log(reactions)
-    // }, [reactionUser])
+        console.log(reactionUser)
+        console.log(reactions)
+    }, [reactionUser])
 
     if (isLoadingGame) {
         return (
