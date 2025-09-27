@@ -130,10 +130,10 @@ function ReviewGame() {
             // if (reactionUser.reaction !== 'like' || !reactionUser || Object.keys(reactionUser).length === 0) {
             // }
 
-            setReactions(prev => ({
-                ...prev,
-                [id]: res.data.usersReactions
-            }))
+            // setReactions(prev => ({
+            //     ...prev,
+            //     [id]: res.data.usersReactions
+            // }))
 
             setReactionUser(res.data.usersReactions)
 
@@ -158,10 +158,10 @@ function ReviewGame() {
             // if (reactionUser.reaction !== 'dislike' || !reactionUser || Object.keys(reactionUser).length === 0) {
             // }
             
-            setReactions(prev => ({
-                ...prev,
-                [id]: res.data.usersReactions
-            }))
+            // setReactions(prev => ({
+            //     ...prev,
+            //     [id]: res.data.usersReactions
+            // }))
             
             setReactionUser(res.data.usersReactions)
             console.log(res.data)
