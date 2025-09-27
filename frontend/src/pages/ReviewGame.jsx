@@ -274,7 +274,7 @@ function ReviewGame() {
                                                         />}
                                                         handleClick={() => fetchDisLike(rev.id)}
                                                     />
-                                                    <p>{reactions[rev.id].likesReview}</p>
+                                                    <p>{reactions[rev.id].dislikesReview}</p>
                                                 </div>
                                             </div>
                                         )
