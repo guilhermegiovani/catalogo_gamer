@@ -115,14 +115,14 @@ function ReviewGame() {
         try {
             const res = await likeReview(id)
 
-            if (reactionUser.reaction !== 'like' || !reactionUser || Object.keys(reactionUser).length === 0) {
-                setReactionUser(res.data.usersReactions)
-            }
+            setReactionUser(res.data.usersReactions)
+            // if (reactionUser.reaction !== 'like' || !reactionUser || Object.keys(reactionUser).length === 0) {
+            // }
 
-            // setReactions(prev => ({
-            //     ...prev,
-            //     [id]: res.data
-            // }))
+            setReactions(prev => ({
+                ...prev,
+                [id]: res.data
+            }))
 
             console.log(res.data)
         } catch (err) {
@@ -133,14 +133,14 @@ function ReviewGame() {
     const fetchDisLike = async (id) => {
         try {
             const res = await dislikeReview(id)
-            if (reactionUser.reaction !== 'dislike' || !reactionUser || Object.keys(reactionUser).length === 0) {
-                setReactionUser(res.data.usersReactions)
-            }
+            // if (reactionUser.reaction !== 'dislike' || !reactionUser || Object.keys(reactionUser).length === 0) {
+            // }
+            setReactionUser(res.data.usersReactions)
 
-            // setReactions(prev => ({
-            //     ...prev,
-            //     [id]: res.data
-            // }))
+            setReactions(prev => ({
+                ...prev,
+                [id]: res.data
+            }))
 
             console.log(res.data)
         } catch (err) {
