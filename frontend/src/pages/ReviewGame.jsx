@@ -166,7 +166,7 @@ function ReviewGame() {
 
         console.log(reactionUser)
         console.log(reactions)
-    }, [reactionUser])
+    }, [])
 
     if (isLoadingGame) {
         return (
