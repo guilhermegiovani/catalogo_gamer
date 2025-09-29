@@ -173,7 +173,7 @@ function ReviewGame() {
     // console.log(`Id review: ${reactionUser.review_id}`)
 
     // if(reactionUser.review_id)
-    const reviewsIds = reviewsData.find(r => r.id)
+    const reviewsIds = reviewsData.map(r => r.id)
 
     console.log(`like: ${isLiked}`)
     console.log(`dislike: ${isDisliked}`)
