@@ -171,8 +171,8 @@ function ReviewGame() {
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     // console.log(reactions)
-    // console.log(`Raction User: ${JSON.stringify(reactionUser)}`)
-    // console.log(`Raction: ${reactionUser.reaction}`)
+    // console.log(`Reaction User: ${JSON.stringify(reactionUser)}`)
+    // console.log(`Reaction: ${reactionUser.reaction}`)
     // console.log(`Id user: ${reactionUser.user_id}`)
     // console.log(`Id review: ${reactionUser.review_id}`)
 
@@ -185,7 +185,7 @@ function ReviewGame() {
     // console.log(reviewsData)
     // console.log(userReactions)
     const reviewsWithReaction = reviewsData.map(rev => {
-        const userReaction = reactions.find(r => r.review_id === rev.id)?.reaction || null
+        const userReaction = !reactions && reactions.find(r => r.review_id === rev.id)?.reaction || null
 
         return {
             ...rev,
