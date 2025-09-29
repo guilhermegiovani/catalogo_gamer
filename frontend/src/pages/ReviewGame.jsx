@@ -94,6 +94,7 @@ function ReviewGame() {
             // }))
 
             setReactionUser(res.data.usersReactions)
+
             setIsLiked(true)
             setIsDisliked(false)
 
@@ -170,6 +171,9 @@ function ReviewGame() {
     // console.log(`Raction: ${reactionUser.reaction}`)
     // console.log(`Id user: ${reactionUser.user_id}`)
     // console.log(`Id review: ${reactionUser.review_id}`)
+
+    // if(reactionUser.review_id)
+    console.log(reviewsData)
 
     console.log(`like: ${isLiked}`)
     console.log(`dislike: ${isDisliked}`)
