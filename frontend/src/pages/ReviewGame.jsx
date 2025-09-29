@@ -139,7 +139,6 @@ function ReviewGame() {
 
     useEffect(() => {
         fetchReviews()
-
     }, [id])
 
     useEffect(() => {
@@ -172,7 +171,7 @@ function ReviewGame() {
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     // console.log(reactions)
     // console.log(`Reaction User: ${JSON.stringify(reactionUser)}`)
-    // console.log(`Reaction: ${reactionUser.reaction}`)
+    console.log(`Reaction: ${reactionUser}`)
     // console.log(`Id user: ${reactionUser.user_id}`)
     // console.log(`Id review: ${reactionUser.review_id}`)
 
@@ -184,6 +183,7 @@ function ReviewGame() {
     // console.log(reviewsIds)
     // console.log(reviewsData)
     // console.log(userReactions)
+
     // const reviewsWithReaction = reviewsData.map(rev => {
     //     const userReaction = reactions[rev.id]?.reaction || null
 
@@ -274,7 +274,7 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer  transition duration-200",
-                                                            userReactions[rev.id] === "like" ? "bg-blue-500/30" : "text-white/20 hover:text-blue-500/30"
+                                                            userReactions[rev.id] === "like" ? "text-blue-500/30" : "text-white/20 hover:text-blue-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
@@ -291,7 +291,7 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer transition duration-200",
-                                                            userReactions[rev.id] === "dislike" ? "bg-red-500/30" : "text-white/20 hover:text-red-500/30"
+                                                            userReactions[rev.id] === "dislike" ? "text-red-500/30" : "text-white/20 hover:text-red-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
