@@ -185,7 +185,7 @@ function ReviewGame() {
     // console.log(reviewsData)
     // console.log(userReactions)
     const reviewsWithReaction = reviewsData.map(rev => {
-        const userReaction = !reactions && reactions.find(r => r.review_id === rev.id)?.reaction || null
+        const userReaction = reactions?.find(r => r.review_id === rev.id)?.reaction || null
 
         return {
             ...rev,
