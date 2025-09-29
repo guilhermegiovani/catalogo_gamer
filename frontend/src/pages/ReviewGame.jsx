@@ -259,7 +259,7 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
-                                                                isLiked === true ? "text-blue-500/30" : ""
+                                                                isLiked === false ? "text-blue-500/30" : ""
                                                             )}
                                                         />}
                                                         handleClick={() => fetchLike(rev.id)}
@@ -276,7 +276,7 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
-                                                                isDislike === true ? "text-red-500/30" : ""
+                                                                isDislike === false ? "text-red-500/30" : ""
                                                             )}
                                                         />}
                                                         handleClick={() => fetchDisLike(rev.id)}
