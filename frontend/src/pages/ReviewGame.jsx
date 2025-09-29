@@ -13,7 +13,7 @@ function ReviewGame() {
     const { games, setGames, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
     const [avgGame, setAvgGame] = useState()
     const [isLoadingGame, setIsLoadingGame] = useState(true)
-    const [reactions, setReactions] = useState({})
+    const [reactions, setReactions] = useState([])
     const [reactionUser, setReactionUser] = useState({})
     // const [userReactions, setUserReactions] = useState({})
 
@@ -185,7 +185,7 @@ function ReviewGame() {
     // console.log(reviewsData)
     // console.log(userReactions)
     const reviewsWithReaction = reviewsData.map(rev => {
-        const userReaction = reactions?.find(r => r.review_id === rev.id)?.reaction || null
+        const userReaction = (reactions || []).find(r => r.review_id === rev.id)?.reaction || null
 
         return {
             ...rev,
