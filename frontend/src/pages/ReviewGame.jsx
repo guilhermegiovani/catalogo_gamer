@@ -268,7 +268,9 @@ function ReviewGame() {
                                             <div className="flex gap-1">
                                                 <Button
                                                     text={<ThumbsUp
-                                                        size={20} fill="currentColor"
+                                                        size={20}
+                                                        fill="currentColor"
+                                                        style={{ color: '#2563EB' }}
                                                     />}
                                                     className={clsx(
                                                         "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
@@ -284,7 +286,8 @@ function ReviewGame() {
                                             <div className="flex gap-1">
                                                 <Button
                                                     text={<ThumbsDown
-                                                        size={20} fill="currentColor"
+                                                        size={20}
+                                                        fill="currentColor"
                                                     />}
                                                     className={clsx(
                                                         "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
