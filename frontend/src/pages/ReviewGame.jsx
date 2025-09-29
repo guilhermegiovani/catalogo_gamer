@@ -61,6 +61,9 @@ function ReviewGame() {
 
             setReactions(reactionsData)
 
+            // const liked = await likeReview
+
+            console.log(reactionsData)
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
             setAvgGame(avg)
@@ -139,9 +142,8 @@ function ReviewGame() {
         }
     }
 
-    // const [isLiked, setIsLiked] = useState(() => {
-    //     const like = 
-    // })
+    const liked = reviewsIds.map(rId => userReactions[rId] === "like")
+    const disliked = reviewsIds.map(rId => userReactions[rId] === "dislike")
 
     useEffect(() => {
         fetchReviews()
@@ -184,8 +186,8 @@ function ReviewGame() {
     // if(reactionUser.review_id)
     // const reviewsIds = reviewsData.map(r => r.id)
 
-    // console.log(`like: ${isLiked}`)
-    // console.log(`dislike: ${isDisliked}`)
+    // console.log(`like: ${liked}`)
+    // console.log(`dislike: ${disliked}`)
     // console.log(reviewsIds)
     // console.log(reviewsData)
     // console.log(userReactions)

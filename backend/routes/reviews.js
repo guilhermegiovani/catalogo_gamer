@@ -129,8 +129,8 @@ router.get("/:id/reactions", async (req, res) => {
     const like = "like"
     const dislike = "dislike"
 
-    const usersLike = results.filter(res => res.reaction === "like")
-    const usersDislike = results.filter(res => res.reaction === "dislike")
+    // const usersLike = results.filter(res => res.reaction === "like")
+    // const usersDislike = results.filter(res => res.reaction === "dislike")
 
     const countLike = await queryDB(
         "select count(*) as totLikes from review_reactions where reaction = ? and review_id = ?;",
@@ -155,7 +155,7 @@ router.get("/:id/reactions", async (req, res) => {
     console.log(`Total like: ${totlikes}`)
     console.log(`Total dislike: ${totdislikes}`)
 
-    res.status(200).json({ likesReview: totlikes, dislikesReview: totdislikes })
+    res.status(200).json({ likesReview: totlikes, dislikesReview: totdislikes, totReactions: results[0] })
 })
 
 // Pegar reviews do jogo específico
