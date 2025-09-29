@@ -63,7 +63,7 @@ function ReviewGame() {
 
             // const liked = await likeReview
 
-            console.log(reactionsData)
+            console.log(reactionsData.infoReactions)
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
             setAvgGame(avg)
