@@ -130,7 +130,7 @@ function ReviewGame() {
 
     useEffect(() => {
         fetchReviews()
-        console.log("TESTEEEE" + reactions)
+        
     }, [id])
 
     useEffect(() => {
@@ -144,10 +144,12 @@ function ReviewGame() {
             setReactions(reactionsData)
         }
 
+        console.log("TESTEEEE 111" + reactions)
         test()
 
         console.log(reactionUser)
         console.log(reactions)
+        console.log("TESTEEEE" + reactions)
     }, [reactionUser])
 
     if (isLoadingGame) {
