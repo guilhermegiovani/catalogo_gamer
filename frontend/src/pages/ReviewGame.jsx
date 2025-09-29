@@ -16,6 +16,7 @@ function ReviewGame() {
     const [reactions, setReactions] = useState({})
     const [reactionUser, setReactionUser] = useState({})
     const [userReactions, setUserReactions] = useState({})
+    const [reviewsIds, setReviewsIds] = useState([])
 
     const gameId = Number(id)
 
@@ -37,6 +38,7 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
 
             setReviewsData(res.data.reviews)
+            setReviewsIds(prev => [...prev, res.data.reviews.id])
             // console.log(res.data.reviews)
 
             // const reactionsArray = await Promise.all(
@@ -137,6 +139,10 @@ function ReviewGame() {
         }
     }
 
+    // const [isLiked, setIsLiked] = useState(() => {
+    //     const like = 
+    // })
+
     useEffect(() => {
         fetchReviews()
     }, [id])
@@ -193,7 +199,9 @@ function ReviewGame() {
     //     }
     // })
 
-    // console.log(reviewsWithReaction)
+    console.log(JSON.stringify(userReactions))
+    console.log(reviewsIds)
+    
 
     return (
 
