@@ -183,6 +183,7 @@ function ReviewGame() {
     // console.log(`dislike: ${isDisliked}`)
     // console.log(reviewsIds)
     // console.log(reviewsData)
+    console.log(userReactions)
 
     return (
 
