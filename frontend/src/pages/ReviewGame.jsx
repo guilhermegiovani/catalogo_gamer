@@ -171,7 +171,7 @@ function ReviewGame() {
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     // console.log(reactions)
     // console.log(`Reaction User: ${JSON.stringify(reactionUser)}`)
-    console.log(`Reaction: ${JSON.stringify(reactionUser)}`)
+    console.log(`Reaction: ${JSON.stringify(reactions)}`)
     // console.log(`Id user: ${reactionUser.user_id}`)
     // console.log(`Id review: ${reactionUser.review_id}`)
 
