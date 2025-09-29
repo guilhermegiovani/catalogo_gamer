@@ -272,7 +272,7 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer  transition duration-200",
-                                                            rev.userReactions === "like" ? "bg-blue-500/30" : "text-white/20 hover:text-blue-500/30"
+                                                            rev.userReaction === "like" ? "bg-blue-500/30" : "text-white/20 hover:text-blue-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
@@ -289,12 +289,13 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer transition duration-200",
-                                                            rev.userReactions === "dislike" ? "bg-red-500/30" : "text-white/20 hover:text-red-500/30"
+                                                            rev.userReaction === "dislike" ? "bg-red-500/30" : "text-white/20 hover:text-red-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
                                                 <p>{reactions[rev.id].dislikesReview}</p>
+                                                <p>{rev.userReaction}</p>
                                             </div>
                                         </div>
 
@@ -326,72 +327,6 @@ function ReviewGame() {
             </div>
 
             <ReviewForm refreshReviews={() => fetchReviews()} />
-
-            {/* <form
-                className="space-y-4"
-                onSubmit={(e) => {
-                    e.preventDefault()
-                    handleSubmitReview()
-                }}
-            >
-
-                <label htmlFor="nota" className="block mb-1 text-lg font-medium text-gray-200">Nota:</label>
-                <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map((index) => {
-                        // const filled = ratingHover !== null ? index <= ratingHover : index <= rating
-
-                        return (
-                            <Star
-                                size={18} fill="currentColor"
-                                key={index}
-                                onMouseEnter={() => setRatingHover(index)}
-                                onMouseLeave={() => setRatingHover(null)}
-                                onClick={() => setRating(index)}
-                                className={clsx(
-                                    "cursor-pointer transition-transform duration-150",
-                                    "-mt-[1px]",
-                                    ratingHover !== null
-                                        ? index <= ratingHover
-                                            ? "text-yellow-400 opacity-50"
-                                            : "text-white/30 fill-transparent"
-                                        : index <= rating
-                                            ? "text-yellow-400"
-                                            : "text-white/30 fill-transparent"
-                                )}
-                            />
-                        )
-                    })}
-                </div>
-                <input
-                    type="hidden"
-                    name="rating"
-                    value={rating}
-                />
-
-                <label htmlFor="comment" className="block mb-1 text-lg font-medium text-gray-200">Comentário:</label>
-                <textarea
-                    name="comment"
-                    id="comment"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    rows={4}
-                    className={clsx(
-                        "w-full rounded-md text-gray-100 placeholder-gray-300",
-                        "border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-gray-600",
-                        "p-2 text-sm resize-none",
-                        "bg-white/5 backdrop-blur-sm shadow-sm"
-                    )}
-                    placeholder="Escreva seu comentário aqui..."
-                ></textarea>
-
-                <Button text="Enviar comentário" className={clsx(
-                    " w-50 text-white font-semibold py-2 rounded-md mt-4",
-                    "bg-gradient-to-r from-[#3c0b8d] to-[#491a9d]",
-                    "hover:brightness-130 transition-all duration-200",
-                    "cursor-pointer"
-                )} />
-
-            </form> */}
         </section>
     )
 }
