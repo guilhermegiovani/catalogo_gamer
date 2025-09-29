@@ -270,12 +270,11 @@ function ReviewGame() {
                                                     text={<ThumbsUp
                                                         size={20}
                                                         fill="currentColor"
-                                                        style={{ color: '#2563EB' }}
+                                                        className={clsx(
+                                                            "-mt-[1px] cursor-pointer  transition duration-200",
+                                                            rev.userReactions === "like" ? "bg-blue-500/30" : "text-white/20 hover:text-blue-500/30"
+                                                        )}
                                                     />}
-                                                    className={clsx(
-                                                        "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
-                                                        rev.userReactions === "like" && "bg-blue-500/30"
-                                                    )}
                                                     handleClick={() => fetchLike(rev.id)}
                                                 />
                                                 <p>{reactions[rev.id].likesReview}</p>
@@ -288,11 +287,11 @@ function ReviewGame() {
                                                     text={<ThumbsDown
                                                         size={20}
                                                         fill="currentColor"
+                                                        className={clsx(
+                                                            "-mt-[1px] cursor-pointer transition duration-200",
+                                                            rev.userReactions === "dislike" ? "bg-red-500/30" : "text-white/20 hover:text-red-500/30"
+                                                        )}
                                                     />}
-                                                    className={clsx(
-                                                        "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
-                                                        rev.userReactions === "dislike" && "bg-red-500/30"
-                                                    )}
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
                                                 <p>{reactions[rev.id].dislikesReview}</p>
@@ -302,11 +301,19 @@ function ReviewGame() {
                                         {Number(rev.iduser) === Number(userId) ?
                                             <div className="flex gap-3 mt-5">
                                                 <Button
-                                                    text={<PencilIcon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
+                                                    text={<PencilIcon
+                                                        size={20}
+                                                        fill="currentColor"
+                                                        className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200"
+                                                    />}
                                                     handleClick={() => handleEditReview(userId, rev.id)}
                                                 />
                                                 <Button
-                                                    text={<Trash2Icon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
+                                                    text={<Trash2Icon
+                                                        size={20}
+                                                        fill="currentColor"
+                                                        className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200"
+                                                    />}
                                                     handleClick={() => deleteRev(rev.id)}
                                                 />
                                             </div> : ""
