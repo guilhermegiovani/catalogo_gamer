@@ -263,51 +263,52 @@ function ReviewGame() {
                                         {rev.comment}
                                     </p>
 
-                                    {Number(rev.iduser) === Number(userId) ?
-                                        <div className="flex gap-3 mt-5">
-                                            <Button
-                                                text={<PencilIcon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
-                                                handleClick={() => handleEditReview(userId, rev.id)}
-                                            />
-                                            <Button
-                                                text={<Trash2Icon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
-                                                handleClick={() => deleteRev(rev.id)}
-                                            />
-                                        </div> : (
-                                            <div className="flex gap-4 mt-5">
-                                                <div className="flex gap-1">
-                                                    <Button
-                                                        text={<ThumbsUp
-                                                            size={20} fill="currentColor"
-                                                            className={clsx(
-                                                                "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
-                                                                rev.userReactions === "like" && "bg-blue-500/30"
-                                                            )}
-                                                        />}
-                                                        handleClick={() => fetchLike(rev.id)}
-                                                    />
-                                                    <p>{reactions[rev.id].likesReview}</p>
-                                                    {/* {keysReactions.map((k) => (
-                                                        <p>{}</p>
-                                                    ))} */}
-                                                </div>
-
-                                                <div className="flex gap-1">
-                                                    <Button
-                                                        text={<ThumbsDown
-                                                            size={20} fill="currentColor"
-                                                            className={clsx(
-                                                                "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
-                                                                rev.userReactions === "dislike" && "bg-red-500/30"
-                                                            )}
-                                                        />}
-                                                        handleClick={() => fetchDisLike(rev.id)}
-                                                    />
-                                                    <p>{reactions[rev.id].dislikesReview}</p>
-                                                </div>
+                                    <div className="flex justify-between">
+                                        <div className="flex gap-4 mt-5">
+                                            <div className="flex gap-1">
+                                                <Button
+                                                    text={<ThumbsUp
+                                                        size={20} fill="currentColor"
+                                                        className={clsx(
+                                                            "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
+                                                            rev.userReactions === "like" && "bg-blue-500/30"
+                                                        )}
+                                                    />}
+                                                    handleClick={() => fetchLike(rev.id)}
+                                                />
+                                                <p>{reactions[rev.id].likesReview}</p>
+                                                {/* {keysReactions.map((k) => (
+                                                            <p>{}</p>
+                                                        ))} */}
                                             </div>
-                                        )
-                                    }
+                                            <div className="flex gap-1">
+                                                <Button
+                                                    text={<ThumbsDown
+                                                        size={20} fill="currentColor"
+                                                        className={clsx(
+                                                            "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
+                                                            rev.userReactions === "dislike" && "bg-red-500/30"
+                                                        )}
+                                                    />}
+                                                    handleClick={() => fetchDisLike(rev.id)}
+                                                />
+                                                <p>{reactions[rev.id].dislikesReview}</p>
+                                            </div>
+                                        </div>
+
+                                        {Number(rev.iduser) === Number(userId) ?
+                                            <div className="flex gap-3 mt-5">
+                                                <Button
+                                                    text={<PencilIcon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200" />}
+                                                    handleClick={() => handleEditReview(userId, rev.id)}
+                                                />
+                                                <Button
+                                                    text={<Trash2Icon size={20} fill="currentColor" className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200" />}
+                                                    handleClick={() => deleteRev(rev.id)}
+                                                />
+                                            </div> : ""
+                                        }
+                                    </div>
                                 </article>
                             </li>
                         ))}
