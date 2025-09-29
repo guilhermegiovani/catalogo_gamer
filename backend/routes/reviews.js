@@ -121,7 +121,7 @@ router.post('/:id/dislike', async (req, res) => {
 })
 
 // Pegar todas as reações
-router.get("/:id/reactions", async (req, res) => {
+router.get("/:id/calcreactions", async (req, res) => {
     const { id } = req.params
     const userId = req.userId
 
@@ -155,7 +155,17 @@ router.get("/:id/reactions", async (req, res) => {
     console.log(`Total like: ${totlikes}`)
     console.log(`Total dislike: ${totdislikes}`)
 
-    res.status(200).json({ likesReview: totlikes, dislikesReview: totdislikes, infoReactions: results[0] })
+    res.status(200).json({ likesReview: totlikes, dislikesReview: totdislikes })
+})
+
+router.get("/:id/reactions", async (req, res) => {
+    const results = await queryDB("select * from review_reactions;")
+
+    if( results.length === 0) return res.status(400).json({ erro: "Erro ao pegar as reações da review" })
+
+    console.log(`Reactions: ${JSON.stringify(results)}`)
+
+    // res.status(200).json({ infoReactions: results[0] })
 })
 
 // Pegar reviews do jogo específico

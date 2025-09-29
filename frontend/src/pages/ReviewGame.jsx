@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth"
 import { Star, PencilIcon, Trash2Icon, ThumbsUp, ThumbsDown } from "lucide-react"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
-import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview, reactionsReviews } from "../services/routes"
+import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview, reactionsCalcReviews, reactionsReviews } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
 import toast from "react-hot-toast"
 
@@ -54,8 +54,9 @@ function ReviewGame() {
 
             const reactionsData = {}
             for (let review of res.data.reviews) {
-                const r = await reactionsReviews(review.id)
+                const r = await reactionsCalcReviews(review.id)
                 reactionsData[review.id] = r.data
+                await reactionsReviews(review.id)
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
 
@@ -153,7 +154,7 @@ function ReviewGame() {
         const test = async () => {
             const reactionsData = {}
             for (let review of reviewsData) {
-                const r = await reactionsReviews(review.id)
+                const r = await reactionsCalcReviews(review.id)
                 reactionsData[review.id] = r.data
             }
 
@@ -179,7 +180,7 @@ function ReviewGame() {
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     // console.log(reactions)
     // console.log(`Reaction User: ${JSON.stringify(reactionUser)}`)
-    console.log(`Reaction: ${JSON.stringify(reactions)}`)
+    console.log(`Reaction: ${JSON.stringify(reactions.infoReactions)}`)
     // console.log(`Id user: ${reactionUser.user_id}`)
     // console.log(`Id review: ${reactionUser.review_id}`)
 

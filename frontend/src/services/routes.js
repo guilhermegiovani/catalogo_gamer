@@ -137,6 +137,11 @@ export const dislikeReview = (id) => {
     return api.post(`/reviews/${id}/dislike`)
 }
 
+// Calcular todas as reções de uma review específica
+export const reactionsCalcReviews = (id) => {
+    return api.get(`/reviews/${id}/calcreactions`)
+}
+
 // Pegar todas as reções de uma review específica
 export const reactionsReviews = (id) => {
     return api.get(`/reviews/${id}/reactions`)
