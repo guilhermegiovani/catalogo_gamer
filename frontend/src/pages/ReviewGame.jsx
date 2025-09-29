@@ -39,7 +39,7 @@ function ReviewGame() {
 
             setReviewsData(res.data.reviews)
             setReviewsIds(prev => [...prev, res.data.reviews.id])
-            // console.log(res.data.reviews)
+            console.log(res.data.reviews)
 
             // const reactionsArray = await Promise.all(
             //     res.data.reviews.map((review) => {
