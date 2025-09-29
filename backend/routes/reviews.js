@@ -129,8 +129,8 @@ router.get("/:id/reactions", async (req, res) => {
     const like = "like"
     const dislike = "dislike"
 
-    // const usersLike = results.filter(res => res.reaction === "like")
-    // const usersDislike = results.filter(res => res.reaction === "dislike")
+    const usersLike = results.filter(res => res.reaction === "like")
+    const usersDislike = results.filter(res => res.reaction === "dislike")
 
     const countLike = await queryDB(
         "select count(*) as totLikes from review_reactions where reaction = ? and review_id = ?;",
