@@ -52,19 +52,21 @@ function ReviewGame() {
             //     reactionsData[review.id] = reactionsArray[index].data
             // })
 
+            const reactionsCalc = {}
             const reactionsData = {}
             for (let review of res.data.reviews) {
-                const r = await reactionsCalcReviews(review.id)
-                reactionsData[review.id] = r.data
-                await reactionsReviews(review.id)
+                const revCalc = await reactionsCalcReviews(review.id)
+                reactionsCalc[review.id] = revCalc.data
+                const rev = await reactionsReviews(review.id)
+                reactionsData[review.id] = rev.data
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
 
-            setReactions(reactionsData)
+            setReactions(reactionsCalc)
 
             // const liked = await likeReview
 
-            console.log(reactionsData.infoReactions)
+            console.log(reactionsData)
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
             setAvgGame(avg)
