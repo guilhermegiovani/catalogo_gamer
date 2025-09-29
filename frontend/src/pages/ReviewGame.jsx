@@ -171,7 +171,7 @@ function ReviewGame() {
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     // console.log(reactions)
     // console.log(`Reaction User: ${JSON.stringify(reactionUser)}`)
-    console.log(`Reaction: ${reactionUser}`)
+    console.log(`Reaction: ${JSON.stringify(reactionUser)}`)
     // console.log(`Id user: ${reactionUser.user_id}`)
     // console.log(`Id review: ${reactionUser.review_id}`)
 
@@ -274,7 +274,7 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer  transition duration-200",
-                                                            userReactions[rev.id] === "like" ? "text-blue-500/30" : "text-white/20 hover:text-blue-500/30"
+                                                            userReactions[rev.id] === "like" ? "text-blue-500/80" : "text-white/20 hover:text-blue-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
@@ -291,7 +291,7 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer transition duration-200",
-                                                            userReactions[rev.id] === "dislike" ? "text-red-500/30" : "text-white/20 hover:text-red-500/30"
+                                                            userReactions[rev.id] === "dislike" ? "text-red-500/80" : "text-white/20 hover:text-red-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
