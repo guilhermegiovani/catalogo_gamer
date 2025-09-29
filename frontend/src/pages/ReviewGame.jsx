@@ -15,7 +15,7 @@ function ReviewGame() {
     const [isLoadingGame, setIsLoadingGame] = useState(true)
     const [reactions, setReactions] = useState({})
     const [reactionUser, setReactionUser] = useState({})
-    // const [userReactions, setUserReactions] = useState({})
+    const [userReactions, setUserReactions] = useState({})
 
     const gameId = Number(id)
 
@@ -94,10 +94,10 @@ function ReviewGame() {
 
             setReactionUser(res.data.usersReactions)
 
-            // setUserReactions(prev => ({
-            //     ...prev,
-            //     [id]: "like"
-            // }))
+            setUserReactions(prev => ({
+                ...prev,
+                [id]: "like"
+            }))
 
             console.log(res.data)
         } catch (err) {
@@ -126,10 +126,10 @@ function ReviewGame() {
             // }))
 
             setReactionUser(res.data.usersReactions)
-            // setUserReactions(prev => ({
-            //     ...prev,
-            //     [id]: "dislike"
-            // }))
+            setUserReactions(prev => ({
+                ...prev,
+                [id]: "dislike"
+            }))
 
             console.log(res.data)
         } catch (err) {
@@ -184,16 +184,16 @@ function ReviewGame() {
     // console.log(reviewsIds)
     // console.log(reviewsData)
     // console.log(userReactions)
-    const reviewsWithReaction = reviewsData.map(rev => {
-        const userReaction = reactions[rev.id]?.reaction || null
+    // const reviewsWithReaction = reviewsData.map(rev => {
+    //     const userReaction = reactions[rev.id]?.reaction || null
 
-        return {
-            ...rev,
-            userReaction
-        }
-    })
+    //     return {
+    //         ...rev,
+    //         userReaction
+    //     }
+    // })
 
-    console.log(reviewsWithReaction)
+    // console.log(reviewsWithReaction)
 
     return (
 
@@ -229,7 +229,7 @@ function ReviewGame() {
 
                 <ul className="space-y-4">
                     {!reviewsData.length > 0 || !reviewsData ? <p>Nenhuma avaliação!</p> :
-                        reviewsWithReaction.map((rev) => (
+                        reviewsData.map((rev) => (
                             <li key={rev.id} className="max-w-5xl">
                                 <article
                                     className={clsx(
@@ -274,7 +274,7 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer  transition duration-200",
-                                                            rev.userReaction === "like" ? "bg-blue-500/30" : "text-white/20 hover:text-blue-500/30"
+                                                            userReactions[rev.id] === "like" ? "bg-blue-500/30" : "text-white/20 hover:text-blue-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
@@ -291,13 +291,13 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer transition duration-200",
-                                                            rev.userReaction === "dislike" ? "bg-red-500/30" : "text-white/20 hover:text-red-500/30"
+                                                            userReactions[rev.id] === "dislike" ? "bg-red-500/30" : "text-white/20 hover:text-red-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
                                                 <p>{reactions[rev.id].dislikesReview}</p>
-                                                <p>{rev.userReaction}</p>
+                                                <p>{userReactions[rev.id]}</p>
                                             </div>
                                         </div>
 
