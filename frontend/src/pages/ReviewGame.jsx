@@ -15,7 +15,7 @@ function ReviewGame() {
     const [isLoadingGame, setIsLoadingGame] = useState(true)
     const [reactions, setReactions] = useState({})
     const [reactionUser, setReactionUser] = useState({})
-    const [userReactions, setUserReactions] = useState({})
+    // const [userReactions, setUserReactions] = useState({})
 
     const gameId = Number(id)
 
@@ -83,7 +83,7 @@ function ReviewGame() {
 
             const res = await likeReview(id)
 
-            
+
             // if (reactionUser.reaction !== 'like' || !reactionUser || Object.keys(reactionUser).length === 0) {
             // }
 
@@ -94,10 +94,10 @@ function ReviewGame() {
 
             setReactionUser(res.data.usersReactions)
 
-            setUserReactions(prev => ({
-                ...prev,
-                [id]: "like"
-            }))
+            // setUserReactions(prev => ({
+            //     ...prev,
+            //     [id]: "like"
+            // }))
 
             console.log(res.data)
         } catch (err) {
@@ -119,17 +119,17 @@ function ReviewGame() {
             const res = await dislikeReview(id)
             // if (reactionUser.reaction !== 'dislike' || !reactionUser || Object.keys(reactionUser).length === 0) {
             // }
-            
+
             // setReactions(prev => ({
             //     ...prev,
             //     [id]: res.data.usersReactions
             // }))
-            
+
             setReactionUser(res.data.usersReactions)
-            setUserReactions(prev => ({
-                ...prev,
-                [id]: "dislike"
-            }))
+            // setUserReactions(prev => ({
+            //     ...prev,
+            //     [id]: "dislike"
+            // }))
 
             console.log(res.data)
         } catch (err) {
@@ -139,7 +139,7 @@ function ReviewGame() {
 
     useEffect(() => {
         fetchReviews()
-        
+
     }, [id])
 
     useEffect(() => {
@@ -183,7 +183,15 @@ function ReviewGame() {
     // console.log(`dislike: ${isDisliked}`)
     // console.log(reviewsIds)
     // console.log(reviewsData)
-    console.log(userReactions)
+    // console.log(userReactions)
+    const reviewsWithReaction = reviewsData.map(rev => {
+        const userReaction = reactions.find(r => r.review_id === rev.id)?.reaction || null
+
+        return {
+            ...rev,
+            userReaction
+        }
+    })
 
     return (
 
@@ -219,7 +227,7 @@ function ReviewGame() {
 
                 <ul className="space-y-4">
                     {!reviewsData.length > 0 || !reviewsData ? <p>Nenhuma avaliação!</p> :
-                        reviewsData.map((rev) => (
+                        reviewsWithReaction.map((rev) => (
                             <li key={rev.id} className="max-w-5xl">
                                 <article
                                     className={clsx(
@@ -273,7 +281,7 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
-                                                                userReactions[rev.id] === "like" ? "text-blue-500/30" : "text-purple-500/30"
+                                                                rev.userReactions === 1 && "text-blue-500/30"
                                                             )}
                                                         />}
                                                         handleClick={() => fetchLike(rev.id)}
@@ -290,7 +298,7 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
-                                                                userReactions[rev.id] === "dislike" ? "text-red-500/30" : "text-green-500/30"
+                                                                rev.userReactions === 0 && "text-red-500/30"
                                                             )}
                                                         />}
                                                         handleClick={() => fetchDisLike(rev.id)}
