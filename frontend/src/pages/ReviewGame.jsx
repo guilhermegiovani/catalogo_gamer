@@ -269,11 +269,11 @@ function ReviewGame() {
                                                 <Button
                                                     text={<ThumbsUp
                                                         size={20} fill="currentColor"
-                                                        className={clsx(
-                                                            "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
-                                                            rev.userReactions === "like" && "bg-blue-500/30"
-                                                        )}
                                                     />}
+                                                    className={clsx(
+                                                        "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
+                                                        rev.userReactions === "like" && "bg-blue-500/30"
+                                                    )}
                                                     handleClick={() => fetchLike(rev.id)}
                                                 />
                                                 <p>{reactions[rev.id].likesReview}</p>
@@ -285,11 +285,11 @@ function ReviewGame() {
                                                 <Button
                                                     text={<ThumbsDown
                                                         size={20} fill="currentColor"
-                                                        className={clsx(
-                                                            "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
-                                                            rev.userReactions === "dislike" && "bg-red-500/30"
-                                                        )}
                                                     />}
+                                                    className={clsx(
+                                                        "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
+                                                        rev.userReactions === "dislike" && "bg-red-500/30"
+                                                    )}
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
                                                 <p>{reactions[rev.id].dislikesReview}</p>
