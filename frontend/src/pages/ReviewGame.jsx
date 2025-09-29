@@ -94,6 +94,8 @@ function ReviewGame() {
             // }))
 
             setReactionUser(res.data.usersReactions)
+            setIsLiked(true)
+            setIsDisliked(false)
 
             console.log(res.data)
         } catch (err) {
@@ -122,6 +124,8 @@ function ReviewGame() {
             // }))
             
             setReactionUser(res.data.usersReactions)
+            setIsLiked(false)
+            setIsDisliked(true)
             console.log(res.data)
         } catch (err) {
             console.log(`Erro ao dar dislike na review: ${err}`)
@@ -144,12 +148,10 @@ function ReviewGame() {
             setReactions(reactionsData)
         }
 
-        console.log("TESTEEEE 111" + JSON.stringify(reactions))
         test()
 
         console.log(reactionUser)
         console.log(reactions)
-        console.log("TESTEEEE" + JSON.stringify(reactions))
     }, [reactionUser])
 
     if (isLoadingGame) {
