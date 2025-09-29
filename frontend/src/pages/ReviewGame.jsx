@@ -16,7 +16,7 @@ function ReviewGame() {
     const [reactions, setReactions] = useState({})
     const [reactionUser, setReactionUser] = useState({})
     const [isLiked, setIsLiked] = useState(false)
-    const [isDislike, setIsDisliked] = useState(false)
+    const [isDisliked, setIsDisliked] = useState(false)
 
     const gameId = Number(id)
 
@@ -165,11 +165,14 @@ function ReviewGame() {
     const game = games.find((g) => g.id === gameId)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
-    console.log(reactions)
-    console.log(`Raction User: ${JSON.stringify(reactionUser)}`)
-    console.log(`Raction: ${reactionUser.reaction}`)
-    console.log(`Id user: ${reactionUser.user_id}`)
-    console.log(`Id review: ${reactionUser.review_id}`)
+    // console.log(reactions)
+    // console.log(`Raction User: ${JSON.stringify(reactionUser)}`)
+    // console.log(`Raction: ${reactionUser.reaction}`)
+    // console.log(`Id user: ${reactionUser.user_id}`)
+    // console.log(`Id review: ${reactionUser.review_id}`)
+
+    console.log(`like: ${isLiked}`)
+    console.log(`dislike: ${isDisliked}`)
 
     return (
 
@@ -259,7 +262,7 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-blue-500/30 transition duration-200",
-                                                                isLiked === false ? "text-blue-500/30" : ""
+                                                                isLiked === true ? "text-blue-500/30" : ""
                                                             )}
                                                         />}
                                                         handleClick={() => fetchLike(rev.id)}
@@ -276,7 +279,7 @@ function ReviewGame() {
                                                             size={20} fill="currentColor"
                                                             className={clsx(
                                                                 "text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200",
-                                                                isDislike === false ? "text-red-500/30" : ""
+                                                                isDisliked === true ? "text-red-500/30" : ""
                                                             )}
                                                         />}
                                                         handleClick={() => fetchDisLike(rev.id)}
