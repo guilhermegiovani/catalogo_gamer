@@ -193,6 +193,8 @@ function ReviewGame() {
         }
     })
 
+    console.log(reviewsWithReaction)
+
     return (
 
         <section className="space-y-10">
