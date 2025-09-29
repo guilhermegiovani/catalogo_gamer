@@ -144,12 +144,12 @@ function ReviewGame() {
             setReactions(reactionsData)
         }
 
-        console.log("TESTEEEE 111" + reactions)
+        console.log("TESTEEEE 111" + JSON.stringify(reactions))
         test()
 
         console.log(reactionUser)
         console.log(reactions)
-        console.log("TESTEEEE" + reactions)
+        console.log("TESTEEEE" + JSON.stringify(reactions))
     }, [reactionUser])
 
     if (isLoadingGame) {
