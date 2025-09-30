@@ -70,11 +70,14 @@ function ReviewGame() {
             const revId = res.data.reviews.map(r => r.id)
             revId.map((r) => {
                 console.log("teste" + JSON.stringify(reactionsData[r]))
+                const userReact = reactionsData[r].filter(userR => userR.user_id === userId ? userR.reaction : "")
 
-                setUserReactions(prev => ({
-                    ...prev,
-                    [r]: reactionsData[r].filter(userR => userR.user_id === userId ? userR.reaction : "")
-                }))
+                console.log(userReact)
+
+                // setUserReactions(prev => ({
+                //     ...prev,
+                //     [r]: reactionsData[r].filter(userR => userR.user_id === userId ? userR.reaction : "")
+                // }))
 
             })
 
@@ -82,9 +85,9 @@ function ReviewGame() {
 
             // const liked = await likeReview
 
-            console.log(`Reações: ${JSON.stringify(userReactions)}`)
-            console.log(`Reações dados completos: ${reactionsData[revId[0].reaction]}`)
-            console.log(`Reações dados completos: ${JSON.stringify(reactionsData)}`)
+            // console.log(`Reações: ${JSON.stringify(userReactions)}`)
+            // console.log(`Reações dados completos: ${reactionsData[revId[0].reaction]}`)
+            // console.log(`Reações dados completos: ${JSON.stringify(reactionsData)}`)
             
 
             const resAvg = await getReviewsAvgs()
@@ -211,10 +214,10 @@ function ReviewGame() {
 
     // console.log(`like: ${liked}`)
     // console.log(`dislike: ${disliked}`)
-    console.log(reviewsIds)
+    // console.log(reviewsIds)
     // console.log(reviewsData)
-    console.log(userReactions)
-    console.log(JSON.stringify(userReactions))
+    // console.log(userReactions)
+    // console.log(JSON.stringify(userReactions))
 
     // const reviewsWithReaction = reviewsData.map(rev => {
     //     const userReaction = reactions[rev.id]?.reaction || null
