@@ -38,7 +38,9 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
 
             setReviewsData(res.data.reviews)
-            setReviewsIds(res.data.reviews.map(r => r.id))
+            const revId = res.data.reviews.map(r => r.id)
+            console.log(revId)
+            setReviewsIds(revId)
             console.log(res.data.reviews)
 
             // const reactionsArray = await Promise.all(
@@ -64,6 +66,7 @@ function ReviewGame() {
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
 
+            console.log(reviewsIds)
             reviewsIds.map((revId) => {
                 console.log("teste" + JSON.stringify(reactionsData[revId]))
 
@@ -205,7 +208,7 @@ function ReviewGame() {
 
     // console.log(`like: ${liked}`)
     // console.log(`dislike: ${disliked}`)
-    // console.log(reviewsIds)
+    console.log(reviewsIds)
     // console.log(reviewsData)
     // console.log(userReactions)
 
