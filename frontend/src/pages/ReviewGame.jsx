@@ -20,16 +20,6 @@ function ReviewGame() {
 
     const gameId = Number(id)
 
-    // const usersReactionsData = async (reviews) => {
-    //     const dataReaction = {}
-    //     for (let review of reviews) {
-    //         const r = await reactionsReviews(review.id)
-    //         dataReaction[review.id] = r.data
-    //     }
-
-    //     return JSON.stringify(dataReaction)
-    // }
-
     const fetchReviews = async () => {
         if (!gameId) return
         try {
@@ -38,21 +28,8 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
 
             setReviewsData(res.data.reviews)
-            // const revId = res.data.reviews.map(r => r.id)
-            // console.log(revId)
+        
             setReviewsIds(res.data.reviews.map(r => r.id))
-            console.log(res.data.reviews)
-
-            // const reactionsArray = await Promise.all(
-            //     res.data.reviews.map((review) => {
-            //         reactionsReviews(review.id)
-            //     })
-            // )
-
-            // const reactionsData = {}
-            // res.data.reviews.forEach((review, index) => {
-            //     reactionsData[review.id] = reactionsArray[index].data
-            // })
 
             const reactionsCalc = {}
             const reactionsData = {}
@@ -60,16 +37,12 @@ function ReviewGame() {
                 const revCalc = await reactionsCalcReviews(review.id)
                 reactionsCalc[review.id] = revCalc.data
                 const rev = await reactionsReviews(review.id)
-                // console.log(`è array: ${Array.isArray(rev.data.infoReactions)}`)
-                // console.log(`array: ${JSON.stringify(rev.data.infoReactions)}`)
                 reactionsData[review.id] = rev.data.infoReactions.filter(r => r.review_id === review.id)
             }
-            // const dataReaction = usersReactionsData(res.data.reviews)
 
             console.log(reviewsIds)
             const revId = res.data.reviews.map(r => r.id)
             revId.map((r) => {
-                // console.log("teste" + JSON.stringify(reactionsData[r]))
                 const userReact = reactionsData[r].find(userR => String(userR.user_id) === String(userId))?.reaction
 
                 console.log(userReact)
@@ -82,13 +55,6 @@ function ReviewGame() {
             })
 
             setReactions(reactionsCalc)
-
-            // const liked = await likeReview
-
-            // console.log(`Reações: ${JSON.stringify(userReactions)}`)
-            // console.log(`Reações dados completos: ${reactionsData[revId[0].reaction]}`)
-            // console.log(`Reações dados completos: ${JSON.stringify(reactionsData)}`)
-            
 
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
@@ -103,25 +69,7 @@ function ReviewGame() {
 
     const fetchLike = async (id) => {
         try {
-            // setReactions(prev => ({
-            //     ...prev,
-            //     [id]: {
-            //         ...prev[id],
-            //         likesReview: Number(prev[id]?.likesReview || 0) + 1,
-            //         dislikesReview: Number(prev[id]?.dislikesReview || 0) - 1
-            //     }
-            // }))
-
             const res = await likeReview(id)
-
-
-            // if (reactionUser.reaction !== 'like' || !reactionUser || Object.keys(reactionUser).length === 0) {
-            // }
-
-            // setReactions(prev => ({
-            //     ...prev,
-            //     [id]: res.data.usersReactions
-            // }))
 
             setReactionUser(res.data.usersReactions)
 
@@ -138,23 +86,7 @@ function ReviewGame() {
 
     const fetchDisLike = async (id) => {
         try {
-            // setReactions(prev => ({
-            //     ...prev,
-            //     [id]: {
-            //         ...prev[id],
-            //         dislikesReview: Number(prev[id]?.dislikesReview || 0) + 1,
-            //         likesReview: Number(prev[id]?.likesReview || 0) - 1
-            //     }
-            // }))
-
             const res = await dislikeReview(id)
-            // if (reactionUser.reaction !== 'dislike' || !reactionUser || Object.keys(reactionUser).length === 0) {
-            // }
-
-            // setReactions(prev => ({
-            //     ...prev,
-            //     [id]: res.data.usersReactions
-            // }))
 
             setReactionUser(res.data.usersReactions)
             setUserReactions(prev => ({
@@ -167,9 +99,6 @@ function ReviewGame() {
             console.log(`Erro ao dar dislike na review: ${err}`)
         }
     }
-
-    const liked = reviewsIds.map(rId => userReactions[rId] === "like")
-    const disliked = reviewsIds.map(rId => userReactions[rId] === "dislike")
 
     useEffect(() => {
         fetchReviews()
@@ -188,8 +117,6 @@ function ReviewGame() {
 
         test()
 
-        // console.log(reactionUser)
-        // console.log(reactions)
     }, [reactionUser])
 
     if (isLoadingGame) {
@@ -203,35 +130,7 @@ function ReviewGame() {
     const game = games.find((g) => g.id === gameId)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
-    // console.log(reactions)
-    // console.log(`Reaction User: ${JSON.stringify(reactionUser)}`)
-    // console.log(`Reaction: ${JSON.stringify(reactions.infoReactions)}`)
-    // console.log(`Id user: ${reactionUser.user_id}`)
-    // console.log(`Id review: ${reactionUser.review_id}`)
-
-    // if(reactionUser.review_id)
-    // const reviewsIds = reviewsData.map(r => r.id)
-
-    // console.log(`like: ${liked}`)
-    // console.log(`dislike: ${disliked}`)
-    // console.log(reviewsIds)
-    // console.log(reviewsData)
-    // console.log(userReactions)
-    // console.log(JSON.stringify(userReactions))
-
-    // const reviewsWithReaction = reviewsData.map(rev => {
-    //     const userReaction = reactions[rev.id]?.reaction || null
-
-    //     return {
-    //         ...rev,
-    //         userReaction
-    //     }
-    // })
-
-    // console.log(JSON.stringify(userReactions))
-    // console.log(reviewsIds)
     
-
     return (
 
         <section className="space-y-10">
@@ -334,7 +233,6 @@ function ReviewGame() {
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
                                                 <p>{reactions[rev.id].dislikesReview}</p>
-                                                <p>{userReactions[rev.id]}</p>
                                             </div>
                                         </div>
 
