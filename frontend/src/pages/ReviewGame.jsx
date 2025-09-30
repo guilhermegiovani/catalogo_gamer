@@ -125,6 +125,7 @@ function ReviewGame() {
     }
 
     const game = games.find((g) => g.id === gameId)
+    console.log(reviewsData)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
@@ -217,10 +218,11 @@ function ReviewGame() {
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
                                                 />
-                                                {reactions[rev.id].likesReview !== undefined
+                                                {/* {reactions[rev.id].likesReview !== undefined
                                                     ? <p>{reactions[rev.id].likesReview}</p>
                                                     : ""
-                                                }
+                                                } */}
+                                                <p>{reactions[rev.id].likesReview}</p>
 
                                             </div>
                                             <div className="flex gap-1">
@@ -235,11 +237,11 @@ function ReviewGame() {
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
-                                                {reactions[rev.id].dislikesReview !== undefined
+                                                {/* {reactions[rev.id].dislikesReview !== undefined
                                                     ? <p>{reactions[rev.id].dislikesReview}</p>
                                                     : ""
-                                                }
-                                                {/* <p>{reactions[rev.id].dislikesReview}</p> */}
+                                                } */}
+                                                <p>{reactions[rev.id].dislikesReview}</p>
                                             </div>
                                         </div>
 
