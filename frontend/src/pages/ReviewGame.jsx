@@ -58,9 +58,13 @@ function ReviewGame() {
                 const revCalc = await reactionsCalcReviews(review.id)
                 reactionsCalc[review.id] = revCalc.data
                 const rev = await reactionsReviews(review.id)
-                console.log(`è array: ${Array.isArray(rev.data.infoReactions)}`)
-                console.log(`array: ${JSON.stringify(rev.data.infoReactions)}`)
+                // console.log(`è array: ${Array.isArray(rev.data.infoReactions)}`)
+                // console.log(`array: ${JSON.stringify(rev.data.infoReactions)}`)
                 reactionsData[review.id] = rev.data.infoReactions.filter(r => r.review_id === review.id)
+                setUserReactions(prev => ({
+                    ...prev,
+                    [review.id]: reactionsData[review.id].find(userR => userR.reaction)
+                }))
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
 
@@ -69,6 +73,9 @@ function ReviewGame() {
             // const liked = await likeReview
 
             console.log(reactionsData)
+            console.log(`Reações: ${userReactions}`)
+            
+
             const resAvg = await getReviewsAvgs()
             const avg = resAvg.data.find(avg => avg.gameid === gameId)
             setAvgGame(avg)
