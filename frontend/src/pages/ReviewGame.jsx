@@ -210,7 +210,7 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer  transition duration-200",
-                                                            userReactions[rev.id] === "like" ? "text-blue-500/80" : "text-white/20 hover:text-blue-500/30"
+                                                            userReactions[rev.id] === "like" ? "text-blue-500/50" : "text-white/20 hover:text-blue-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
@@ -227,7 +227,7 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className={clsx(
                                                             "-mt-[1px] cursor-pointer transition duration-200",
-                                                            userReactions[rev.id] === "dislike" ? "text-red-500/80" : "text-white/20 hover:text-red-500/30"
+                                                            userReactions[rev.id] === "dislike" ? "text-red-500/50" : "text-white/20 hover:text-red-500/30"
                                                         )}
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
