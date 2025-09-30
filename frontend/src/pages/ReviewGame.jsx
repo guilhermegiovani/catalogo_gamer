@@ -70,7 +70,7 @@ function ReviewGame() {
                     [revId]: reactionsData[revId].find(userR => userR.reaction)
                 }))
 
-                console.log(reactionsData[revId])
+                console.log("teste" + JSON.stringify(reactionsData[revId]))
             })
             setReactions(reactionsCalc)
 
