@@ -64,13 +64,14 @@ function ReviewGame() {
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
 
-            reviewsIds.map(revId => {
+            reviewsIds.map((revId) => {
+                console.log("teste" + JSON.stringify(reactionsData[revId]))
+                
                 setUserReactions(prev => ({
                     ...prev,
                     [revId]: reactionsData[revId].find(userR => userR.reaction)
                 }))
 
-                console.log("teste" + JSON.stringify(reactionsData[revId]))
             })
             setReactions(reactionsCalc)
 
