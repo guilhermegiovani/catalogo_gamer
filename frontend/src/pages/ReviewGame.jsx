@@ -58,6 +58,8 @@ function ReviewGame() {
                 const revCalc = await reactionsCalcReviews(review.id)
                 reactionsCalc[review.id] = revCalc.data
                 const rev = await reactionsReviews(review.id)
+                console.log(`è array: ${Array.isArray(rev.data)}`)
+                console.log(`array: ${rev.data}`)
                 reactionsData[review.id] = rev.data.filter(r => r.review_id === review.id)
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
