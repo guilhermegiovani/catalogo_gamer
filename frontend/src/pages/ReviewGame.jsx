@@ -73,11 +73,11 @@ function ReviewGame() {
 
                 setUserReactions(prev => ({
                     ...prev,
-                    [r]: reactionsData[revId].find(userR => userR.reaction)
+                    [r]: reactionsData[revId].find(userR => userR.user_id === userId ? userR.reaction : "")
                 }))
 
             })
-            
+
             setReactions(reactionsCalc)
 
             // const liked = await likeReview
@@ -212,7 +212,8 @@ function ReviewGame() {
     // console.log(`dislike: ${disliked}`)
     console.log(reviewsIds)
     // console.log(reviewsData)
-    // console.log(userReactions)
+    console.log(userReactions)
+    console.log(JSON.stringify(userReactions))
 
     // const reviewsWithReaction = reviewsData.map(rev => {
     //     const userReaction = reactions[rev.id]?.reaction || null
