@@ -70,12 +70,12 @@ function ReviewGame() {
                     [revId]: reactionsData[revId].find(userR => userR.reaction)
                 }))
 
+                console.log(reactionsData[revId])
             })
             setReactions(reactionsCalc)
 
             // const liked = await likeReview
 
-            console.log(reactionsData)
             console.log(`Reações: ${JSON.stringify(userReactions)}`)
             
 
