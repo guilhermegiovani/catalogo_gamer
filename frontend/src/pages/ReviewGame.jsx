@@ -73,7 +73,7 @@ function ReviewGame() {
 
                 setUserReactions(prev => ({
                     ...prev,
-                    [r]: reactionsData[revId].find(userR => userR.user_id === userId ? userR.reaction : "")
+                    [r]: reactionsData[revId].filter(userR => userR.user_id === userId ? userR.reaction : "")
                 }))
 
             })
