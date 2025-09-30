@@ -71,12 +71,13 @@ function ReviewGame() {
             revId.map((r) => {
                 console.log("teste" + JSON.stringify(reactionsData[r]))
 
-                // setUserReactions(prev => ({
-                //     ...prev,
-                //     [r]: reactionsData[revId].find(userR => userR.reaction)
-                // }))
+                setUserReactions(prev => ({
+                    ...prev,
+                    [r]: reactionsData[revId].find(userR => userR.reaction)
+                }))
 
             })
+            
             setReactions(reactionsCalc)
 
             // const liked = await likeReview
