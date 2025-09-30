@@ -28,14 +28,16 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
 
             setReviewsData(res.data.reviews)
-        
+
             setReviewsIds(res.data.reviews.map(r => r.id))
 
             const reactionsCalc = {}
             const reactionsData = {}
+
             for (let review of res.data.reviews) {
                 const revCalc = await reactionsCalcReviews(review.id)
                 reactionsCalc[review.id] = revCalc.data
+
                 const rev = await reactionsReviews(review.id)
                 reactionsData[review.id] = rev.data.infoReactions.filter(r => r.review_id === review.id)
             }
@@ -100,7 +102,7 @@ function ReviewGame() {
     }, [id])
 
     useEffect(() => {
-        const test = async () => {
+        const getReactions = async () => {
             const reactionsData = {}
             for (let review of reviewsData) {
                 const r = await reactionsCalcReviews(review.id)
@@ -110,9 +112,9 @@ function ReviewGame() {
             setReactions(reactionsData)
         }
 
-        test()
+        getReactions()
 
-    }, [reactionUser])
+    }, []) // reactionUser
 
     if (isLoadingGame) {
         return (
@@ -125,7 +127,7 @@ function ReviewGame() {
     const game = games.find((g) => g.id === gameId)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
-    
+
     return (
 
         <section className="space-y-10">
@@ -169,7 +171,12 @@ function ReviewGame() {
                                         "transition-colors"
                                     )}
                                 >
-                                    <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{rev.name}</h3>
+                                    {rev.apelido !== "" ? (
+                                        <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{rev.nickname}</h3>
+                                    ) : (
+                                        <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{rev.name}</h3>
+                                    )
+                                    }
 
                                     <div className="flex items-center gap-3 text-sm xl:text-base mb-3 text-gray-200">
                                         <span className="flex items-center gap-1">
