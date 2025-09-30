@@ -114,7 +114,7 @@ function ReviewGame() {
 
         getReactions()
 
-    }, []) // reactionUser
+    }, [reactionUser]) // reactionUser
 
     if (isLoadingGame) {
         return (
@@ -171,7 +171,7 @@ function ReviewGame() {
                                         "transition-colors"
                                     )}
                                 >
-                                    {rev.apelido !== "" ? (
+                                    {rev.nickname !== "" ? (
                                         <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{rev.nickname}</h3>
                                     ) : (
                                         <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{rev.name}</h3>
@@ -217,7 +217,11 @@ function ReviewGame() {
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
                                                 />
-                                                <p>{reactions[rev?.id].likesReview || 0}</p>
+                                                {reactions[rev.id].likesReview !== undefined
+                                                    ? <p>{reactions[rev.id].likesReview}</p>
+                                                    : ""
+                                                }
+
                                             </div>
                                             <div className="flex gap-1">
                                                 <Button
@@ -231,7 +235,11 @@ function ReviewGame() {
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
-                                                <p>{reactions[rev?.id].dislikesReview}</p>
+                                                {reactions[rev.id].dislikesReview !== undefined
+                                                    ? <p>{reactions[rev.id].dislikesReview}</p>
+                                                    : ""
+                                                }
+                                                {/* <p>{reactions[rev.id].dislikesReview}</p> */}
                                             </div>
                                         </div>
 
