@@ -159,7 +159,8 @@ router.get("/:id/calcreactions", async (req, res) => {
 })
 
 router.get("/:id/reactions", async (req, res) => {
-    const results = await queryDB("select * from review_reactions;")
+    const { id } = req.params
+    const results = await queryDB("select * from review_reactions where review_id = ?;", [id])
 
     if( results.length === 0) return res.status(400).json({ erro: "Erro ao pegar as reações da review" })
 
