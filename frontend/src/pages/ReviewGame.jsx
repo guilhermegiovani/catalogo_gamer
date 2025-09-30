@@ -73,7 +73,7 @@ function ReviewGame() {
             // const liked = await likeReview
 
             console.log(reactionsData)
-            console.log(`Reações: ${userReactions}`)
+            console.log(`Reações: ${JSON.stringify(userReactions)}`)
             
 
             const resAvg = await getReviewsAvgs()
