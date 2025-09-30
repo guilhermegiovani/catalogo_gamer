@@ -64,9 +64,9 @@ function ReviewGame() {
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
 
-            reviewsIds.map((revId) => {
+            reviewsIds[0].map((revId) => {
                 console.log("teste" + JSON.stringify(reactionsData[revId]))
-                
+
                 setUserReactions(prev => ({
                     ...prev,
                     [revId]: reactionsData[revId].find(userR => userR.reaction)
@@ -179,8 +179,8 @@ function ReviewGame() {
 
         test()
 
-        console.log(reactionUser)
-        console.log(reactions)
+        // console.log(reactionUser)
+        // console.log(reactions)
     }, [reactionUser])
 
     if (isLoadingGame) {
@@ -196,7 +196,7 @@ function ReviewGame() {
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     // console.log(reactions)
     // console.log(`Reaction User: ${JSON.stringify(reactionUser)}`)
-    console.log(`Reaction: ${JSON.stringify(reactions.infoReactions)}`)
+    // console.log(`Reaction: ${JSON.stringify(reactions.infoReactions)}`)
     // console.log(`Id user: ${reactionUser.user_id}`)
     // console.log(`Id review: ${reactionUser.review_id}`)
 
@@ -218,8 +218,8 @@ function ReviewGame() {
     //     }
     // })
 
-    console.log(JSON.stringify(userReactions))
-    console.log(reviewsIds)
+    // console.log(JSON.stringify(userReactions))
+    // console.log(reviewsIds)
     
 
     return (
