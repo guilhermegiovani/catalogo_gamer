@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
         [results.insertId]
     )
 
-    console.log(createdReview[0])
+    console.log(createdReview)
 
     return res.status(201).json(createdReview[0])
     // return res.status(201).json({ message: "Avaliação feita com sucesso!", data: createdReview[0] })
