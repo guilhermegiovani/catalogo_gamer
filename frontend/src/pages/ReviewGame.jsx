@@ -70,7 +70,7 @@ function ReviewGame() {
             const revId = res.data.reviews.map(r => r.id)
             revId.map((r) => {
                 console.log("teste" + JSON.stringify(reactionsData[r]))
-                const userReact = reactionsData[r].filter(userR => userR.user_id === userId)?.reaction
+                const userReact = reactionsData[r].find(userR => userR.user_id === userId)?.reaction
 
                 console.log(userReact)
 
