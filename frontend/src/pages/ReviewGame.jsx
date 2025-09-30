@@ -215,7 +215,7 @@ function ReviewGame() {
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
                                                 />
-                                                <p>{reactions[rev.id].likesReview}</p>
+                                                <p>{reactions[rev.id]?.likesReview}</p>
                                             </div>
                                             <div className="flex gap-1">
                                                 <Button
@@ -229,7 +229,7 @@ function ReviewGame() {
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
-                                                <p>{reactions[rev.id].dislikesReview}</p>
+                                                <p>{reactions[rev.id]?.dislikesReview}</p>
                                             </div>
                                         </div>
 
