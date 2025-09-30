@@ -69,15 +69,15 @@ function ReviewGame() {
             console.log(reviewsIds)
             const revId = res.data.reviews.map(r => r.id)
             revId.map((r) => {
-                console.log("teste" + JSON.stringify(reactionsData[r]))
+                // console.log("teste" + JSON.stringify(reactionsData[r]))
                 const userReact = reactionsData[r].find(userR => String(userR.user_id) === String(userId))?.reaction
 
                 console.log(userReact)
 
-                // setUserReactions(prev => ({
-                //     ...prev,
-                //     [r]: reactionsData[r].filter(userR => userR.user_id === userId ? userR.reaction : "")
-                // }))
+                setUserReactions(prev => ({
+                    ...prev,
+                    [r]: userReact
+                }))
 
             })
 
