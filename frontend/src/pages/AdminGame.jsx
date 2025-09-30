@@ -9,6 +9,7 @@ import toast from "react-hot-toast"
 import Form from "../components/Form"
 import Input from "../components/Input"
 import EditAdminGame from "../components/EditAdminGame"
+import Modal from "../components/Modal"
 
 function AdminGame() {
     const { id } = useParams()
@@ -27,6 +28,8 @@ function AdminGame() {
     const [genderGame, setGenderGame] = useState("")
     const [platformGame, setPlatformGame] = useState("")
     const [studioGame, setStudioGame] = useState("")
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     useEffect(() => {
         // async function getGame() {
@@ -220,17 +223,38 @@ function AdminGame() {
                         if (isEditingGame === true) {
                             setIsEditingGame(false)
                         } else {
-                            await deleteGame(game.id).then(() => {
-                                toast.success("Jogo deletado com sucesso!")
-                                navigate("/admin")
-                            }).catch((err) => {
-                                console.log(`Erro ao deletar jogo: ${err}`)
-                            })
+                            setIsDeleteModalOpen(true)
+                            // await deleteGame(game.id).then(() => {
+                            //     toast.success("Jogo deletado com sucesso!")
+                            //     navigate("/admin")
+                            // }).catch((err) => {
+                            //     console.log(`Erro ao deletar jogo: ${err}`)
+                            // })
                         }
 
                     }}
                 />
             </div>
+
+            <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={async () => {
+                    try {
+                        await deleteGame(game.id);
+                        toast.success("Jogo deletado com sucesso!");
+                        navigate("/admin");
+                    } catch (err) {
+                        console.log(`Erro ao deletar jogo: ${err}`);
+                        toast.error("Erro ao deletar jogo!");
+                    } finally {
+                        setIsDeleteModalOpen(false);
+                    }
+                }}
+                title="Excluir jogo"
+                message={`Tem certeza que deseja excluir "${game.title}"? Essa ação não pode ser desfeita.`}
+            />
+
         </section>
     )
 }

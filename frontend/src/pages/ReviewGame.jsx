@@ -6,7 +6,7 @@ import Button from "../components/Button"
 import { useEffect, useState } from "react"
 import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview, reactionsCalcReviews, reactionsReviews } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
-import toast from "react-hot-toast"
+// import toast from "react-hot-toast"
 
 function ReviewGame() {
     const { id } = useParams()
@@ -216,9 +216,6 @@ function ReviewGame() {
                                                     handleClick={() => fetchLike(rev.id)}
                                                 />
                                                 <p>{reactions[rev.id].likesReview}</p>
-                                                {/* {keysReactions.map((k) => (
-                                                            <p>{}</p>
-                                                        ))} */}
                                             </div>
                                             <div className="flex gap-1">
                                                 <Button
