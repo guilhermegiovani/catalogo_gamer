@@ -40,12 +40,9 @@ function ReviewGame() {
                 reactionsData[review.id] = rev.data.infoReactions.filter(r => r.review_id === review.id)
             }
 
-            console.log(reviewsIds)
             const revId = res.data.reviews.map(r => r.id)
             revId.map((r) => {
                 const userReact = reactionsData[r].find(userR => String(userR.user_id) === String(userId))?.reaction
-
-                console.log(userReact)
 
                 setUserReactions(prev => ({
                     ...prev,
@@ -78,7 +75,6 @@ function ReviewGame() {
                 [id]: "like"
             }))
 
-            console.log(res.data)
         } catch (err) {
             console.log(`Erro ao dar like na review: ${err}`)
         }
@@ -94,7 +90,6 @@ function ReviewGame() {
                 [id]: "dislike"
             }))
 
-            console.log(res.data)
         } catch (err) {
             console.log(`Erro ao dar dislike na review: ${err}`)
         }
@@ -215,7 +210,7 @@ function ReviewGame() {
                                                     />}
                                                     handleClick={() => fetchLike(rev.id)}
                                                 />
-                                                <p>{reactions[rev.id]?.likesReview}</p>
+                                                <p>{reactions[rev.id].likesReview || 0}</p>
                                             </div>
                                             <div className="flex gap-1">
                                                 <Button
@@ -229,7 +224,7 @@ function ReviewGame() {
                                                     />}
                                                     handleClick={() => fetchDisLike(rev.id)}
                                                 />
-                                                <p>{reactions[rev.id]?.dislikesReview}</p>
+                                                <p>{reactions[rev.id]?.dislikesReview || 0}</p>
                                             </div>
                                         </div>
 
