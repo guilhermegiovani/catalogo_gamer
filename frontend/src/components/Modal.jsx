@@ -33,7 +33,7 @@ function Modal({ isOpen, onClose, onConfirm, title, message }) {
                             <Button
                                 text="Cancelar"
                                 className={clsx(
-                                    "py-2 rounded-md font-semibold",
+                                    "px-4 py-2 rounded-md font-semibold",
                                     "bg-[#3b3b5c] hover:bg-[#4c4c70]",
                                     "text-gray-300 cursor-pointer xl:text-lg"
                                 )}
@@ -62,7 +62,7 @@ function Modal({ isOpen, onClose, onConfirm, title, message }) {
                             <Button
                                 text="Deletar"
                                 className={clsx(
-                                    "py-2 rounded-md font-semibold cursor-pointer",
+                                    "px-4 py-2 rounded-md font-semibold cursor-pointer",
                                     "bg-red-600 hover:bg-red-700 text-gray-300 xl:text-lg",
                                     "hover:brightness-130"
                                 )}
