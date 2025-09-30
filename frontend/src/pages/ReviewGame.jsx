@@ -38,7 +38,7 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
 
             setReviewsData(res.data.reviews)
-            setReviewsIds(prev => [...prev, res.data.reviews.map(r => r.id)])
+            setReviewsIds(res.data.reviews.map(r => r.id))
             console.log(res.data.reviews)
 
             // const reactionsArray = await Promise.all(
@@ -64,7 +64,7 @@ function ReviewGame() {
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
 
-            reviewsIds[0].map((revId) => {
+            reviewsIds.map((revId) => {
                 console.log("teste" + JSON.stringify(reactionsData[revId]))
 
                 setUserReactions(prev => ({
