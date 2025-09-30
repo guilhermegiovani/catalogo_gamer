@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
      FROM reviews r
      JOIN users u ON r.user_id = u.id
      WHERE r.id = ?;`,
-        [results]
+        [results[0].id]
     )
 
     console.log(createdReview)
