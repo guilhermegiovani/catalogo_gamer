@@ -61,13 +61,16 @@ function ReviewGame() {
                 // console.log(`è array: ${Array.isArray(rev.data.infoReactions)}`)
                 // console.log(`array: ${JSON.stringify(rev.data.infoReactions)}`)
                 reactionsData[review.id] = rev.data.infoReactions.filter(r => r.review_id === review.id)
-                setUserReactions(prev => ({
-                    ...prev,
-                    [review.id]: reactionsData[review.id].find(userR => userR.reaction)
-                }))
             }
             // const dataReaction = usersReactionsData(res.data.reviews)
 
+            reviewsIds.map(revId => {
+                setUserReactions(prev => ({
+                    ...prev,
+                    [revId]: reactionsData[revId].find(userR => userR.reaction)
+                }))
+
+            })
             setReactions(reactionsCalc)
 
             // const liked = await likeReview
