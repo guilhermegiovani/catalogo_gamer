@@ -162,7 +162,7 @@ router.get("/:id/reactions", async (req, res) => {
     const { id } = req.params
     const results = await queryDB("select * from review_reactions where review_id = ?;", [id])
 
-    if( results.length === 0) return res.status(400).json({ erro: "Erro ao pegar as reações da review" })
+    // if( results.length === 0) return res.status(400).json({ erro: "Erro ao pegar as reações da review" })
 
     console.log(`Reactions: ${JSON.stringify(results)}`)
 
