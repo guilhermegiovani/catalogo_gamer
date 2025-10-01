@@ -138,9 +138,6 @@ function ReviewGame() {
     const game = games.find((g) => g.id === gameId)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
-    // console.log(revId)
-    // console.log(revComment)
-    // console.log(JSON.stringify(reviewsData))
 
     return (
 
@@ -291,6 +288,7 @@ function ReviewGame() {
                 onConfirm={async () => {
                     try {
                         deleteRev(revId)
+                        toast.sucess("Avaliação deletada!");
                     } catch (err) {
                         console.log(`Erro ao deletar avaliação: ${err}`);
                         toast.error("Erro ao deletar avaliação!");
@@ -299,7 +297,7 @@ function ReviewGame() {
                     }
                 }}
                 title="Excluir Avaliação"
-                message={`Tem certeza que deseja excluir "${revComment}"? Essa ação não pode ser desfeita.`}
+                message={`Tem certeza que deseja excluir sua avaliação "${revComment}"? Essa ação não pode ser desfeita.`}
             />
 
             <ReviewForm refreshReviews={() => fetchReviews()} />

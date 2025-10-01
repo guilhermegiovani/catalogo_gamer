@@ -5,7 +5,7 @@ import clsx from "clsx"
 import { useAuth } from "../hooks/useAuth"
 
 
-function Carousel({ items }) {
+function Carrossel({ items }) { // Carousel
     let [current, setCurrent] = useState(0)
     const { baseURL } = useAuth()
 
@@ -18,6 +18,19 @@ function Carousel({ items }) {
         if (current === items.length - 1) setCurrent(0)
         else setCurrent(current + 1)
     }
+
+    // ---- Limite de dots ----
+    const maxDots = 5
+    let start = Math.max(0, current - Math.floor(maxDots / 2))
+    let end = start + maxDots
+
+    if (end > items.length) {
+        end = items.length
+        start = Math.max(0, end - maxDots)
+    }
+
+    const visibleDots = items.slice(start, end)
+    // ------------------------
 
     return (
         <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
@@ -87,26 +100,30 @@ function Carousel({ items }) {
             </div>
 
             <div className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3">
-                {items.map((item, i) => (
-                    <div
-                        key={item.id}
-                        className={clsx(
-                            "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10",
-                            "transition-transform duration-400 hover:scale-120",
-                            "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
-                            "portrait:sm:w-2 portrait:sm:h-2",
-                            i == current ? "bg-white scale-130" : "bg-gray-500"
-                        )}
-                        onClick={() => {
-                            setCurrent(i)
-                        }}
-                    ></div>
+                {visibleDots.map((item, i) => {
+                    const actualIndex = start + i
 
-                ))}
+                    return (
+                        <div
+                            key={item.id}
+                            className={clsx(
+                                "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10",
+                                "transition-transform duration-400 hover:scale-120",
+                                "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
+                                "portrait:sm:w-2 portrait:sm:h-2",
+                                actualIndex === current ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                            )}
+                            onClick={() => {
+                                setCurrent(actualIndex)
+                            }}
+                        ></div>
+                    )
+
+                })}
             </div>
 
         </div>
     )
 }
 
-export default Carousel
+export default Carrossel
