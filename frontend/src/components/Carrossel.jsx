@@ -23,32 +23,22 @@ function Carrossel({ items }) { // Carousel
     const maxDots = 5
     // let start = Math.max(0, current - Math.floor(maxDots / 2))
     // let end = start + maxDots
-    let half = Math.floor(maxDots / 2)
-    let start = current - half
-    let end = current + half + 1
+    const half = Math.floor(maxDots / 2)
 
     // if (end > items.length) {
     //     end = items.length
     //     start = Math.max(0, end - maxDots)
     // }
-    if (items.length <= maxDots) {
-        start = 0
-        end = items.length
-    } else {
-        if (start < 0) {
-            start = items.length + start // loopar para o final
-            end = start + maxDots
-        }
-        if (end > items.length) {
-            end = end - items.length
-        }
-    }
+
 
     // const visibleDots = items.slice(start, end)
     const visibleDots = []
-    for (let i = start; i !== end; i = (i + 1) % items.length) {
-        visibleDots.push(items[i])
+
+    for (let i = -half; i <= half; i++) {
+        const index = (current + i + items.length) % items.length
+        visibleDots.push({ ...items[index], actualIndex: index })
     }
+
     // ------------------------
 
     return (
@@ -119,26 +109,22 @@ function Carrossel({ items }) { // Carousel
             </div>
 
             <div className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3">
-                {visibleDots.map((item, i) => {
-                    const actualIndex = start + i
+                {visibleDots.map((item) => (
+                    <div
+                        key={item.id}
+                        className={clsx(
+                            "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10",
+                            "transition-transform duration-400 hover:scale-120",
+                            "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
+                            "portrait:sm:w-2 portrait:sm:h-2",
+                            item.actualIndex === current ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                        )}
+                        onClick={() => {
+                            setCurrent(item.actualIndex)
+                        }}
+                    ></div>
 
-                    return (
-                        <div
-                            key={item.id}
-                            className={clsx(
-                                "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10",
-                                "transition-transform duration-400 hover:scale-120",
-                                "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
-                                "portrait:sm:w-2 portrait:sm:h-2",
-                                actualIndex === current ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
-                            )}
-                            onClick={() => {
-                                setCurrent(actualIndex)
-                            }}
-                        ></div>
-                    )
-
-                })}
+                ))}
             </div>
 
         </div>
