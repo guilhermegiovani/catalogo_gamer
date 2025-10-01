@@ -32,8 +32,8 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
 
             setReviewsData(res.data.reviews)
-            setRevId(res.data.reviews.filter(rev => rev.iduser === userId ? rev.id : ""))
-            setRevComment(res.data.reviews.filter(rev => rev.iduser === userId ? rev.comment : ""))
+            setRevId(res.data.reviews.find(rev => rev.iduser === userId ? rev.id : ""))
+            setRevComment(res.data.reviews.find(rev => rev.iduser === userId ? rev.comment : ""))
 
             // setReviewsIds(res.data.reviews.map(r => r.id))
 
@@ -285,7 +285,7 @@ function ReviewGame() {
                 onClose={() => setIsDeleteModalOpen(false)}
                 onConfirm={async () => {
                     try {
-                        deleteRev(revId)
+                        deleteRev(revId[0]).id
                     } catch (err) {
                         console.log(`Erro ao deletar avaliação: ${err}`);
                         toast.error("Erro ao deletar avaliação!");
@@ -294,7 +294,7 @@ function ReviewGame() {
                     }
                 }}
                 title="Excluir Avaliação"
-                message={`Tem certeza que deseja excluir "${revComment}"? Essa ação não pode ser desfeita.`}
+                message={`Tem certeza que deseja excluir "${revComment[0]}"? Essa ação não pode ser desfeita.`}
             /> */}
 
             <ReviewForm refreshReviews={() => fetchReviews()} />
