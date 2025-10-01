@@ -125,7 +125,6 @@ function ReviewGame() {
     }
 
     const game = games.find((g) => g.id === gameId)
-    console.log(reviewsData)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 
@@ -222,7 +221,7 @@ function ReviewGame() {
                                                     ? <p>{reactions[rev.id].likesReview}</p>
                                                     : ""
                                                 } */}
-                                                <p>{reactions[rev.id].likesReview}</p>
+                                                <p>{reactions[rev.id]?.likesReview ?? 0}</p>
 
                                             </div>
                                             <div className="flex gap-1">
@@ -241,7 +240,7 @@ function ReviewGame() {
                                                     ? <p>{reactions[rev.id].dislikesReview}</p>
                                                     : ""
                                                 } */}
-                                                <p>{reactions[rev.id].dislikesReview}</p>
+                                                <p>{reactions[rev.id]?.dislikesReview ?? 0}</p>
                                             </div>
                                         </div>
 
