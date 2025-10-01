@@ -21,15 +21,34 @@ function Carrossel({ items }) { // Carousel
 
     // ---- Limite de dots ----
     const maxDots = 5
-    let start = Math.max(0, current - Math.floor(maxDots / 2))
-    let end = start + maxDots
+    // let start = Math.max(0, current - Math.floor(maxDots / 2))
+    // let end = start + maxDots
+    let half = Math.floor(maxDots / 2)
+    let start = current - half
+    let end = current + half + 1
 
-    if (end > items.length) {
+    // if (end > items.length) {
+    //     end = items.length
+    //     start = Math.max(0, end - maxDots)
+    // }
+    if (items.length <= maxDots) {
+        start = 0
         end = items.length
-        start = Math.max(0, end - maxDots)
+    } else {
+        if (start < 0) {
+            start = items.length + start // loopar para o final
+            end = start + maxDots
+        }
+        if (end > items.length) {
+            end = end - items.length
+        }
     }
 
-    const visibleDots = items.slice(start, end)
+    // const visibleDots = items.slice(start, end)
+    const visibleDots = []
+    for (let i = start; i !== end; i = (i + 1) % items.length) {
+        visibleDots.push(items[i])
+    }
     // ------------------------
 
     return (
