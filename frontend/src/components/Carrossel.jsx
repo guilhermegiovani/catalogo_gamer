@@ -24,13 +24,13 @@ function Carrossel({ items }) { // Carousel
     // let start = Math.max(0, current - Math.floor(maxDots / 2))
     // let end = start + maxDots
     const half = Math.floor(maxDots / 2)
-    let start = current - half
+    // let start = current - half
     const dots = []
 
     for (let i = 0; i < maxDots; i++) {
-        const index = (start + i + items.length) % items.length
+        const index = (current + i + items.length) % items.length;
         dots.push({
-            item: items[index],
+            item: {...items[index]},
             actualIndex: index
         })
     }
