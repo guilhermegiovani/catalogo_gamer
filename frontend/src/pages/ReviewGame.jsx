@@ -20,6 +20,7 @@ function ReviewGame() {
     // const [reviewsIds, setReviewsIds] = useState([])
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [revId, setRevId] = useState(0)
+    const [revComment, setRevComment] = useState("")
 
     const gameId = Number(id)
 
@@ -34,6 +35,7 @@ function ReviewGame() {
 
             // setReviewsIds(res.data.reviews.map(r => r.id))
             setRevId(res.data.reviews.filter(rev => rev.idUser === userId ? rev.id : ""))
+            setRevComment(res.data.reviews.filter(rev => rev.idUser === userId ? rev.comment : ""))
 
             const reactionsCalc = {}
             const reactionsData = {}
@@ -132,6 +134,7 @@ function ReviewGame() {
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     console.log(revId)
+    console.log(revComment)
 
     return (
 
@@ -276,12 +279,12 @@ function ReviewGame() {
                 </ul>
             </div>
 
-            <Modal
+            {/* <Modal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
                 onConfirm={async () => {
                     try {
-                        deleteRev(rev.id)
+                        deleteRev(revId)
                     } catch (err) {
                         console.log(`Erro ao deletar avaliação: ${err}`);
                         toast.error("Erro ao deletar avaliação!");
@@ -290,8 +293,8 @@ function ReviewGame() {
                     }
                 }}
                 title="Excluir Avaliação"
-                message={`Tem certeza que deseja excluir "${rev.comment}"? Essa ação não pode ser desfeita.`}
-            />
+                message={`Tem certeza que deseja excluir "${revComment}"? Essa ação não pode ser desfeita.`}
+            /> */}
 
             <ReviewForm refreshReviews={() => fetchReviews()} />
 
