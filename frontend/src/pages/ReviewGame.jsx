@@ -135,6 +135,7 @@ function ReviewGame() {
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
     console.log(revId)
     console.log(revComment)
+    console.log(JSON.stringify(reviewsData))
 
     return (
 
