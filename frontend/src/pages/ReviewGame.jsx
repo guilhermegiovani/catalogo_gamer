@@ -34,8 +34,6 @@ function ReviewGame() {
             setReviewsData(res.data.reviews)
 
             // setReviewsIds(res.data.reviews.map(r => r.id))
-            setRevId(res.data.reviews.filter(rev => rev.idUser === userId ? rev.id : ""))
-            setRevComment(res.data.reviews.filter(rev => rev.idUser === userId ? rev.comment : ""))
 
             const reactionsCalc = {}
             const reactionsData = {}
@@ -105,6 +103,8 @@ function ReviewGame() {
 
     useEffect(() => {
         fetchReviews()
+        setRevId(reviewsData.filter(rev => rev.idUser === userId ? rev.id : ""))
+        setRevComment(reviewsData.filter(rev => rev.idUser === userId ? rev.comment : ""))
     }, [id])
 
     useEffect(() => {
