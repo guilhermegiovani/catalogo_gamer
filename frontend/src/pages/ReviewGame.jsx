@@ -32,6 +32,8 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
 
             setReviewsData(res.data.reviews)
+            setRevId(res.data.reviews.filter(rev => rev.iduser === userId ? rev.id : ""))
+            setRevComment(res.data.reviews.filter(rev => rev.iduser === userId ? rev.comment : ""))
 
             // setReviewsIds(res.data.reviews.map(r => r.id))
 
@@ -103,8 +105,6 @@ function ReviewGame() {
 
     useEffect(() => {
         fetchReviews()
-        setRevId(reviewsData.filter(rev => rev.idUser === userId ? rev.id : ""))
-        setRevComment(reviewsData.filter(rev => rev.idUser === userId ? rev.comment : ""))
     }, [id])
 
     useEffect(() => {
