@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview, reactionsCalcReviews, reactionsReviews } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
 import toast from "react-hot-toast"
+import Modal from "../components/Modal"
 // import toast from "react-hot-toast"
 
 function ReviewGame() {
