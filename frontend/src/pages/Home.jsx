@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/useAuth"
 import { getGames } from "../services/routes"
 import { useEffect, useState } from "react"
-import Carrossel from "../components/Carousel"
+import Carrossel from "../components/Carrossel"
 
 function Home() {
     const navigate = useNavigate()
