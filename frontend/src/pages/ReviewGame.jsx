@@ -19,6 +19,7 @@ function ReviewGame() {
     const [userReactions, setUserReactions] = useState({})
     // const [reviewsIds, setReviewsIds] = useState([])
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+    const [revId, setRevId] = useState(0)
 
     const gameId = Number(id)
 
@@ -32,6 +33,7 @@ function ReviewGame() {
             setReviewsData(res.data.reviews)
 
             // setReviewsIds(res.data.reviews.map(r => r.id))
+            setRevId(res.data.reviews.filter(rev => rev.idUser === userId ? rev.id : ""))
 
             const reactionsCalc = {}
             const reactionsData = {}
@@ -129,6 +131,7 @@ function ReviewGame() {
     const game = games.find((g) => g.id === gameId)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
+    console.log(revId)
 
     return (
 
@@ -268,26 +271,27 @@ function ReviewGame() {
                                         }
                                     </div>
                                 </article>
-                                <Modal
-                                    isOpen={isDeleteModalOpen}
-                                    onClose={() => setIsDeleteModalOpen(false)}
-                                    onConfirm={async () => {
-                                        try {
-                                            deleteRev(rev.id)
-                                        } catch (err) {
-                                            console.log(`Erro ao deletar avaliação: ${err}`);
-                                            toast.error("Erro ao deletar avaliação!");
-                                        } finally {
-                                            setIsDeleteModalOpen(false);
-                                        }
-                                    }}
-                                    title="Excluir Avaliação"
-                                    message={`Tem certeza que deseja excluir "${rev.comment}"? Essa ação não pode ser desfeita.`}
-                                />
                             </li>
                         ))}
                 </ul>
             </div>
+
+            <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={async () => {
+                    try {
+                        deleteRev(rev.id)
+                    } catch (err) {
+                        console.log(`Erro ao deletar avaliação: ${err}`);
+                        toast.error("Erro ao deletar avaliação!");
+                    } finally {
+                        setIsDeleteModalOpen(false);
+                    }
+                }}
+                title="Excluir Avaliação"
+                message={`Tem certeza que deseja excluir "${rev.comment}"? Essa ação não pode ser desfeita.`}
+            />
 
             <ReviewForm refreshReviews={() => fetchReviews()} />
 
