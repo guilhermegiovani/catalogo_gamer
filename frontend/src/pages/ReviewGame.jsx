@@ -6,6 +6,7 @@ import Button from "../components/Button"
 import { useEffect, useState } from "react"
 import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview, reactionsCalcReviews, reactionsReviews } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
+import toast from "react-hot-toast"
 // import toast from "react-hot-toast"
 
 function ReviewGame() {
@@ -16,7 +17,8 @@ function ReviewGame() {
     const [reactions, setReactions] = useState({})
     const [reactionUser, setReactionUser] = useState({})
     const [userReactions, setUserReactions] = useState({})
-    const [reviewsIds, setReviewsIds] = useState([])
+    // const [reviewsIds, setReviewsIds] = useState([])
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
     const gameId = Number(id)
 
@@ -29,7 +31,7 @@ function ReviewGame() {
 
             setReviewsData(res.data.reviews)
 
-            setReviewsIds(res.data.reviews.map(r => r.id))
+            // setReviewsIds(res.data.reviews.map(r => r.id))
 
             const reactionsCalc = {}
             const reactionsData = {}
@@ -260,18 +262,35 @@ function ReviewGame() {
                                                         fill="currentColor"
                                                         className="text-white/20 -mt-[1px] cursor-pointer hover:text-red-500/30 transition duration-200"
                                                     />}
-                                                    handleClick={() => deleteRev(rev.id)}
+                                                    handleClick={() => setIsDeleteModalOpen(true)}
                                                 />
                                             </div> : ""
                                         }
                                     </div>
                                 </article>
+                                <Modal
+                                    isOpen={isDeleteModalOpen}
+                                    onClose={() => setIsDeleteModalOpen(false)}
+                                    onConfirm={async () => {
+                                        try {
+                                            deleteRev(rev.id)
+                                        } catch (err) {
+                                            console.log(`Erro ao deletar avaliação: ${err}`);
+                                            toast.error("Erro ao deletar avaliação!");
+                                        } finally {
+                                            setIsDeleteModalOpen(false);
+                                        }
+                                    }}
+                                    title="Excluir Avaliação"
+                                    message={`Tem certeza que deseja excluir "${rev.comment}"? Essa ação não pode ser desfeita.`}
+                                />
                             </li>
                         ))}
                 </ul>
             </div>
 
             <ReviewForm refreshReviews={() => fetchReviews()} />
+
         </section>
     )
 }
