@@ -24,6 +24,16 @@ function Carrossel({ items }) { // Carousel
     // let start = Math.max(0, current - Math.floor(maxDots / 2))
     // let end = start + maxDots
     const half = Math.floor(maxDots / 2)
+    const dots = []
+
+    for (let i = -half; i <= half; i++) {
+        // calcula o índice real do item, com loop circular
+        const index = (current + i + items.length) % items.length
+        dots.push({
+            item: items[index],
+            actualIndex: index,
+        })
+    }
 
     // if (end > items.length) {
     //     end = items.length
@@ -32,12 +42,6 @@ function Carrossel({ items }) { // Carousel
 
 
     // const visibleDots = items.slice(start, end)
-    const visibleDots = []
-
-    for (let i = -half; i <= half; i++) {
-        const index = (current + i + items.length) % items.length
-        visibleDots.push({ ...items[index], actualIndex: index })
-    }
 
     // ------------------------
 
@@ -109,7 +113,7 @@ function Carrossel({ items }) { // Carousel
             </div>
 
             <div className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3">
-                {visibleDots.map((item) => (
+                {dots.map((d) => (
                     <div
                         key={item.id}
                         className={clsx(
@@ -117,10 +121,10 @@ function Carrossel({ items }) { // Carousel
                             "transition-transform duration-400 hover:scale-120",
                             "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
                             "portrait:sm:w-2 portrait:sm:h-2",
-                            item.actualIndex === current ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                            d.actualIndex === current ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
                         onClick={() => {
-                            setCurrent(item.actualIndex)
+                            setCurrent(d.actualIndex)
                         }}
                     ></div>
 
