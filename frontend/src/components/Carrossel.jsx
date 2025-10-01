@@ -115,7 +115,7 @@ function Carrossel({ items }) { // Carousel
             <div className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3">
                 {dots.map((d) => (
                     <div
-                        key={item.id}
+                        key={d.id}
                         className={clsx(
                             "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10",
                             "transition-transform duration-400 hover:scale-120",
