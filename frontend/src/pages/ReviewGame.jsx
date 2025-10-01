@@ -32,8 +32,8 @@ function ReviewGame() {
             const res = await getReviewsByGame(gameId)
 
             setReviewsData(res.data.reviews)
-            setRevId(res.data.reviews.find(rev => rev.iduser === userId ? rev.id : ""))
-            setRevComment(res.data.reviews.find(rev => rev.iduser === userId ? rev.comment : ""))
+            setRevId(res.data.reviews.find(rev => rev.iduser === userId))?.id
+            setRevComment(res.data.reviews.find(rev => rev.iduser === userId))?.comment
 
             // setReviewsIds(res.data.reviews.map(r => r.id))
 
