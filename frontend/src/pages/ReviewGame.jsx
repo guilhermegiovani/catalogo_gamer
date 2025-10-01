@@ -137,9 +137,9 @@ function ReviewGame() {
     const game = games.find((g) => g.id === gameId)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
-    console.log(revId)
-    console.log(revComment)
-    console.log(JSON.stringify(reviewsData))
+    // console.log(revId)
+    // console.log(revComment)
+    // console.log(JSON.stringify(reviewsData))
 
     return (
 
@@ -284,12 +284,12 @@ function ReviewGame() {
                 </ul>
             </div>
 
-            {/* <Modal
+            <Modal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
                 onConfirm={async () => {
                     try {
-                        deleteRev(revId[0]).id
+                        deleteRev(revId)
                     } catch (err) {
                         console.log(`Erro ao deletar avaliação: ${err}`);
                         toast.error("Erro ao deletar avaliação!");
@@ -298,8 +298,8 @@ function ReviewGame() {
                     }
                 }}
                 title="Excluir Avaliação"
-                message={`Tem certeza que deseja excluir "${revComment[0]}"? Essa ação não pode ser desfeita.`}
-            /> */}
+                message={`Tem certeza que deseja excluir "${revComment}"? Essa ação não pode ser desfeita.`}
+            />
 
             <ReviewForm refreshReviews={() => fetchReviews()} />
 
