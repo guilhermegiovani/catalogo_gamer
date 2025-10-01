@@ -27,12 +27,9 @@ function Carrossel({ items }) { // Carousel
     // let start = current - half
     const dots = []
 
-    for (let i = 0; i < maxDots; i++) {
+    for (let i = -half; i <= half; i++) {
         const index = (current + i + items.length) % items.length;
-        dots.push({
-            item: {...items[index]},
-            actualIndex: index
-        })
+        dots.push({ ...items[index], actualIndex: index });
     }
 
     // if (end > items.length) {
