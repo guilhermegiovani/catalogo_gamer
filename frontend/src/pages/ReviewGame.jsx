@@ -147,7 +147,7 @@ function ReviewGame() {
                 <img
                     src={baseURL + game.img_landscape}
                     alt={game.title}
-                    className="max-w-xl h-64 md:h-80 lg:h-96 object-contain rounded-xl border border-[#4f46e5]/30 shadow-md"
+                    className="max-w-xl h-60 md:h-80 lg:h-96 object-contain rounded-xl border border-[#4f46e5]/30 shadow-md"
                 />
 
                 <h1 className="text-2xl xl:text-3xl font-bold">{game.title}</h1>
