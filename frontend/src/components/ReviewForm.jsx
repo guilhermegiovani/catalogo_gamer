@@ -10,11 +10,11 @@ import Input from "./Input"
 import toast from "react-hot-toast"
 
 function ReviewForm({ refreshReviews }) {
-    const { id } = useParams()
+    const { slug } = useParams()
     const { games, setReviews, isEditing, setIsEditing, rating, setRating, comment, setComment, reviewId, setReviewId } = useAuth()
     const [ratingHover, setRatingHover] = useState(null)
 
-    const game = games.find((g) => g.id === Number(id))
+    const game = games.find((g) => g.slug === slug)
 
     useEffect(() => {
         setComment("")
