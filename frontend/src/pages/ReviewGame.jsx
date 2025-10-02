@@ -174,7 +174,7 @@ function ReviewGame() {
                 <ul className="space-y-4">
                     {!reviewsData.length > 0 || !reviewsData ? <p>Nenhuma avaliação!</p> :
                         reviewsData.map((rev) => (
-                            <li key={rev.id} className="max-w-3xl lg:max-w-5xl">
+                            <li key={rev.id} className="w-full flex flex-col justify-center lg:block lg:max-w-5xl">
                                 <article
                                     className={clsx(
                                         "w-full rounded-2xl p-4",
