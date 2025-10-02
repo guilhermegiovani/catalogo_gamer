@@ -42,10 +42,6 @@ function Carrossel({ items }) { // Carousel
         })
     }
 
-    // --- calcular deslocamento total dos dots ---
-    const dotSpacing = 16 // px entre dots
-    const translateX = -(dotSpacing * half)
-
     // ------------------------
 
     return (
@@ -117,9 +113,8 @@ function Carrossel({ items }) { // Carousel
 
             <div
                 className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3"
-                style={{ transform: `translateX(${translateX}px)` }}
             >
-                {dots.map((d) => (
+                {items.map((d, index) => (
                     <div
                         key={d.id}
                         className={clsx(
@@ -127,11 +122,11 @@ function Carrossel({ items }) { // Carousel
                             "transition-transform duration-400 hover:scale-120",
                             "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
                             "portrait:sm:w-2 portrait:sm:h-2",
-                            d.isActive ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                            current === index ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
                         // style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
                         onClick={() => {
-                            setCurrent(d.actualIndex)
+                            setCurrent(index)
                         }}
                     ></div>
 
