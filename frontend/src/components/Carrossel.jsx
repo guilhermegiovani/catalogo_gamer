@@ -9,6 +9,8 @@ function Carrossel({ items }) { // Carousel
     let [current, setCurrent] = useState(0)
     const { baseURL } = useAuth()
 
+    if (!items || items.length === 0) return null
+
     let prevSlide = () => {
         if (current === 0) setCurrent(items.length - 1)
         else setCurrent(current - 1)
@@ -28,8 +30,11 @@ function Carrossel({ items }) { // Carousel
 
     for (let i = -half; i <= half; i++) {
         const index = (current + i + items.length) % items.length
+        const item = items[index]
+        if (!item) continue
+        
         dots.push({
-            id: items[index].id,
+            id: items[index].id ?? index,
             actualIndex: index,
             isActive: i === 0 // o do meio sempre é o ativo
         })
