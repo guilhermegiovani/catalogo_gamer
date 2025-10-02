@@ -21,7 +21,7 @@ function Modal({ isOpen, onClose, onConfirm, title, message }) {
                         exit={{ scale: 0.9, opacity: 0 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
                         className={clsx(
-                            "bg-[#1a1a2e] rounded-2xl shadow-lg p-6 w-full max-w-md",
+                            "bg-[#1a1a2e] rounded-2xl shadow-lg p-6 w-full max-w-sm lg:max-w-md",
                             "flex flex-col gap-4",
                             "shadow-[0_0_20px_2px_rgba(59,59,92,0.6)]"
                         )}
