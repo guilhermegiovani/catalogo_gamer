@@ -29,8 +29,8 @@ function Carrossel({ items }) { // Carousel
 
     const dots = []
 
-    for (let i = -half; i <= half; i++) {
-        const index = (current + i + items.length) % items.length
+    for (let i = 0; i <= maxDots; i++) {
+        const index = (current - half + i + items.length) % items.length
         const item = items[index]
         if (!item) continue
 
@@ -44,7 +44,7 @@ function Carrossel({ items }) { // Carousel
 
     // --- calcular deslocamento total dos dots ---
     const dotSpacing = 16 // px entre dots
-    const translateX = -dots[half].offset * dotSpacing
+    const translateX = -(dotSpacing * half)
 
     // ------------------------
 
@@ -117,6 +117,7 @@ function Carrossel({ items }) { // Carousel
 
             <div
                 className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3"
+                style={{ transform: `translateX(${translateX}px)` }}
             >
                 {dots.map((d) => (
                     <div
@@ -128,7 +129,7 @@ function Carrossel({ items }) { // Carousel
                             "portrait:sm:w-2 portrait:sm:h-2",
                             d.isActive ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
-                        style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
+                        // style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
                         onClick={() => {
                             setCurrent(d.actualIndex)
                         }}
