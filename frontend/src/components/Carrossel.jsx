@@ -29,8 +29,8 @@ function Carrossel({ items }) { // Carousel
 
     const dots = []
 
-    for (let i = 0; i <= maxDots; i++) {
-        const index = (current - half + i + items.length) % items.length
+    for (let i = -half; i <= half; i++) {
+        const index = (current + i + items.length) % items.length
         const item = items[index]
         if (!item) continue
 
@@ -112,9 +112,12 @@ function Carrossel({ items }) { // Carousel
             </div>
 
             <div
-                className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3"
+                className={clsx(
+                    "absolute w-full bottom-[-5px] py-4 flex justify-center gap-3",
+                    "animate-scroll md:animate-scrollMd xl:animate-scrollXl"
+                )}
             >
-                {items.map((d, index) => (
+                {dots.map((d) => (
                     <div
                         key={d.id}
                         className={clsx(
@@ -122,11 +125,11 @@ function Carrossel({ items }) { // Carousel
                             "transition-transform duration-400 hover:scale-120",
                             "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
                             "portrait:sm:w-2 portrait:sm:h-2",
-                            current === index ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                            d.isActive ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
                         // style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
                         onClick={() => {
-                            setCurrent(index)
+                            setCurrent(d.actualIndex)
                         }}
                     ></div>
 
