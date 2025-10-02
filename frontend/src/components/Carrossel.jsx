@@ -28,16 +28,15 @@ function Carrossel({ items }) { // Carousel
 
     const dots = []
 
-    for (let i = -half; i <= half; i++) {
-        const index = (current + i + items.length) % items.length
+    for (let i = 0; i < maxDots; i++) {
+        const index = (current - half + i + items.length) % items.length
         const item = items[index]
         if (!item) continue
 
         dots.push({
             id: items[index].id ?? index,
             actualIndex: index,
-            offset: i,
-            isActive: i === current // o do meio sempre é o ativo
+            isActive: i === half // o do meio sempre é o ativo
         })
     }
 
@@ -121,9 +120,6 @@ function Carrossel({ items }) { // Carousel
                             "portrait:sm:w-2 portrait:sm:h-2",
                             d.isActive ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
-                        style={{
-                            transform: `translateX(${d.offset * 16}px)` // todos andam junto
-                        }}
                         onClick={() => {
                             setCurrent(d.actualIndex)
                         }}
