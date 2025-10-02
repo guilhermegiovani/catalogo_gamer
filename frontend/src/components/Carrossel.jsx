@@ -37,6 +37,7 @@ function Carrossel({ items }) { // Carousel
         dots.push({
             id: item.id ?? index,
             actualIndex: index,
+            offset: i,
             isActive: i === 0 // sempre o do meio é ativo
         })
     }
@@ -116,7 +117,6 @@ function Carrossel({ items }) { // Carousel
 
             <div
                 className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3"
-                style={{ transform: `translateX(${translateX}px)` }}
             >
                 {dots.map((d) => (
                     <div
@@ -128,6 +128,7 @@ function Carrossel({ items }) { // Carousel
                             "portrait:sm:w-2 portrait:sm:h-2",
                             d.isActive ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
+                        style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
                         onClick={() => {
                             setCurrent(d.actualIndex)
                         }}
