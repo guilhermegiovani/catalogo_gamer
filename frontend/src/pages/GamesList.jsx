@@ -85,7 +85,7 @@ function GamesList() {
                             game={game}
                             avgGame={avgMap[game.id]}
                             isFavorite={favoritesIdGame.includes(game.id)}
-                            to={`/reviews/${game.id}`}
+                            to={`/games/${game.slug}/reviews`}
                         />
 
 

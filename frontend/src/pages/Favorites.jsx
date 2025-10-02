@@ -74,7 +74,7 @@ function Favorites() {
                             game={fav}
                             avgGame={avgsFavMap[fav.id]}
                             isFavorite={favoritesIdGame.includes(fav.id)}
-                            to={`/reviews/${fav.id}`}
+                            to={`/games/${fav.slug}/reviews`}
                         />
                     ))}
             </div>
