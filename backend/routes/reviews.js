@@ -170,62 +170,61 @@ router.get("/:id/reactions", async (req, res) => {
 })
 
 // Pegar reviews do jogo específico
-router.get('/game/:id', async (req, res) => {
-    const { id } = req.params
+// router.get('/game/:id', async (req, res) => {
+//     const { id } = req.params
 
-    const results = await queryDB(
-        "select r.id, u.id as idUser, u.name, u.nickname, r.rating, r.comment, review_date, edit_date from reviews as r left join users as u on r.user_id = u.id where r.game_id = ?;",
-        [id]
-    )
+//     const results = await queryDB(
+//         "select r.id, u.id as idUser, u.name, u.nickname, r.rating, r.comment, review_date, edit_date from reviews as r left join users as u on r.user_id = u.id where r.game_id = ?;",
+//         [id]
+//     )
 
-    if (results.length === 0) return res.json({ reviews: [] })
-    // res.status(404).json({ erro: "Jogo não encontrado ou não foi avaliado!" })
+//     if (results.length === 0) return res.json({ reviews: [] })
+//     // res.status(404).json({ erro: "Jogo não encontrado ou não foi avaliado!" })
 
-    const formattedDate = results.map(review => {
-        const format = (dateString) => {
-            // console.log(`data rev: ${dateString}`)
-            // if (!dateString) return null
-            // const date = new Date(dateString)
+//     const formattedDate = results.map(review => {
+//         const format = (dateString) => {
+//             // console.log(`data rev: ${dateString}`)
+//             // if (!dateString) return null
+//             // const date = new Date(dateString)
 
-            // const day = String(date.getDate()).padStart(2, '0')
-            // const month = String(date.getMonth() + 1).padStart(2, '0')
-            // const year = date.getFullYear()
+//             // const day = String(date.getDate()).padStart(2, '0')
+//             // const month = String(date.getMonth() + 1).padStart(2, '0')
+//             // const year = date.getFullYear()
 
-            // const hours = String(date.getHours()).padStart(2, '0')
-            // const minutes = String(date.getMinutes()).padStart(2, '0')
+//             // const hours = String(date.getHours()).padStart(2, '0')
+//             // const minutes = String(date.getMinutes()).padStart(2, '0')
 
-            // return `${day}/${month}/${year} ${hours}:${minutes}`
-            if (!dateString) return null
-            return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
-        }
+//             // return `${day}/${month}/${year} ${hours}:${minutes}`
+//             if (!dateString) return null
+//             return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+//         }
 
-        return {
-            ...review,
-            review_date: format(review.review_date),
-            edit_date: format(review.edit_date)
-        }
+//         return {
+//             ...review,
+//             review_date: format(review.review_date),
+//             edit_date: format(review.edit_date)
+//         }
 
-    })
+//     })
 
-    const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where game_id = ?;", [id])
+//     const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where game_id = ?;", [id])
 
-    let statistics = {
-        avgGrade: null,
-        totReviews: 0
-    }
+//     let statistics = {
+//         avgGrade: null,
+//         totReviews: 0
+//     }
 
-    if (resultsAvgCount.length > 0) {
-        let average = Number(resultsAvgCount[0].avgGrade)
-        if (!isNaN(average)) {
-            statistics.avgGrade = Number(average.toFixed(1))
-        }
+//     if (resultsAvgCount.length > 0) {
+//         let average = Number(resultsAvgCount[0].avgGrade)
+//         if (!isNaN(average)) {
+//             statistics.avgGrade = Number(average.toFixed(1))
+//         }
 
-        statistics.totReviews = resultsAvgCount[0].totReviews
-    }
+//         statistics.totReviews = resultsAvgCount[0].totReviews
+//     }
 
-    return res.status(200).json({ reviews: formattedDate, statistics: statistics })
-})
-
+//     return res.status(200).json({ reviews: formattedDate, statistics: statistics })
+// })
 
 // Pegar médias das notas dos jogos
 router.get("/averages", async (req, res) => {
