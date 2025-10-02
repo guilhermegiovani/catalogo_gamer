@@ -26,10 +26,12 @@ function ReviewGame() {
     // const gameId = Number(id)
 
     const fetchReviews = async () => {
+        console.log(slug)
         if (!slug) return
         try {
             const resGame = await getGames()
             setGames(resGame.data)
+            console.log(slug)
 
             const gameId = resGame.data.find(g => g.slug === slug)?.id ?? null
 
