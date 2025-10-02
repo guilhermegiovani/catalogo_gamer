@@ -33,38 +33,19 @@ function Modal({ isOpen, onClose, onConfirm, title, message }) {
                             <Button
                                 text="Cancelar"
                                 className={clsx(
-                                    "px-4 py-2 rounded-md font-semibold",
+                                    "px-3 py-1 lg:px-4 lg:py-2 rounded-md font-semibold",
                                     "bg-[#3b3b5c] hover:bg-[#4c4c70]",
-                                    "text-gray-300 cursor-pointer xl:text-lg"
+                                    "text-sm md:text-base text-gray-300 cursor-pointer xl:text-lg"
                                 )}
                                 handleClick={onClose}
                             />
-                            {/* <button
-                                onClick={onClose}
-                                className={clsx(
-                                    "px-4 py-2 rounded-xl font-medium",
-                                    "bg-gray-200 hover:bg-gray-300 text-gray-700"
-                                )}
-                            >
-                                Cancelar
-                            </button> */}
-
-                            {/* <button
-                                onClick={onConfirm}
-                                className={clsx(
-                                    "px-4 py-2 rounded-xl font-medium",
-                                    "bg-red-600 hover:bg-red-700 text-white"
-                                )}
-                            >
-                                Deletar
-                            </button> */}
 
                             <Button
                                 text="Deletar"
                                 className={clsx(
-                                    "px-4 py-2 rounded-md font-semibold cursor-pointer",
-                                    "bg-red-600 hover:bg-red-700 text-gray-300 xl:text-lg",
-                                    "hover:brightness-130"
+                                    "px-3 py-1 lg:px-4 lg:py-2 rounded-md font-semibold cursor-pointer",
+                                    "text-sm md:text-base text-gray-300 xl:text-lg",
+                                    "bg-red-600 hover:bg-red-700 hover:brightness-130"
                                 )}
                                 handleClick={onConfirm}
                             />
