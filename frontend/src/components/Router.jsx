@@ -34,13 +34,13 @@ export default function Router() {
             <Route element={<PrivateRouter />}>
                 {/* Games */}
                 <Route path="/games" element={<GamesList />} />
+                <Route path="/games/:slug/reviews" element={<ReviewGame />} />
 
                 {/* Favoritos */}
                 <Route path="/favorites" element={<Favorites />} />
 
                 {/* Reviews */}
                 {/* <Route path="/reviews" element={<Reviews />} /> */}
-                <Route path="/reviews/:id" element={<ReviewGame />} />
 
                 {/* Admin */}
                 <Route path="/admin" element={<Admin />} />
