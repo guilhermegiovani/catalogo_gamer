@@ -36,7 +36,8 @@ function Carrossel({ items }) { // Carousel
         dots.push({
             id: items[index].id ?? index,
             actualIndex: index,
-            isActive: i === 0 // o do meio sempre é o ativo
+            offset: i,
+            isActive: i === current // o do meio sempre é o ativo
         })
     }
 
@@ -120,6 +121,9 @@ function Carrossel({ items }) { // Carousel
                             "portrait:sm:w-2 portrait:sm:h-2",
                             d.isActive ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
+                        style={{
+                            transform: `translateX(${d.offset * 16}px)` // todos andam junto
+                        }}
                         onClick={() => {
                             setCurrent(d.actualIndex)
                         }}
