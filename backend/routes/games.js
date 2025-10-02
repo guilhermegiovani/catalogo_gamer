@@ -9,6 +9,7 @@ import multer from "multer"
 import { queryDB } from '../utils/dbQuery.js'
 import { uploadToCloudinary } from '../utils/cloudinary.js'
 import handleUpload from '../utils/uploadHander.js'
+import slugify from "slugify";
 
 
 const router = express.Router()
@@ -44,12 +45,14 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             "select * from games where title = ?;",
             [title]
         )
-
+        
         if (results.length > 0) return res.status(409).json({ erro: "Jogo já existe!" })
 
+        const slug = slugify(title, { lower: true, strict: true });
+
         const resInsert = await queryDB(
-            "insert into games(title, description, genre, platform, studio) values(?, ?, ?, ?, ?);",
-            [title, description, genre, platform, studio] // img_portrait, img_landscape
+            "insert into games(title, description, genre, platform, studio, slug) values(?, ?, ?, ?, ?, ?);",
+            [title, description, genre, platform, studio, slug] // img_portrait, img_landscape
         )
 
         const gameId = resInsert[0].id
@@ -157,6 +160,18 @@ router.get("/", async (req, res) => {
 
     if (results.length === 0) return res.status(404).json({ erro: "Nenhum dado encontrado" })
 
+    console.log(`Jogos: ${JSON.stringify(results)}`)
+
+    let titleGame
+    let slug
+
+    for(let i = 0; i < results.length; i++) {
+        console.log("Jogo: " + results[i].id)
+        titleGame = results[i].title
+        slug = slugify(titleGame, { lower: true, strict: true });
+        await queryDB("UPDATE games SET slug = ? WHERE id = ?;", [slug, results[i].id])
+    }
+
     return res.status(200).json(results)
 
 })
@@ -174,6 +189,70 @@ router.get("/:id", authMiddleware, adminMiddleware, async (req, res) => {
 
     return res.status(200).json(results[0])
 
+})
+
+// Pegar reviews do jogo específico
+router.get('/:slug/reviews', async (req, res) => {
+    const { slug } = req.params
+
+    const game = await queryDB("SELECT id FROM games WHERE slug = ?", [slug])
+    if (game.length === 0) {
+        return res.status(404).json({ error: "Jogo não encontrado" })
+    }
+
+    const gameId = game[0].id
+
+    const results = await queryDB(
+        "select r.id, u.id as idUser, u.name, u.nickname, r.rating, r.comment, review_date, edit_date from reviews as r left join users as u on r.user_id = u.id where r.game_id = ?;",
+        [gameId]
+    )
+
+    if (results.length === 0) return res.json({ reviews: [] })
+    // res.status(404).json({ erro: "Jogo não encontrado ou não foi avaliado!" })
+
+    const formattedDate = results.map(review => {
+        const format = (dateString) => {
+            // console.log(`data rev: ${dateString}`)
+            // if (!dateString) return null
+            // const date = new Date(dateString)
+
+            // const day = String(date.getDate()).padStart(2, '0')
+            // const month = String(date.getMonth() + 1).padStart(2, '0')
+            // const year = date.getFullYear()
+
+            // const hours = String(date.getHours()).padStart(2, '0')
+            // const minutes = String(date.getMinutes()).padStart(2, '0')
+
+            // return `${day}/${month}/${year} ${hours}:${minutes}`
+            if (!dateString) return null
+            return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+        }
+
+        return {
+            ...review,
+            review_date: format(review.review_date),
+            edit_date: format(review.edit_date)
+        }
+
+    })
+
+    const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where game_id = ?;", [gameId])
+
+    let statistics = {
+        avgGrade: null,
+        totReviews: 0
+    }
+
+    if (resultsAvgCount.length > 0) {
+        let average = Number(resultsAvgCount[0].avgGrade)
+        if (!isNaN(average)) {
+            statistics.avgGrade = Number(average.toFixed(1))
+        }
+
+        statistics.totReviews = resultsAvgCount[0].totReviews
+    }
+
+    return res.status(200).json({ reviews: formattedDate, statistics: statistics })
 })
 
 // Deletar Jogo

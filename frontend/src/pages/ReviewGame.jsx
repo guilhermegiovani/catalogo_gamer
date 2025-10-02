@@ -11,7 +11,7 @@ import Modal from "../components/Modal"
 // import toast from "react-hot-toast"
 
 function ReviewGame() {
-    const { id } = useParams()
+    const { slug } = useParams()
     const { games, setGames, reviewsData, setReviewsData, userId, handleEditReview, deleteRev, baseURL } = useAuth()
     const [avgGame, setAvgGame] = useState()
     const [isLoadingGame, setIsLoadingGame] = useState(true)
@@ -23,14 +23,17 @@ function ReviewGame() {
     const [revId, setRevId] = useState(0)
     const [revComment, setRevComment] = useState("")
 
-    const gameId = Number(id)
+    // const gameId = Number(id)
 
     const fetchReviews = async () => {
-        if (!gameId) return
+        if (!slug) return
         try {
             const resGame = await getGames()
             setGames(resGame.data)
-            const res = await getReviewsByGame(gameId)
+
+            const gameId = resGame.data.find(g => g.slug === slug)?.id ?? null
+
+            const res = await getReviewsByGame(slug)
 
             setReviewsData(res.data.reviews)
 
@@ -110,7 +113,7 @@ function ReviewGame() {
 
     useEffect(() => {
         fetchReviews()
-    }, [id])
+    }, [slug])
 
     useEffect(() => {
         const getReactions = async () => {
@@ -135,7 +138,7 @@ function ReviewGame() {
         )
     }
 
-    const game = games.find((g) => g.id === gameId)
+    const game = games.find((g) => g.slug === slug)
 
     if (!game) return <p className="text-white">Jogo não encontrado.</p>
 

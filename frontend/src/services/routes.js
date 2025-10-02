@@ -108,8 +108,8 @@ export const patchReviews = (id, dados) => {
 }
 
 // Listar jogos avaliados
-export const getReviewsByGame = (id) => {
-    return api.get(`/reviews/game/${id}`)
+export const getReviewsByGame = (slug) => {
+    return api.get(`/games/${slug}/reviews`)
 }
 
 // Listar jogos avaliados pelo usuário
