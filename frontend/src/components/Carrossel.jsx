@@ -32,7 +32,7 @@ function Carrossel({ items }) { // Carousel
         const index = (current + i + items.length) % items.length
         const item = items[index]
         if (!item) continue
-        
+
         dots.push({
             id: items[index].id ?? index,
             actualIndex: index,
@@ -118,7 +118,7 @@ function Carrossel({ items }) { // Carousel
                             "transition-transform duration-400 hover:scale-120",
                             "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
                             "portrait:sm:w-2 portrait:sm:h-2",
-                            d.isActive === current ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                            d.isActive ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
                         onClick={() => {
                             setCurrent(d.actualIndex)
