@@ -10,9 +10,14 @@ import { queryDB } from '../utils/dbQuery.js'
 import { uploadToCloudinary } from '../utils/cloudinary.js'
 import handleUpload from '../utils/uploadHander.js'
 import slugify from "slugify";
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc.js"
+import timezone from "dayjs/plugin/timezone.js"
 
 
 const router = express.Router()
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 router.use(express.json())
 
@@ -45,7 +50,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
             "select * from games where title = ?;",
             [title]
         )
-        
+
         if (results.length > 0) return res.status(409).json({ erro: "Jogo já existe!" })
 
         const slug = slugify(title, { lower: true, strict: true });
@@ -56,7 +61,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
         )
 
         const gameId = resInsert[0].id
-        
+
         if (!gameId) return res.status(500).json({ erro: "Erro ao cadastrar jogo" });
 
         if (req.files["img-portrait"]) {
@@ -68,7 +73,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
                 )
 
                 console.log(`URL Retrato: ${img_portrait}`)
-            } catch(err) {
+            } catch (err) {
                 console.log(`Error: ${err}`)
                 return res.status(500).json({ erro: "Falha ao enviar imagem retrato", detalhe: err.message })
             }
@@ -84,7 +89,7 @@ router.post('/', authMiddleware, adminMiddleware, upload.fields([
                 )
 
                 console.log(`URL Paisagem: ${img_landscape}`)
-            } catch(err) {
+            } catch (err) {
                 console.log(`Error: ${err}`)
                 return res.status(500).json({ erro: "Falha ao enviar imagem retrato", detalhe: err.message })
             }
@@ -208,7 +213,7 @@ router.get('/:slug/reviews', async (req, res) => {
         [gameId]
     )
 
-    if (results.length === 0) return res.json({ reviews: [] })
+    if (results.length === 0) return res.json({ reviews: [], statistics: { avgGrade: null, totReviews: 0 }})
     // res.status(404).json({ erro: "Jogo não encontrado ou não foi avaliado!" })
 
     const formattedDate = results.map(review => {
