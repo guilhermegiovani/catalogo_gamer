@@ -26,8 +26,8 @@ function Modal({ isOpen, onClose, onConfirm, title, message }) {
                             "shadow-[0_0_20px_2px_rgba(59,59,92,0.6)]"
                         )}
                     >
-                        <h2 className="text-xl font-semibold text-white">{title}</h2>
-                        <p className="text-[#b0b0c3]">{message}</p>
+                        <h2 className="text-lg lg:text-xl font-semibold text-white">{title}</h2>
+                        <p className="text-sm lg:text-base text-[#b0b0c3]">{message}</p>
 
                         <div className="flex justify-end gap-2 mt-4">
                             <Button
