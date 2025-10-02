@@ -11,34 +11,39 @@ function Carrossel({ items }) { // Carousel
 
     if (!items || items.length === 0) return null
 
-    let prevSlide = () => {
-        if (current === 0) setCurrent(items.length - 1)
-        else setCurrent(current - 1)
-    }
+    // let prevSlide = () => {
+    //     if (current === 0) setCurrent(items.length - 1)
+    //     else setCurrent(current - 1)
+    // }
 
-    let nextSlide = () => {
-        if (current === items.length - 1) setCurrent(0)
-        else setCurrent(current + 1)
-    }
+    // let nextSlide = () => {
+    //     if (current === items.length - 1) setCurrent(0)
+    //     else setCurrent(current + 1)
+    // }
+    const prevSlide = () => setCurrent((current - 1 + items.length) % items.length)
+    const nextSlide = () => setCurrent((current + 1) % items.length)
 
     // ---- Limite de dots ----
     const maxDots = 5
-
     const half = Math.floor(maxDots / 2)
 
     const dots = []
 
-    for (let i = 0; i < maxDots; i++) {
-        const index = (current - half + i + items.length) % items.length
+    for (let i = -half; i <= half; i++) {
+        const index = (current + i + items.length) % items.length
         const item = items[index]
         if (!item) continue
 
         dots.push({
-            id: items[index].id ?? index,
+            id: item.id ?? index,
             actualIndex: index,
-            isActive: i === half // o do meio sempre é o ativo
+            isActive: i === 0 // sempre o do meio é ativo
         })
     }
+
+    // --- calcular deslocamento total dos dots ---
+    const dotSpacing = 16 // px entre dots
+    const translateX = -dots[half].offset * dotSpacing
 
     // ------------------------
 
@@ -109,7 +114,10 @@ function Carrossel({ items }) { // Carousel
                 />
             </div>
 
-            <div className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3">
+            <div
+                className="absolute w-full bottom-[-5px] py-4 flex justify-center gap-3"
+                style={{ transform: `translateX(${translateX}px)` }}
+            >
                 {dots.map((d) => (
                     <div
                         key={d.id}
