@@ -162,16 +162,16 @@ router.get("/", async (req, res) => {
 
     console.log(`Jogos: ${JSON.stringify(results)}`)
 
-    let titleGame
-    let slug
+    // let titleGame
+    // let slug
 
-    for(let i = 0; i < results.length; i++) {
-        console.log("Jogo: " + results[i].id)
-        titleGame = results[i].title
-        slug = slugify(titleGame, { lower: true, strict: true });
-        console.log(`Slug: ${slug}`)
-        await queryDB("UPDATE games SET slug = ? WHERE id = ?;", [slug, results[i].id])
-    }
+    // for(let i = 0; i < results.length; i++) {
+    //     console.log("Jogo: " + results[i].id)
+    //     titleGame = results[i].title
+    //     slug = slugify(titleGame, { lower: true, strict: true });
+    //     console.log(`Slug: ${slug}`)
+    //     await queryDB("UPDATE games SET slug = ? WHERE id = ?;", [slug, results[i].id])
+    // }
 
     return res.status(200).json(results)
 
