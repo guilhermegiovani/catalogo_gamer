@@ -141,7 +141,7 @@ function ReviewGame() {
 
     return (
 
-        <section className="space-y-10 flex flex-col justify-center lg:block">
+        <section className="space-y-10 flex flex-col justify-center lg:block text-blue-700">
 
             <div className="space-y-2">
                 <img
