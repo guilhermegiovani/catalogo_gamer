@@ -169,6 +169,7 @@ router.get("/", async (req, res) => {
         console.log("Jogo: " + results[i].id)
         titleGame = results[i].title
         slug = slugify(titleGame, { lower: true, strict: true });
+        console.log(`Slug: ${slug}`)
         await queryDB("UPDATE games SET slug = ? WHERE id = ?;", [slug, results[i].id])
     }
 
