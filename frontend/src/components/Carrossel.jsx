@@ -21,24 +21,19 @@ function Carrossel({ items }) { // Carousel
 
     // ---- Limite de dots ----
     const maxDots = 5
-    // let start = Math.max(0, current - Math.floor(maxDots / 2))
-    // let end = start + maxDots
+
     const half = Math.floor(maxDots / 2)
-    // let start = current - half
+
     const dots = []
 
     for (let i = -half; i <= half; i++) {
-        const index = (current + i + items.length) % items.length;
-        dots.push({ ...items[index], actualIndex: index });
+        const index = (current + i + items.length) % items.length
+        dots.push({
+            id: items[index].id,
+            actualIndex: index,
+            isActive: i === 0 // o do meio sempre é o ativo
+        })
     }
-
-    // if (end > items.length) {
-    //     end = items.length
-    //     start = Math.max(0, end - maxDots)
-    // }
-
-
-    // const visibleDots = items.slice(start, end)
 
     // ------------------------
 
@@ -118,7 +113,7 @@ function Carrossel({ items }) { // Carousel
                             "transition-transform duration-400 hover:scale-120",
                             "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
                             "portrait:sm:w-2 portrait:sm:h-2",
-                            d.actualIndex === current ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                            d.isActive === current ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                         )}
                         onClick={() => {
                             setCurrent(d.actualIndex)
