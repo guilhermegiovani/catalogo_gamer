@@ -144,7 +144,7 @@ function Carrossel({ items }) {
         spaceBetween={0}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => setCurrent(swiper.realIndex)}
-        pagination={{ clickable: false }} // não usamos bullets padrão
+        pagination={{ clickable: false }}
       >
         {items.map((item, index) => (
           <SwiperSlide key={item.id ?? index}>
@@ -179,23 +179,25 @@ function Carrossel({ items }) {
         />
       </div>
 
-      {/* Bullets limitados */}
+      {/* Bullets deslizando suavemente */}
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
-        <div className="flex gap-3">
-          {visibleDots.map((_, i) => {
-            const realIndex = start + i
-            return (
-              <div
-                key={realIndex}
-                className={clsx(
-                  "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer",
-                  current === realIndex ? "bg-white scale-125" : "bg-gray-500 hover:scale-110",
-                  "mx-1"
-                )}
-                onClick={() => swiperRef.current?.slideToLoop(realIndex)}
-              />
-            )
-          })}
+        <div
+          className="flex transition-transform duration-300 ease-in-out"
+          style={{
+            transform: `translateX(-${start * 14}px)` // desliza os bullets visíveis
+          }}
+        >
+          {items.map((_, index) => (
+            <div
+              key={index}
+              className={clsx(
+                "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer",
+                current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110",
+                "mx-1"
+              )}
+              onClick={() => swiperRef.current?.slideToLoop(index)}
+            />
+          ))}
         </div>
       </div>
     </div>
