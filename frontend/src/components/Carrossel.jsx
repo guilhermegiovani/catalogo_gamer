@@ -24,23 +24,17 @@ function Carrossel({ items }) { // Carousel
     const nextSlide = () => setCurrent((current + 1) % items.length)
 
     // ---- Limite de dots ----
-    const maxDots = 5
-    const half = Math.floor(maxDots / 2)
+    const maxDots = 5; // ou 5
+    let start = Math.max(0, current - Math.floor(maxDots / 2));
+    let end = start + maxDots;
 
-    const dots = []
-
-    for (let i = -half; i <= half; i++) {
-        const index = (current + i + items.length) % items.length
-        const item = items[index]
-        if (!item) continue
-
-        dots.push({
-            id: item.id ?? index,
-            actualIndex: index,
-            offset: i,
-            isActive: i === 0 // sempre o do meio é ativo
-        })
+    // se passar do tamanho da lista, ajusta
+    if (end > items.length) {
+        end = items.length;
+        start = Math.max(0, end - maxDots);
     }
+
+    const visibleDots = items.slice(start, end);
 
     // ------------------------
 
@@ -117,23 +111,26 @@ function Carrossel({ items }) { // Carousel
                     "animate-scroll md:animate-scrollMd xl:animate-scrollXl"
                 )}
             >
-                {dots.map((d) => (
-                    <div
-                        key={d.id}
-                        className={clsx(
-                            "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10",
-                            "transition-transform duration-400 hover:scale-120",
-                            "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
-                            "portrait:sm:w-2 portrait:sm:h-2",
-                            d.isActive ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
-                        )}
-                        // style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
-                        onClick={() => {
-                            setCurrent(d.actualIndex)
-                        }}
-                    ></div>
+                {visibleDots.map((item, index) => {
+                    const realIndex = start + index;
+                    return (
+                        <div
+                            key={item.id}
+                            className={clsx(
+                                "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10",
+                                "transition-transform duration-400 hover:scale-120",
+                                "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
+                                "portrait:sm:w-2 portrait:sm:h-2",
+                                current === realIndex ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                            )}
+                            // style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
+                            onClick={() => {
+                                setCurrent(realIndex)
+                            }}
+                        ></div>
 
-                ))}
+                    )
+                })}
             </div>
 
         </div>
