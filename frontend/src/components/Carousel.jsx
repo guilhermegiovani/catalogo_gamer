@@ -100,61 +100,75 @@
 
 // export default Carrossel
 
-import { useRef, useState, useEffect } from "react"
+import { useState, useRef, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Button from "./Button"
 import clsx from "clsx"
 import { useAuth } from "../hooks/useAuth"
 
 import { Swiper, SwiperSlide } from "swiper/react"
-import { Pagination } from "swiper/modules"
+import { Navigation } from "swiper/modules"
 import "swiper/css"
-import "swiper/css/pagination"
 
 function Carrossel({ items }) {
+  const [current, setCurrent] = useState(0)
   const { baseURL } = useAuth()
   const swiperRef = useRef(null)
-  const maxVisibleDots = 5
-  const [current, setCurrent] = useState(0)
 
   if (!items || items.length === 0) return null
 
   const prevSlide = () => swiperRef.current?.slidePrev()
   const nextSlide = () => swiperRef.current?.slideNext()
 
-  // Calcula bullets visíveis
-  const visibleStart = Math.min(
-    Math.max(current - Math.floor(maxVisibleDots / 2), 0),
-    Math.max(items.length - maxVisibleDots, 0)
-  )
-  const visibleDots = items.slice(visibleStart, visibleStart + maxVisibleDots)
+  const maxVisibleDots = 5
+
+  // Calcula os dots visíveis
+  const getVisibleDots = () => {
+    const half = Math.floor(maxVisibleDots / 2)
+    let start = 0
+    if (current > half && current < items.length - half) {
+      start = current - half
+    } else if (current >= items.length - half) {
+      start = items.length - maxVisibleDots
+    }
+    start = Math.max(0, start)
+    return items.slice(start, start + maxVisibleDots).map((item, idx) => start + idx)
+  }
+
+  const visibleDots = getVisibleDots()
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
+      {/* Slides */}
       <Swiper
-        modules={[Pagination]}
+        modules={[Navigation]}
         loop={true}
         slidesPerView={1}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => setCurrent(swiper.realIndex)}
-        pagination={{ clickable: true }}
+        navigation={false} // setas customizadas, então desliga a do Swiper
+        pagination={false} // remove bullets internos
       >
         {items.map((item, index) => (
           <SwiperSlide key={`${item.id ?? index}-${index}`}>
-            <img
-              src={baseURL + item.img_landscape}
-              alt={item.name ?? "imagem_jogo"}
-              className={clsx(
-                "w-full max-h-58 object-cover object-top rounded-lg",
-                "landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100",
-                "portrait:sm:max-h-90"
-              )}
-            />
+            {item ? (
+              <img
+                src={baseURL + item.img_landscape}
+                alt={item.name ?? "imagem_jogo"}
+                className={clsx(
+                  "w-full max-h-58 object-cover object-top rounded-lg",
+                  "landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100",
+                  "portrait:sm:max-h-90"
+                )}
+              />
+            ) : (
+              <div className="w-full h-full rounded-lg bg-neutral-800" />
+            )}
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Botões */}
+      {/* Setas */}
       <div className="absolute inset-0 pointer-events-none">
         <Button
           text={<ChevronLeft className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
@@ -168,22 +182,20 @@ function Carrossel({ items }) {
         />
       </div>
 
-      {/* Bullets limitados a 5 */}
+      {/* Bullets customizados limitados a 5 */}
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
-        <div className="flex gap-3">
-          {visibleDots.map((_, i) => {
-            const realIndex = visibleStart + i
-            return (
-              <div
-                key={realIndex}
-                className={clsx(
-                  "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer mx-1",
-                  current === realIndex ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
-                )}
-                onClick={() => swiperRef.current?.slideToLoop(realIndex)}
-              />
-            )
-          })}
+        <div className="flex gap-3 transition-transform duration-300 ease-in-out">
+          {visibleDots.map((idx) => (
+            <div
+              key={idx}
+              className={clsx(
+                "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer",
+                current === idx ? "bg-white scale-125" : "bg-gray-500 hover:scale-110",
+                "mx-1"
+              )}
+              onClick={() => swiperRef.current?.slideToLoop(idx)}
+            />
+          ))}
         </div>
       </div>
     </div>
