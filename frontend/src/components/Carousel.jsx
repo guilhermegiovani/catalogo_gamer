@@ -13,23 +13,6 @@
 //   const prevSlide = () => setCurrent((current - 1 + items.length) % items.length)
 //   const nextSlide = () => setCurrent((current + 1) % items.length)
 
-//   const maxDots = 5
-//   const half = Math.floor(maxDots / 2)
-//   const dotSize = 5 // largura + gap aproximado
-
-//   // Calcula os dots visíveis
-//   let start = 0
-//   if (current > half && current < items.length - half) {
-//     start = current - half
-//   } else if (current >= items.length - half) {
-//     start = items.length - maxDots
-//   }
-//   start = Math.max(0, start)
-//   const visibleDots = items.slice(start, start + maxDots)
-
-//   // Offset para deslizar os dots
-//   const offset = start * dotSize
-
 //   return (
 //     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
 //       {/* Slides */}
@@ -76,7 +59,7 @@
 //         <div
 //           className="flex gap-3 transition-transform duration-300 ease-in-out"
 //         >
-//           {visibleDots.map((item, index) => {
+//           {items.map((item, index) => {
 //             const realIndex = start + index
 //             return (
 //               <div
@@ -85,10 +68,10 @@
 //                   "rounded-full w-1 h-1 transition-transform duration-400 cursor-pointer",
 //                   "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
 //                   "portrait:sm:w-2 portrait:sm:h-2",
-//                   current === realIndex ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
+//                   current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
 //                 )}
 //                 style={{ transform: `translateX(-${offset}px)` }}
-//                 onClick={() => setCurrent(realIndex)}
+//                 onClick={() => setCurrent(index)}
 //               />
 //             )
 //           })}
@@ -100,71 +83,111 @@
 
 // export default Carrossel
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Button from "./Button"
 import clsx from "clsx"
 import { useAuth } from "../hooks/useAuth"
 
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation } from "swiper/modules"
-import "swiper/css"
-
 function Carrossel({ items }) {
   const { baseURL } = useAuth()
-  const swiperRef = useRef(null)
-  const maxVisibleDots = 5
   const [current, setCurrent] = useState(0)
-  
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  // Triplica os items para criar efeito infinito
+  const extendedItems = items?.length > 1 ? [...items, ...items, ...items] : items
+  const startIndex = items?.length || 0
+  const [displayIndex, setDisplayIndex] = useState(startIndex)
+
+  useEffect(() => {
+    if (items?.length) {
+      setDisplayIndex(items.length)
+    }
+  }, [items?.length])
+
   if (!items || items.length === 0) return null
 
-  const prevSlide = () => swiperRef.current?.slidePrev()
-  const nextSlide = () => swiperRef.current?.slideNext()
-
-  const getVisibleDots = () => {
-    const half = Math.floor(maxVisibleDots / 2)
-    let start = 0
-    if (current > half && current < items.length - half) {
-      start = current - half
-    } else if (current >= items.length - half) {
-      start = items.length - maxVisibleDots
-    }
-    start = Math.max(0, start)
-    return items.slice(start, start + maxVisibleDots).map((_, idx) => start + idx)
+  const prevSlide = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setDisplayIndex(prev => prev - 1)
+    setCurrent(prev => (prev - 1 + items.length) % items.length)
   }
 
-  const visibleDots = getVisibleDots()
+  const nextSlide = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setDisplayIndex(prev => prev + 1)
+    setCurrent(prev => (prev + 1) % items.length)
+  }
+
+  const handleTransitionEnd = () => {
+    setIsTransitioning(false)
+    // Reposiciona sem animação quando chega nas bordas
+    if (displayIndex >= items.length * 2) {
+      setDisplayIndex(startIndex)
+    } else if (displayIndex < items.length) {
+      setDisplayIndex(startIndex + items.length - 1)
+    }
+  }
+
+  // Calcula quais 5 dots devem ser visíveis
+  const maxVisibleDots = 5
+  const totalDots = items.length
+
+  const getVisibleDots = () => {
+    if (totalDots <= maxVisibleDots) {
+      return { start: 0, end: totalDots }
+    }
+
+    const halfVisible = Math.floor(maxVisibleDots / 2)
+    let start = current - halfVisible
+    let end = current + halfVisible + 1
+
+    if (start < 0) {
+      start = 0
+      end = maxVisibleDots
+    } else if (end > totalDots) {
+      end = totalDots
+      start = totalDots - maxVisibleDots
+    }
+
+    return { start, end }
+  }
+
+  const { start, end } = getVisibleDots()
+  const visibleDots = items.slice(start, end)
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
       {/* Slides */}
-      <Swiper
-        modules={[Navigation]}
-        loop={true}
-        slidesPerView={1}
-        onSwiper={(swiper) => (swiperRef.current = swiper)}
-        onSlideChange={(swiper) => setCurrent(swiper.realIndex)}
-        navigation={false}
-        pagination={false}
+      <div
+        className={clsx(
+          "flex",
+          isTransitioning && "transition-transform duration-400 ease-in-out"
+        )}
+        style={{ transform: `translateX(-${displayIndex * 100}%)` }}
+        onTransitionEnd={handleTransitionEnd}
       >
-        {items.map((item, index) => (
-          <SwiperSlide key={`${item.id ?? index}-${index}`}>
+        {extendedItems.map((item, index) => (
+          <div
+            key={`${item.id ?? index}-${index}`}
+            className="w-full max-h-58 flex-shrink-0
+                       landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100
+                       portrait:sm:max-h-90"
+          >
             {item ? (
               <img
                 src={baseURL + item.img_landscape}
                 alt={item.name ?? "imagem_jogo"}
-                className={clsx(
-                  "w-full max-h-58 object-cover object-top rounded-lg",
-                  "landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100",
-                  "portrait:sm:max-h-90"
-                )}
+                className="w-full h-full object-cover object-top rounded-lg"
               />
             ) : (
               <div className="w-full h-full rounded-lg bg-neutral-800" />
             )}
-          </SwiperSlide>
+          </div>
         ))}
-      </Swiper>
+      </div>
 
       {/* Setas */}
       <div className="absolute inset-0 pointer-events-none">
@@ -180,20 +203,27 @@ function Carrossel({ items }) {
         />
       </div>
 
-      {/* Bullets limitados a 5 */}
+      {/* Dots - exibe apenas 5 por vez */}
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
-        <div className="flex gap-2">
-          {visibleDots.map((idx) => (
-            <div
-              key={idx}
-              className={clsx(
-                "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer",
-                current === idx ? "bg-white scale-125" : "bg-gray-500 hover:scale-110",
-                "mx-1"
-              )}
-              onClick={() => swiperRef.current?.slideToLoop(idx)}
-            />
-          ))}
+        <div className="flex gap-3 transition-all duration-300 ease-in-out">
+          {visibleDots.map((item, index) => {
+            const realIndex = start + index
+            return (
+              <div
+                key={item.id ?? realIndex}
+                className={clsx(
+                  "rounded-full w-1 h-1 transition-all duration-400 cursor-pointer",
+                  "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
+                  "portrait:sm:w-2 portrait:sm:h-2",
+                  current === realIndex ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
+                )}
+                onClick={() => {
+                  setCurrent(realIndex)
+                  setDisplayIndex(startIndex + realIndex)
+                }}
+              />
+            )
+          })}
         </div>
       </div>
     </div>
@@ -201,4 +231,5 @@ function Carrossel({ items }) {
 }
 
 export default Carrossel
+
 
