@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "../hooks/useAuth"
 import { getGames } from "../services/routes"
 import { useEffect, useState } from "react"
-import Carrossel from "../components/Carrossel"
+import Carousel from "../components/Carousel"
 
 function Home() {
     const navigate = useNavigate()
@@ -91,8 +91,8 @@ function Home() {
                 </div>
             </div>
 
-            {/* Imagem + Carrossel (placeholder) */}
-            <Carrossel items={gamesImgs} />
+            {/* Imagem + Carousel (placeholder) */}
+            <Carousel items={gamesImgs} />
 
             {/* <div className="w-full max-w-md mx-auto sm:max-w-full">
                 <Carousel items={gamesImgs} />
