@@ -15,7 +15,7 @@ function Carrossel({ items }) {
 
   const maxDots = 5
   const half = Math.floor(maxDots / 2)
-  const dotSize = 16 // largura + gap aproximado
+  const dotSize = 3 // largura + gap aproximado
 
   // Calcula os dots visíveis
   let start = 0
