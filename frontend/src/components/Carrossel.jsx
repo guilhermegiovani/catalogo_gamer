@@ -24,17 +24,24 @@ function Carrossel({ items }) { // Carousel
     const nextSlide = () => setCurrent((current + 1) % items.length)
 
     // ---- Limite de dots ----
-    const maxDots = 5; // ou 5
-    let start = Math.max(0, current - Math.floor(maxDots / 2));
-    let end = start + maxDots;
+    const maxDots = 7
+    const half = Math.floor(maxDots / 2)
 
-    // se passar do tamanho da lista, ajusta
+    // calcula início da janela
+    let start = current - half
+    let end = current + half + 1
+
+    // corrige limites
+    if (start < 0) {
+        start = 0
+        end = maxDots
+    }
     if (end > items.length) {
-        end = items.length;
-        start = Math.max(0, end - maxDots);
+        end = items.length
+        start = Math.max(0, end - maxDots)
     }
 
-    const visibleDots = items.slice(start, end);
+    const visibleDots = items.slice(start, end)
 
     // ------------------------
 
