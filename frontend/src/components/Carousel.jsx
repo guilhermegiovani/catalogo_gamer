@@ -122,22 +122,24 @@ function Carrossel({ items }) {
   const nextSlide = () => swiperRef.current?.slideNext()
 
   const maxVisibleDots = 5
-  const dotSize = 14 // tamanho + gap aproximado
+  const half = Math.floor(maxVisibleDots / 2)
 
-  // controla o offset dos bullets
-  const [bulletOffset, setBulletOffset] = useState(0)
-
-  useEffect(() => {
+  // Calcula os índices dos bullets visíveis
+  const getVisibleDots = () => {
     let start = 0
-    const half = Math.floor(maxVisibleDots / 2)
     if (current > half && current < items.length - half) {
       start = current - half
     } else if (current >= items.length - half) {
       start = items.length - maxVisibleDots
     }
     start = Math.max(0, start)
-    setBulletOffset(start * dotSize)
-  }, [current, items.length])
+    return items.slice(start, start + maxVisibleDots).map((item, i) => ({
+      realIndex: start + i,
+      id: item.id ?? start + i
+    }))
+  }
+
+  const visibleDots = getVisibleDots()
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
@@ -186,19 +188,16 @@ function Carrossel({ items }) {
 
       {/* Dots customizados limitados a 5 */}
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
-        <div
-          className="flex transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${bulletOffset}px)` }}
-        >
-          {items.map((_, index) => (
+        <div className="flex gap-3 transition-transform duration-300 ease-in-out">
+          {visibleDots.map(({ realIndex, id }) => (
             <div
-              key={index}
+              key={id}
               className={clsx(
                 "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer",
-                current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110",
+                current === realIndex ? "bg-white scale-125" : "bg-gray-500 hover:scale-110",
                 "mx-1"
               )}
-              onClick={() => swiperRef.current?.slideToLoop(index)}
+              onClick={() => swiperRef.current?.slideToLoop(realIndex)}
             />
           ))}
         </div>
