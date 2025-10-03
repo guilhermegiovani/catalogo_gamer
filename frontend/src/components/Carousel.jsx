@@ -100,18 +100,21 @@
 
 // export default Carrossel
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Button from "./Button"
 import clsx from "clsx"
 import { useAuth } from "../hooks/useAuth"
 
 import { Swiper, SwiperSlide } from "swiper/react"
+import { Pagination } from "swiper/modules"
 import "swiper/css"
+import "swiper/css/pagination"
 
 function Carrossel({ items }) {
   const { baseURL } = useAuth()
   const swiperRef = useRef(null)
+  const maxVisibleDots = 5
   const [current, setCurrent] = useState(0)
 
   if (!items || items.length === 0) return null
@@ -119,51 +122,39 @@ function Carrossel({ items }) {
   const prevSlide = () => swiperRef.current?.slidePrev()
   const nextSlide = () => swiperRef.current?.slideNext()
 
-  const maxVisibleDots = 5
-  const dotGap = 14
-  const half = Math.floor(maxVisibleDots / 2)
-
-  // calcula o índice do primeiro bullet visível
-  let start = 0
-  if (current > half && current < items.length - half) {
-    start = current - half
-  } else if (current >= items.length - maxVisibleDots) {
-    start = items.length - maxVisibleDots
-  }
-  start = Math.max(0, start)
-
-  const visibleDots = items.slice(start, start + maxVisibleDots)
+  // Calcula bullets visíveis
+  const visibleStart = Math.min(
+    Math.max(current - Math.floor(maxVisibleDots / 2), 0),
+    Math.max(items.length - maxVisibleDots, 0)
+  )
+  const visibleDots = items.slice(visibleStart, visibleStart + maxVisibleDots)
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
-      {/* Slides */}
       <Swiper
+        modules={[Pagination]}
         loop={true}
         slidesPerView={1}
-        spaceBetween={0}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => setCurrent(swiper.realIndex)}
+        pagination={{ clickable: true }}
       >
         {items.map((item, index) => (
-          <SwiperSlide key={item.id ?? index}>
-            {item ? (
-              <img
-                src={baseURL + item.img_landscape}
-                alt={item.name ?? "imagem_jogo"}
-                className={clsx(
-                  "w-full max-h-58 object-cover object-top rounded-lg",
-                  "landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100",
-                  "portrait:sm:max-h-90"
-                )}
-              />
-            ) : (
-              <div className="w-full h-full rounded-lg bg-neutral-800" />
-            )}
+          <SwiperSlide key={`${item.id ?? index}-${index}`}>
+            <img
+              src={baseURL + item.img_landscape}
+              alt={item.name ?? "imagem_jogo"}
+              className={clsx(
+                "w-full max-h-58 object-cover object-top rounded-lg",
+                "landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100",
+                "portrait:sm:max-h-90"
+              )}
+            />
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Setas */}
+      {/* Botões */}
       <div className="absolute inset-0 pointer-events-none">
         <Button
           text={<ChevronLeft className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
@@ -177,14 +168,11 @@ function Carrossel({ items }) {
         />
       </div>
 
-      {/* Dots customizados limitados a 5 */}
+      {/* Bullets limitados a 5 */}
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
-        <div
-          className="flex transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${start * dotGap}px)` }}
-        >
-          {visibleDots.map((_, index) => {
-            const realIndex = start + index
+        <div className="flex gap-3">
+          {visibleDots.map((_, i) => {
+            const realIndex = visibleStart + i
             return (
               <div
                 key={realIndex}
