@@ -24,7 +24,7 @@ function Carrossel({ items }) { // Carousel
     const nextSlide = () => setCurrent((current + 1) % items.length)
 
     // ---- Limite de dots ----
-    const maxDots = 7
+    const maxDots = 5
     const half = Math.floor(maxDots / 2)
 
     // calcula início da janela
@@ -117,9 +117,7 @@ function Carrossel({ items }) { // Carousel
                     "absolute w-full bottom-[-5px] py-4 flex justify-center gap-3",
                     // "animate-scroll md:animate-scrollMd xl:animate-scrollXl"
                 )}
-                style={{
-                    transform: `translateX(-${Math.max(0, current - 2) * 16}px)` // 16px ≈ largura + gap do dot
-                }}
+
             >
                 {visibleDots.map((item, index) => {
                     const realIndex = start + index;
@@ -133,6 +131,9 @@ function Carrossel({ items }) { // Carousel
                                 "portrait:sm:w-2 portrait:sm:h-2",
                                 current === realIndex ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                             )}
+                            style={{
+                                transform: `translateX(-${Math.max(0, current - 2) * 16}px)` // 16px ≈ largura + gap do dot
+                            }}
                             // style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
                             onClick={() => {
                                 setCurrent(realIndex)
