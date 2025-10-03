@@ -74,7 +74,7 @@ function Carrossel({ items }) {
       {/* Dots */}
       <div className="absolute bg-black w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
         <div
-          className="flex fixed gap-3 transition-transform duration-300 ease-in-out bg-blue-700"
+          className="flex gap-3 transition-transform duration-300 ease-in-out bg-blue-700"
         >
           {visibleDots.map((item, index) => {
             const realIndex = start + index
