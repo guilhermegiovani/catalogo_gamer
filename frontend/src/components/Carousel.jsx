@@ -122,9 +122,10 @@ function Carrossel({ items }) {
   const nextSlide = () => swiperRef.current?.slideNext()
 
   const maxVisibleDots = 5
-
-  // calcula quais bullets serão visíveis
+  const dotGap = 14
   const half = Math.floor(maxVisibleDots / 2)
+
+  // calcula o índice do primeiro bullet visível
   let start = 0
   if (current > half && current < items.length - half) {
     start = current - half
@@ -132,7 +133,9 @@ function Carrossel({ items }) {
     start = items.length - maxVisibleDots
   }
   start = Math.max(0, start)
-  const visibleDots = items.slice(start, start + maxVisibleDots)
+
+  // ajusta offset para centralizar o bullet ativo
+  const bulletOffset = Math.max(0, (current - half) * dotGap)
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
@@ -179,25 +182,26 @@ function Carrossel({ items }) {
         />
       </div>
 
-      {/* Bullets deslizando suavemente */}
+      {/* Dots limitados a 5 e centralizando ativo */}
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
         <div
           className="flex transition-transform duration-300 ease-in-out"
-          style={{
-            transform: `translateX(-${start * 14}px)` // desliza os bullets visíveis
-          }}
+          style={{ transform: `translateX(-${bulletOffset}px)` }}
         >
-          {items.map((_, index) => (
-            <div
-              key={index}
-              className={clsx(
-                "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer",
-                current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110",
-                "mx-1"
-              )}
-              onClick={() => swiperRef.current?.slideToLoop(index)}
-            />
-          ))}
+          {items.map((_, index) => {
+            // mostra apenas bullets visíveis
+            if (index < start || index >= start + maxVisibleDots) return null
+            return (
+              <div
+                key={index}
+                className={clsx(
+                  "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer mx-1",
+                  current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
+                )}
+                onClick={() => swiperRef.current?.slideToLoop(index)}
+              />
+            )
+          })}
         </div>
       </div>
     </div>
@@ -205,3 +209,4 @@ function Carrossel({ items }) {
 }
 
 export default Carrossel
+
