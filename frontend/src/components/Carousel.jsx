@@ -111,18 +111,16 @@ import { Navigation } from "swiper/modules"
 import "swiper/css"
 
 function Carrossel({ items }) {
-  const [current, setCurrent] = useState(0)
   const { baseURL } = useAuth()
   const swiperRef = useRef(null)
-
+  const maxVisibleDots = 5
+  const [current, setCurrent] = useState(0)
+  
   if (!items || items.length === 0) return null
 
   const prevSlide = () => swiperRef.current?.slidePrev()
   const nextSlide = () => swiperRef.current?.slideNext()
 
-  const maxVisibleDots = 5
-
-  // Calcula os dots visíveis
   const getVisibleDots = () => {
     const half = Math.floor(maxVisibleDots / 2)
     let start = 0
@@ -132,7 +130,7 @@ function Carrossel({ items }) {
       start = items.length - maxVisibleDots
     }
     start = Math.max(0, start)
-    return items.slice(start, start + maxVisibleDots).map((item, idx) => start + idx)
+    return items.slice(start, start + maxVisibleDots).map((_, idx) => start + idx)
   }
 
   const visibleDots = getVisibleDots()
@@ -146,8 +144,8 @@ function Carrossel({ items }) {
         slidesPerView={1}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => setCurrent(swiper.realIndex)}
-        navigation={false} // setas customizadas, então desliga a do Swiper
-        pagination={false} // remove bullets internos
+        navigation={false}
+        pagination={false}
       >
         {items.map((item, index) => (
           <SwiperSlide key={`${item.id ?? index}-${index}`}>
@@ -182,9 +180,9 @@ function Carrossel({ items }) {
         />
       </div>
 
-      {/* Bullets customizados limitados a 5 */}
+      {/* Bullets limitados a 5 */}
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
-        <div className="flex gap-3 transition-transform duration-300 ease-in-out">
+        <div className="flex gap-2">
           {visibleDots.map((idx) => (
             <div
               key={idx}
@@ -203,3 +201,4 @@ function Carrossel({ items }) {
 }
 
 export default Carrossel
+
