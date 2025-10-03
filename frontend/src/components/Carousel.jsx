@@ -101,12 +101,14 @@
 // export default Carrossel
 
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import Button from "./Button"
+import clsx from "clsx"
+import { useAuth } from "../hooks/useAuth"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Pagination } from "swiper/modules"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
-import { useAuth } from "../hooks/useAuth"
 
 function Carrossel({ items }) {
   const { baseURL } = useAuth()
@@ -115,52 +117,70 @@ function Carrossel({ items }) {
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
+      {/* Slides com Swiper */}
       <Swiper
         modules={[Navigation, Pagination]}
+        slidesPerView={1}
         navigation={{
-          prevEl: ".swiper-button-prev",
-          nextEl: ".swiper-button-next",
+          nextEl: ".custom-next",
+          prevEl: ".custom-prev",
         }}
         pagination={{
-          el: ".swiper-pagination",
+          el: ".custom-pagination",
           clickable: true,
-          dynamicBullets: true, // <- faz igual do Instagram/YouTube, dots deslizantes
+          dynamicBullets: true,
         }}
-        spaceBetween={10}
-        slidesPerView={1}
+        loop={true}
         className="w-full h-full"
       >
         {items.map((item, index) => (
           <SwiperSlide key={`${item.id ?? index}-${index}`}>
-            {item ? (
-              <img
-                src={baseURL + item.img_landscape}
-                alt={item.name ?? "imagem_jogo"}
-                className="w-full h-full object-cover object-top rounded-lg"
-              />
-            ) : (
-              <div className="w-full h-full rounded-lg bg-neutral-800" />
-            )}
+            <div
+              className="w-full max-h-58 flex-shrink-0
+                         landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100
+                         portrait:sm:max-h-90"
+            >
+              {item ? (
+                <img
+                  src={baseURL + item.img_landscape}
+                  alt={item.name ?? "imagem_jogo"}
+                  className="w-full h-full object-cover object-top rounded-lg"
+                />
+              ) : (
+                <div className="w-full h-full rounded-lg bg-neutral-800" />
+              )}
+            </div>
           </SwiperSlide>
         ))}
-
-        {/* Setas customizadas */}
-        <div className="swiper-button-prev absolute top-1/2 left-2 z-30 
-                        -translate-y-1/2 bg-black/50 text-white p-2 rounded-full 
-                        cursor-pointer hover:scale-110">
-          <ChevronLeft className="w-5 h-5" />
-        </div>
-        <div className="swiper-button-next absolute top-1/2 right-2 z-30 
-                        -translate-y-1/2 bg-black/50 text-white p-2 rounded-full 
-                        cursor-pointer hover:scale-110">
-          <ChevronRight className="w-5 h-5" />
-        </div>
-
-        {/* Dots */}
-        <div className="swiper-pagination !bottom-2" />
       </Swiper>
+
+      {/* Setas customizadas com Button */}
+      <div className="absolute inset-0 pointer-events-none z-30">
+        <Button
+          text={<ChevronLeft className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
+          className="custom-prev pointer-events-auto absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 text-white p-1 lg:p-2 rounded-full cursor-pointer hover:scale-[1.08] landscape:md:p-1.5 aspect-square flex items-center justify-center"
+        />
+        <Button
+          text={<ChevronRight className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
+          className="custom-next pointer-events-auto absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 text-white p-1 lg:p-2 rounded-full cursor-pointer hover:scale-[1.08] landscape:md:p-1.5 aspect-square flex items-center justify-center"
+        />
+      </div>
+
+      {/* Dots customizados */}
+      <div className="custom-pagination absolute w-full bottom-[-5px] py-4 flex justify-center gap-3" />
+
+      {/* Estilo dos dots */}
+      <style jsx>{`
+        .swiper-pagination-bullet {
+          @apply w-2 h-2 bg-gray-500 rounded-full opacity-100 transition-all;
+        }
+        .swiper-pagination-bullet-active {
+          @apply bg-white scale-125;
+        }
+      `}</style>
     </div>
   )
 }
 
 export default Carrossel
+
