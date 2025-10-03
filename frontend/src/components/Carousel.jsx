@@ -100,7 +100,7 @@
 
 // export default Carrossel
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Button from "./Button"
 import clsx from "clsx"
@@ -118,33 +118,38 @@ function Carrossel({ items }) {
 
   if (!items || items.length === 0) return null
 
-  // chama o método do Swiper (fallback para state caso não tenha init)
-  const prevSlide = () => {
-    if (swiperRef.current && swiperRef.current.slidePrev) swiperRef.current.slidePrev()
-    else setCurrent((c) => (c - 1 + items.length) % items.length)
-  }
-  const nextSlide = () => {
-    if (swiperRef.current && swiperRef.current.slideNext) swiperRef.current.slideNext()
-    else setCurrent((c) => (c + 1) % items.length)
-  }
+  const prevSlide = () => swiperRef.current?.slidePrev()
+  const nextSlide = () => swiperRef.current?.slideNext()
+
+  const maxVisibleDots = 5
+  const dotSize = 14 // tamanho + gap aproximado
+
+  // controla o offset dos bullets
+  const [bulletOffset, setBulletOffset] = useState(0)
+
+  useEffect(() => {
+    let start = 0
+    const half = Math.floor(maxVisibleDots / 2)
+    if (current > half && current < items.length - half) {
+      start = current - half
+    } else if (current >= items.length - half) {
+      start = items.length - maxVisibleDots
+    }
+    start = Math.max(0, start)
+    setBulletOffset(start * dotSize)
+  }, [current, items.length])
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
-      {/* Swiper - substitui o container de slides */}
+      {/* Slides */}
       <Swiper
         modules={[Pagination]}
         loop={true}
         slidesPerView={1}
         spaceBetween={0}
-        pagination={{ clickable: true }}
-        onSwiper={(swiper) => {
-          // guarda instância para controlar com seus botões
-          swiperRef.current = swiper
-          // sincroniza current (caso queira iniciar com outro índice)
-          setCurrent(swiper.realIndex ?? 0)
-        }}
+        onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => setCurrent(swiper.realIndex)}
-        className="w-full"
+        pagination={{ clickable: true }}
       >
         {items.map((item, index) => (
           <SwiperSlide key={`${item.id ?? index}-${index}`}>
@@ -165,7 +170,7 @@ function Carrossel({ items }) {
         ))}
       </Swiper>
 
-      {/* Setas: seus Buttons (mesmas classes). Usamos as funções prevSlide/nextSlide que chamam o swiperRef */}
+      {/* Setas */}
       <div className="absolute inset-0 pointer-events-none">
         <Button
           text={<ChevronLeft className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
@@ -179,28 +184,25 @@ function Carrossel({ items }) {
         />
       </div>
 
-      {/* Swiper pagination (bullets) aparecerão automaticamente aqui */}
-      {/* Estilo customizado para os bullets (mantém visual parecido com o seu) */}
-      <style>{`
-        .swiper-pagination {
-          bottom: 10px !important;
-          z-index: 30;
-        }
-        .swiper-pagination-bullet {
-          width: 8px;
-          height: 8px;
-          background-color: #6b7280; /* gray-500 */
-          opacity: 1;
-          border-radius: 9999px;
-          margin: 0 6px !important;
-          transform: scale(1);
-          transition: transform 0.25s ease, background-color 0.2s ease;
-        }
-        .swiper-pagination-bullet-active {
-          background-color: #ffffff;
-          transform: scale(1.25);
-        }
-      `}</style>
+      {/* Dots customizados limitados a 5 */}
+      <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
+        <div
+          className="flex transition-transform duration-300 ease-in-out"
+          style={{ transform: `translateX(-${bulletOffset}px)` }}
+        >
+          {items.map((_, index) => (
+            <div
+              key={index}
+              className={clsx(
+                "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer",
+                current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110",
+                "mx-1"
+              )}
+              onClick={() => swiperRef.current?.slideToLoop(index)}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
