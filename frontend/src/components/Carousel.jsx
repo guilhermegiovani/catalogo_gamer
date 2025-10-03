@@ -75,7 +75,6 @@ function Carrossel({ items }) {
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
         <div
           className="flex gap-3 transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${offset}px)` }}
         >
           {visibleDots.map((item, index) => {
             const realIndex = start + index
@@ -88,6 +87,7 @@ function Carrossel({ items }) {
                   "portrait:sm:w-2 portrait:sm:h-2",
                   current === realIndex ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
                 )}
+                style={{ transform: `translateX(-${offset}px)` }}
                 onClick={() => setCurrent(realIndex)}
               />
             )
