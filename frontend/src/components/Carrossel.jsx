@@ -115,8 +115,11 @@ function Carrossel({ items }) { // Carousel
             <div
                 className={clsx(
                     "absolute w-full bottom-[-5px] py-4 flex justify-center gap-3",
-                    "animate-scroll md:animate-scrollMd xl:animate-scrollXl"
+                    // "animate-scroll md:animate-scrollMd xl:animate-scrollXl"
                 )}
+                style={{
+                    transform: `translateX(-${Math.max(0, current - 2) * 16}px)` // 16px ≈ largura + gap do dot
+                }}
             >
                 {visibleDots.map((item, index) => {
                     const realIndex = start + index;
