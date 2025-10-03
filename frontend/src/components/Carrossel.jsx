@@ -26,22 +26,14 @@ function Carrossel({ items }) { // Carousel
     // ---- Limite de dots ----
     const maxDots = 5
     const half = Math.floor(maxDots / 2)
+    const dotSize = 16
 
-    // calcula início da janela
-    let start = current - half
-    let end = current + half + 1
-
-    // corrige limites
-    if (start < 0) {
-        start = 0
-        end = maxDots
+    let offset = 0
+    if (current > half && current < items.length - half) {
+        offset = (current - half) * dotSize
+    } else if (current >= items.length - half) {
+        offset = (items.length - maxDots) * dotSize
     }
-    if (end > items.length) {
-        end = items.length
-        start = Math.max(0, end - maxDots)
-    }
-
-    const visibleDots = items.slice(start, end)
 
     // ------------------------
 
@@ -114,34 +106,33 @@ function Carrossel({ items }) { // Carousel
 
             <div
                 className={clsx(
-                    "absolute w-full bottom-[-5px] py-4 flex justify-center gap-3",
+                    "absolute w-full bottom-[-5px] py-4 flex justify-center gap-3 overflow-hidden",
                     // "animate-scroll md:animate-scrollMd xl:animate-scrollXl"
                 )}
 
             >
-                {visibleDots.map((item, index) => {
-                    const realIndex = start + index;
-                    return (
+                <div
+                    className="flex gap-3 transition-transform duration-300 ease-in-out"
+                    style={{ transform: `translateX(-${offset}px)` }}
+                >
+                    {items.map((item, index) => (
                         <div
-                            key={item.id}
+                            key={item.id ?? index}
                             className={clsx(
                                 "rounded-full w-1 h-1 bg-gray-300 cursor-pointer z-10",
                                 "transition-transform duration-400 hover:scale-120",
                                 "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
                                 "portrait:sm:w-2 portrait:sm:h-2",
-                                current === realIndex ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
+                                current === index ? "bg-white scale-130" : "bg-gray-500 hover:scale-110"
                             )}
-                            style={{
-                                transform: `translateX(-${Math.max(0, current - 2) * 16}px)` // 16px ≈ largura + gap do dot
-                            }}
                             // style={{ transform: `translateX(${d.offset * dotSpacing}px)` }}
                             onClick={() => {
-                                setCurrent(realIndex)
+                                setCurrent(index)
                             }}
                         ></div>
-
                     )
-                })}
+                    )}
+                </div>
             </div>
 
         </div>
