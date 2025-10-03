@@ -107,9 +107,7 @@ import clsx from "clsx"
 import { useAuth } from "../hooks/useAuth"
 
 import { Swiper, SwiperSlide } from "swiper/react"
-import { Pagination } from "swiper/modules"
 import "swiper/css"
-import "swiper/css/pagination"
 
 function Carrossel({ items }) {
   const { baseURL } = useAuth()
@@ -134,20 +132,17 @@ function Carrossel({ items }) {
   }
   start = Math.max(0, start)
 
-  // ajusta offset para centralizar o bullet ativo
-  const bulletOffset = Math.max(0, (current - half) * dotGap)
+  const visibleDots = items.slice(start, start + maxVisibleDots)
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
       {/* Slides */}
       <Swiper
-        modules={[Pagination]}
         loop={true}
         slidesPerView={1}
         spaceBetween={0}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onSlideChange={(swiper) => setCurrent(swiper.realIndex)}
-        pagination={{ clickable: false }}
       >
         {items.map((item, index) => (
           <SwiperSlide key={item.id ?? index}>
@@ -182,23 +177,22 @@ function Carrossel({ items }) {
         />
       </div>
 
-      {/* Dots limitados a 5 e centralizando ativo */}
+      {/* Dots customizados limitados a 5 */}
       <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
         <div
           className="flex transition-transform duration-300 ease-in-out"
-          style={{ transform: `translateX(-${bulletOffset}px)` }}
+          style={{ transform: `translateX(-${start * dotGap}px)` }}
         >
-          {items.map((_, index) => {
-            // mostra apenas bullets visíveis
-            if (index < start || index >= start + maxVisibleDots) return null
+          {visibleDots.map((_, index) => {
+            const realIndex = start + index
             return (
               <div
-                key={index}
+                key={realIndex}
                 className={clsx(
                   "rounded-full w-2 h-2 transition-transform duration-300 cursor-pointer mx-1",
-                  current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
+                  current === realIndex ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
                 )}
-                onClick={() => swiperRef.current?.slideToLoop(index)}
+                onClick={() => swiperRef.current?.slideToLoop(realIndex)}
               />
             )
           })}
@@ -209,4 +203,3 @@ function Carrossel({ items }) {
 }
 
 export default Carrossel
-
