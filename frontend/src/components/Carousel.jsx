@@ -86,7 +86,6 @@
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Button from "./Button"
-// import { useAuth } from "../hooks/useAuth"
 import clsx from "clsx"
 
 function Carrossel({ items, baseURL = "" }) {
@@ -159,8 +158,7 @@ function Carrossel({ items, baseURL = "" }) {
     return { start, end, offset }
   }
 
-  const { start, end, offset } = getVisibleDots()
-  const visibleDots = items.slice(start, end)
+  const { offset } = getVisibleDots()
 
   return (
     <div className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg">
@@ -176,9 +174,11 @@ function Carrossel({ items, baseURL = "" }) {
         {extendedItems.map((item, index) => (
           <div
             key={`${item.id ?? index}-${index}`}
-            className="w-full max-h-58 flex-shrink-0
-                       landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100
-                       portrait:sm:max-h-90"
+            className={clsx(
+              "w-full max-h-58 flex-shrink-0",
+              "landscape:sm:max-h-55 landscape:lg:max-h-70 landscape:xl:max-h-100",
+              "portrait:sm:max-h-90"
+            )}
           >
             {item ? (
               <img
@@ -212,27 +212,29 @@ function Carrossel({ items, baseURL = "" }) {
 
       {/* Dots - exibe apenas 5 por vez com deslizamento */}
       {items.length > 1 && (
-        <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
-          <div
-            className="flex gap-3 transition-transform duration-300 ease-in-out"
-            style={{ transform: `translateX(-${offset}px)` }}
-          >
-            {items.map((item, index) => (
-              <div
-                key={item.id ?? index}
-                className={clsx(
-                  "rounded-full w-1 h-1 transition-all duration-400 cursor-pointer flex-shrink-0",
-                  "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
-                  "portrait:sm:w-2 portrait:sm:h-2",
-                  current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
-                )}
-                onClick={() => {
-                  if (isTransitioning) return
-                  setCurrent(index)
-                  setDisplayIndex(startIndex + index)
-                }}
-              />
-            ))}
+        <div className="absolute w-full bottom-[-5px] py-4 flex justify-center">
+          <div className="relative w-20 overflow-hidden">
+            <div
+              className="flex gap-3 transition-transform duration-300 ease-in-out absolute left-1/2"
+              style={{ transform: `translateX(calc(-50% - ${offset}px))` }}
+            >
+              {items.map((item, index) => (
+                <div
+                  key={item.id ?? index}
+                  className={clsx(
+                    "rounded-full w-1 h-1 transition-all duration-400 cursor-pointer flex-shrink-0",
+                    "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
+                    "portrait:sm:w-2 portrait:sm:h-2",
+                    current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
+                  )}
+                  onClick={() => {
+                    if (isTransitioning) return
+                    setCurrent(index)
+                    setDisplayIndex(startIndex + index)
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -241,4 +243,3 @@ function Carrossel({ items, baseURL = "" }) {
 }
 
 export default Carrossel
-
