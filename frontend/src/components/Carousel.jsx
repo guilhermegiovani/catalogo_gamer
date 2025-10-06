@@ -85,12 +85,9 @@
 
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import Button from "./Button"
 import clsx from "clsx"
-import { useAuth } from "../hooks/useAuth"
 
-function Carrossel({ items }) {
-  const { baseURL } = useAuth()
+function Carrossel({ items, baseURL = "" }) {
   const [current, setCurrent] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
@@ -137,25 +134,30 @@ function Carrossel({ items }) {
 
   const getVisibleDots = () => {
     if (totalDots <= maxVisibleDots) {
-      return { start: 0, end: totalDots }
+      return { start: 0, end: totalDots, offset: 0 }
     }
 
     const halfVisible = Math.floor(maxVisibleDots / 2)
     let start = current - halfVisible
     let end = current + halfVisible + 1
+    let offset = 0
 
     if (start < 0) {
       start = 0
       end = maxVisibleDots
+      offset = 0
     } else if (end > totalDots) {
       end = totalDots
       start = totalDots - maxVisibleDots
+      offset = (start) * 16 // 16px = gap (12px) + dot width (4px ajustado)
+    } else {
+      offset = start * 16
     }
 
-    return { start, end }
+    return { start, end, offset }
   }
 
-  const { start, end } = getVisibleDots()
+  const { start, end, offset } = getVisibleDots()
   const visibleDots = items.slice(start, end)
 
   return (
@@ -190,46 +192,51 @@ function Carrossel({ items }) {
       </div>
 
       {/* Setas */}
-      <div className="absolute inset-0 pointer-events-none">
-        <Button
-          text={<ChevronLeft className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
-          className="pointer-events-auto absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 text-white p-1 lg:p-2 rounded-full cursor-pointer z-30 hover:scale-[1.08] landscape:md:p-1.5 aspect-square flex items-center justify-center"
-          handleClick={prevSlide}
-        />
-        <Button
-          text={<ChevronRight className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
-          className="pointer-events-auto absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 text-white p-1 lg:p-2 rounded-full cursor-pointer z-30 hover:scale-[1.08] landscape:md:p-1.5 aspect-square flex items-center justify-center"
-          handleClick={nextSlide}
-        />
-      </div>
+      {items.length > 1 && (
+        <div className="absolute inset-0 pointer-events-none">
+          <Button
+            text={<ChevronLeft className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
+            className="pointer-events-auto absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 text-white p-1 lg:p-2 rounded-full cursor-pointer z-30 hover:scale-[1.08] landscape:md:p-1.5 aspect-square flex items-center justify-center"
+            handleClick={prevSlide}
+          />
 
-      {/* Dots - exibe apenas 5 por vez */}
-      <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
-        <div className="flex gap-3 transition-all duration-300 ease-in-out">
-          {visibleDots.map((item, index) => {
-            const realIndex = start + index
-            return (
+          <Button
+            text={<ChevronRight className="w-4 h-4 landscape:md:h-5 landscape:md:w-5 landscape:xl:h-7 landscape:xl:w-7 portrait:sm:h-6 portrait:sm:w-6" />}
+            className="pointer-events-auto absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 text-white p-1 lg:p-2 rounded-full cursor-pointer z-30 hover:scale-[1.08] landscape:md:p-1.5 aspect-square flex items-center justify-center"
+            handleClick={nextSlide}
+          />
+        </div>
+      )}
+
+      {/* Dots - exibe apenas 5 por vez com deslizamento */}
+      {items.length > 1 && (
+        <div className="absolute w-full bottom-[-5px] py-4 flex justify-center overflow-hidden">
+          <div
+            className="flex gap-3 transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(-${offset}px)` }}
+          >
+            {items.map((item, index) => (
               <div
-                key={item.id ?? realIndex}
+                key={item.id ?? index}
                 className={clsx(
-                  "rounded-full w-1 h-1 transition-all duration-400 cursor-pointer",
+                  "rounded-full w-1 h-1 transition-all duration-400 cursor-pointer flex-shrink-0",
                   "landscape:md:w-1.5 landscape:md:h-1.5 landscape:xl:w-2 landscape:xl:h-2",
                   "portrait:sm:w-2 portrait:sm:h-2",
-                  current === realIndex ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
+                  current === index ? "bg-white scale-125" : "bg-gray-500 hover:scale-110"
                 )}
                 onClick={() => {
-                  setCurrent(realIndex)
-                  setDisplayIndex(startIndex + realIndex)
+                  if (isTransitioning) return
+                  setCurrent(index)
+                  setDisplayIndex(startIndex + index)
                 }}
               />
-            )
-          })}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
 
 export default Carrossel
-
 
