@@ -85,6 +85,8 @@
 
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import Button from "./Button"
+// import { useAuth } from "../hooks/useAuth"
 import clsx from "clsx"
 
 function Carrossel({ items, baseURL = "" }) {
