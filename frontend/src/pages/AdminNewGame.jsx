@@ -213,7 +213,7 @@ function AdminNewGame() {
                 />
 
                 <Input
-                    textLabel="Imagem do jogo (retrato) - max:2.5 MB:"
+                    textLabel="Imagem do jogo (retrato) - max: 2.5 MB:"
                     classNameLabel={clsx(
                         "w-full px-4 py-2 rounded-md bg-[#2a264f] text-white text-center cursor-pointer",
                         "hover:bg-[#3a3360] transition-all duration-200",
@@ -252,7 +252,7 @@ function AdminNewGame() {
                 )}
 
                 <Input
-                    textLabel="Imagem do jogo (paisagem) - max:2.5 MB :"
+                    textLabel="Imagem do jogo (paisagem) - max: 2.5 MB :"
                     classNameLabel={clsx(
                         "w-full px-4 py-2 rounded-md bg-[#2a264f] text-white text-center cursor-pointer",
                         "hover:bg-[#3a3360] transition-all duration-200",
