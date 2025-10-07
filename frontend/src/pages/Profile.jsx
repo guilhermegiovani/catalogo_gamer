@@ -156,7 +156,7 @@ function Profile() {
                             <div className="w-24 h-32 bg-gray-700 rounded-lg"></div> */}
                             {favUser.map((fav) => (
                                 <div key={fav.id} className="w-20 sm:w-24 lg:w-30 bg-gray-700 rounded-lg">
-                                    <Link to={`/reviews/${fav.id}`}>
+                                    <Link to={`/games/${fav.slug}/reviews`}>
                                         <img
                                             className="hover:scale-[1.04] cursor-pointer transition duration-400 object-cover"
                                             src={baseURL + fav.img_portrait}
