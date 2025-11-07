@@ -265,3 +265,10 @@ Durante o desenvolvimento deste projeto, pratiquei:
 - Deploy completo com **Vercel** e **Neon.tech**;
 - Configuração de ambientes distintos (**MySQL local** e **PostgreSQL em produção**);
 - Estilização responsiva e componentização com **Tailwind CSS**.
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **[Guilherme Giovani](https://github.com/guilhermegiovani).**  
+Projeto criado com o objetivo de praticar e demonstrar habilidades em **React**, **Node.js**, **Express**, **TailwindCSS**, **MySQL** e **PostgreSQL (Neon.tech)**.
