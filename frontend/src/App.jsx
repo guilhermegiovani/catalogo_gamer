@@ -3,6 +3,7 @@ import './App.css'
 import NavBar from "./components/NavBar"
 import clsx from "clsx"
 import { Toaster } from "react-hot-toast"
+import Footer from "./components/Footer"
 
 function App() {
 
@@ -33,8 +34,8 @@ function App() {
         "bg-[#0f0f2b]",
         "px-4 sm:px-6 lg:px-10",
         "py-6",
-        "md:shadow-lg border border-[#2d2d5f]",
-        "flex flex-col gap-10"
+        "md:shadow-lg border-t border-l border-r border-[#2d2d5f]",
+        "flex flex-col gap-10" // border-t border-l border-r
       )}>
 
         {/* Conteúdo da Página aqui */}
@@ -84,7 +85,10 @@ function App() {
             },
           }}
         />
+
+        
       </section>
+        <Footer />
 
       {/* Detalhes geométricos */}
       {/* <div className={clsx(
