@@ -13,6 +13,7 @@ import utc from "dayjs/plugin/utc.js"
 import timezone from "dayjs/plugin/timezone.js"
 import crypto from "crypto"
 import { resend } from '../utils/resend.js'
+import { createUserControllers } from '../modules/users/usersControllers.js'
 
 const router = express.Router()
 router.use(express.json())
@@ -20,61 +21,63 @@ router.use(express.json())
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-router.post('/', async (req, res) => {
-    const { name, email, password } = req.body
+// router.post('/', async (req, res) => {
+//     const { name, email, password } = req.body
 
-    if (!name || !email || !password) {
-        return res.status(400).json({ erro: "Preencha todos os campos!" })
-    }
+//     if (!name || !email || !password) {
+//         return res.status(400).json({ erro: "Preencha todos os campos!" })
+//     }
 
-    const senhaCripto = await bcrypt.hash(password, 10)
+//     const senhaCripto = await bcrypt.hash(password, 10)
 
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const emailSanitizado = email.trim().toLowerCase()
+//     const emailSanitizado = email.trim().toLowerCase()
 
-    if (!regexEmail.test(email)) {
-        return res.status(400).json({ erro: "Email inválido" })
-    }
+//     if (!regexEmail.test(email)) {
+//         return res.status(400).json({ erro: "Email inválido" })
+//     }
 
-    const results = await queryDB("SELECT * FROM users WHERE email = ?;", [email])
+//     const results = await queryDB("SELECT * FROM users WHERE email = ?;", [email])
 
-    if (results.length > 0) return res.status(409).json({ erro: "Email já existe!" })
+//     if (results.length > 0) return res.status(409).json({ erro: "Email já existe!" })
 
-    // const resInsert = 
-    await queryDB("insert into users(name, email, password) values (?, ?, ?);",
-        [name, emailSanitizado, senhaCripto]
-    )
+//     // const resInsert = 
+//     await queryDB("insert into users(name, email, password) values (?, ?, ?);",
+//         [name, emailSanitizado, senhaCripto]
+//     )
 
-    // const newUser = {
-    //     name: resInsert.name,
-    //     email: resInsert.emailSanitizado,
-    //     password: resInsert.password
-    // }
+//     // const newUser = {
+//     //     name: resInsert.name,
+//     //     email: resInsert.emailSanitizado,
+//     //     password: resInsert.password
+//     // }
 
-    const infoUser = await queryDB("select * from users where email = ?;", [emailSanitizado])
+//     const infoUser = await queryDB("select * from users where email = ?;", [emailSanitizado])
 
-    const formattedDate = infoUser.map(user => {
-        const format = (dateString) => {
-            if (!dateString) return null
-            return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
-        }
+//     const formattedDate = infoUser.map(user => {
+//         const format = (dateString) => {
+//             if (!dateString) return null
+//             return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+//         }
 
-        return {
-            ...user,
-            created_account: format(user.created_account)
-        }
+//         return {
+//             ...user,
+//             created_account: format(user.created_account)
+//         }
 
-    })
+//     })
 
-    // console.log(formattedDate)
+//     // console.log(formattedDate)
 
-    return res.status(201).json({ message: "Usuário criado com sucesso!", newUser: formattedDate })
-    // id: newUserId
+//     return res.status(201).json({ message: "Usuário criado com sucesso!", newUser: formattedDate })
+//     // id: newUserId
 
-})
+// })
 
 // authMiddleware
+router.post('/', createUserControllers)
+
 router.get('/', async (req, res) => {
     const results = await queryDB("select * from users;")
 

@@ -56,7 +56,7 @@ server.use("/favicon.png", express.static(path.join("caminho/do/frontend", "vite
 console.log("Banco pronto pra usar!")
 
 server.get('/', (req, res) => {
-  return res.json({ "message": "JSON Funcionou!" })
+  return res.json({ message: "JSON Funcionou!" })
 })
 
 const __filename = fileURLToPath(import.meta.url)

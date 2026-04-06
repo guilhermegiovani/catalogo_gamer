@@ -25,7 +25,7 @@ const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
 export const upload = multer({ storage })
 
 // Criar jogo
-router.post('/', authMiddleware, adminMiddleware, upload.fields([
+router.post('/', upload.fields([
     { name: "img-portrait", maxCount: 1 },
     { name: "img-landscape", maxCount: 1 }
 ]), createGameController)

@@ -1,3 +1,4 @@
+import { AppError } from "../../utils/AppError.js"
 import handleUpload from "../../utils/uploadHander.js"
 import * as repository from "./gamesRepository.js"
 import slugify from "slugify"
@@ -6,13 +7,13 @@ export const createGameService = async (data, files) => {
     const { title, description, genre, platform, studio } = data
 
     if (!title || !description || !genre || !platform || !studio) {
-        throw new Error("Fill in all the fields!")
+        throw new Error("Fill in all the fields!", 400)
     }
 
     const results = await repository.findGameByTitle(title)
 
-    if (results.length > 0) {
-        throw new Error("The game already exists!")
+    if (results) {
+        throw new Error("The game already exists!", 409)
     }
 
     const slug = slugify(title, { lower: true, strict: true })
@@ -69,11 +70,11 @@ export const findGamesService = async (query) => {
     const limitNumber = Number(limit)
 
     if (Number.isNaN(limitNumber) || limitNumber <= 0 || limitNumber > 9999) {
-        throw new Error("Invalid limit!")
+        throw new AppError("Invalid limit!", 400)
     }
 
     if (Number.isNaN(pageNumber) || pageNumber <= 0 || pageNumber > 999) {
-        throw new Error("Invalid page!")
+        throw new Error("Invalid page!", 400)
     }
 
     const offset = (pageNumber - 1) * limitNumber
@@ -94,7 +95,7 @@ export const findGamesByIdService = async (id) => {
     const results = await repository.findGamesById(id)
 
     if (!results) {
-        throw new Error("Game not found!")
+        throw new Error("Game not found!", 404)
     }
 
     return results
@@ -104,7 +105,7 @@ export const findGamesBySlugService = async (slug) => {
     const results = await repository.findGamesBySlug(slug)
 
     if (!results) {
-        throw new Error("Game not found!")
+        throw new Error("Game not found!", 404)
     }
 
     return results
@@ -115,7 +116,7 @@ export const deleteGameService = async (id) => {
     let gameDeleted
 
     if (!gameExists) {
-        throw new Error("Game not found!")
+        throw new Error("Game not found!", 404)
     } else {
         gameDeleted = await repository.deleteGame(id)
     }
@@ -127,16 +128,16 @@ export const updateGameService = async (id, body) => {
     const gameExists = await repository.findGamesById(id)
 
     if (!gameExists) {
-        throw new Error("Game not found!")
+        throw new Error("Game not found!", 404)
     }
 
     if (Object.keys(body).length === 0) {
-        throw new Error("No fields to update!")
+        throw new Error("No fields to update!", 400)
     }
 
     for (const [key, value] of Object.entries(body)) {
         if (value.trim() === "") {
-            throw new Error("One of the fields is empty!")
+            throw new Error("One of the fields is empty!", 400)
         }
     }
 

@@ -1,55 +1,56 @@
 import slugify from "slugify"
 import { queryDB } from "../../utils/dbQuery.js"
 
-export const findGameByTitle = async (title) => {
-    const results = await queryDB("select * from games where title = ?", [title])
-
-    return results
-}
 
 export const createGame = async (title, description, genre, platform, studio, slug) => {
     const results = await queryDB("insert into games(title, description, genre, platform, studio, slug) values (?, ?, ?, ?, ?, ?)", [title, description, genre, platform, studio, slug]);
-
+    
     return results[0].id
 }
 
 export const findGames = async (limit, offset, search) => {
     const conditionsFilter = []
     const conditionsPagination = []
-
+    
     const valuesFilter = []
     const valuesPagination = []
-
+    
     if(search) {
         conditionsFilter.push("where title like ?")
-
+        
         valuesFilter.push(`%${search}%`)
     }
-
+    
     conditionsPagination.push("limit ?", "offset ?")
     valuesPagination.push(limit, offset)
-
+    
     const games = await queryDB(
         `select * from games ${conditionsFilter.join(" ")} ${conditionsPagination.join(" ")}`,
         [...valuesFilter, ...valuesPagination]
     )
-
+    
     const count = await queryDB(`select count(*) as total from games ${conditionsFilter.join(" ")}`, valuesFilter)
     
     const total = count[0].total
-
+    
     return {
         games,
         total
     }
-
+    
 }
 
 export const findGamesById = async (id) => {
     const game = await queryDB("select * from games where id = ?", [id])
-
+    
     return game[0]
+    
+}
 
+export const findGameByTitle = async (title) => {
+    const results = await queryDB("select * from games where title = ?", [title])
+
+    return results[0]
 }
 
 export const findGamesBySlug = async (slug) => {
@@ -96,7 +97,6 @@ export const updateGame = async (id, body) => {
 }
 
 export const updateGameImages = async (id, images) => {
-    // IMG ESTÀ SENDO OBRIGATORIO, MUDAR ISSO
     const values = [images.portrait, images.landscape, id]
 
     const imagesGame = await queryDB("update games set img_portrait = ?, img_landscape = ? WHERE id = ?", values)

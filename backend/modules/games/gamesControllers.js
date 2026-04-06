@@ -11,14 +11,10 @@ const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
 
 export const upload = multer({ storage })
 
-// upload.fields([
-//     { name: "img-portrait", maxCount: 1 },
-//     { name: "img-landscape", maxCount: 1 }
-// ])
-
 export const createGameController = async (req, res) => {
     try {
-        const { body, files } = req
+        const { body } = req
+        const files = req.files || {}
 
         const portrait = files["img-portrait"]?.[0]
         const landscape = files["img-landscape"]?.[0]
@@ -32,7 +28,9 @@ export const createGameController = async (req, res) => {
 
         return res.status(201).json(result)
     } catch (err) {
-        return res.status(400).json({ error: err.message })
+        return res.status(err.statusCode || 500).json({
+            error: err.message
+        })
     }
 }
 
@@ -42,7 +40,9 @@ export const findGamesController = async (req, res) => {
 
         return res.status(201).json(result)
     } catch (err) {
-        return res.status(400).json({ error: err.message })
+        return res.status(err.statusCode || 500).json({
+            error: err.message
+        })
     }
 }
 
@@ -52,7 +52,9 @@ export const findGamesByIdController = async (req, res) => {
 
         return res.status(200).json({ data: result })
     } catch (err) {
-        return res.status(404).json({ error: err.message })
+        return res.status(err.statusCode || 500).json({
+            error: err.message
+        })
     }
 }
 
@@ -62,7 +64,9 @@ export const findGamesBySlugController = async (req, res) => {
 
         return res.status(200).json({ data: result })
     } catch (err) {
-        return res.status(404).json({ error: err.message })
+        return res.status(err.statusCode || 500).json({
+            error: err.message
+        })
     }
 }
 
@@ -73,7 +77,9 @@ export const deleteGameController = async (req, res) => {
 
         return res.status(200).json({ message: "Game deleted successfully" })
     } catch (err) {
-        return res.status(404).json({ error: err.message })
+        return res.status(err.statusCode || 500).json({
+            error: err.message
+        })
     }
 }
 
@@ -83,8 +89,8 @@ export const updateGameController = async (req, res) => {
 
         return res.status(200).json({ data: results, message: "Game updated successfully" })
     } catch (err) {
-        return res.status(404).json({ error: err.message })
+        return res.status(err.statusCode || 500).json({
+            error: err.message
+        })
     }
 }
-
-export const updateImagesGame = async (req, res) => { }
