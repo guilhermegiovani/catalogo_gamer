@@ -2,14 +2,14 @@
 import multer from "multer"
 import { createGameService, deleteGameService, findGamesByIdService, findGamesBySlugService, findGamesService, updateGameService } from "./gamesService.js"
 
-const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
-    destination: "uploads/",
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.originalname)
-    }
-}) : multerter.memoryStorage()
+// const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
+//     destination: "uploads/",
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + "-" + file.originalname)
+//     }
+// }) : multerter.memoryStorage()
 
-export const upload = multer({ storage })
+// export const upload = multer({ storage })
 
 export const createGameController = async (req, res) => {
     try {
@@ -38,7 +38,7 @@ export const findGamesController = async (req, res) => {
     try {
         const result = await findGamesService(req.query)
 
-        return res.status(201).json(result)
+        return res.status(201).json({ data: result })
     } catch (err) {
         return res.status(err.statusCode || 500).json({
             error: err.message

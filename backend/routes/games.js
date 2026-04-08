@@ -30,6 +30,9 @@ router.post('/', upload.fields([
     { name: "img-landscape", maxCount: 1 }
 ]), createGameController)
 
+// Pegar todos os jogos
+router.get("/", findGamesController)
+
 // Pesquisar jogo
 router.get("/search", async (req, res) => {
     const conditions = []
@@ -60,20 +63,17 @@ router.get("/search", async (req, res) => {
 
 })
 
-// Pegar todos os jogos
-router.get("/", findGamesController)
-
 // Pegar jogo por ID
 router.get("/:id", findGamesByIdController)
 
 // Pegar reviews do jogo específico
 router.get('/:slug/reviews', findGamesBySlugController)
 
-// Deletar Jogo
-router.delete("/:id", authMiddleware, adminMiddleware, deleteGameController)
-
 // Atualizar Jogo
 router.patch("/:id", authMiddleware, adminMiddleware, updateGameController)
+
+// Deletar Jogo
+router.delete("/:id", authMiddleware, adminMiddleware, deleteGameController)
 
 
 export default router

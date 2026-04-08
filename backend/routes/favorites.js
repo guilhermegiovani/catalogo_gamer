@@ -12,9 +12,6 @@ router.post('/', async (req, res) => {
     const { gameId } = req.body
     const userId = req.userId
 
-    // console.log(`Game id: ${gameId}`)
-    // console.log(`User id: ${userId}`)
-
     const checkGameId = await queryDB("select * from games where id = ?", [gameId])
 
     if (checkGameId.length === 0) return res.status(404).json({ erro: "Jogo não existe!" })
