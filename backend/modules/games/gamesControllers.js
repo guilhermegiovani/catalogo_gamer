@@ -38,7 +38,7 @@ export const findGamesController = async (req, res) => {
     try {
         const result = await findGamesService(req.query)
 
-        return res.status(201).json({ data: result })
+        return res.status(201).json(result)
     } catch (err) {
         return res.status(err.statusCode || 500).json({
             error: err.message

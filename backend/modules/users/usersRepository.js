@@ -23,7 +23,7 @@ export const findUserByEmail = async (email) => {
 export const findUserById = async (id) => {
     const user = await queryDB("select * from users where id = ?;", [id])
 
-    return user
+    return user[0]
 }
 
 export const deleteUser = async (id) => {

@@ -1,4 +1,4 @@
-import { getGamesAverageRatingsService, createReviewsService, reactReviewService, updateReviewService, findReviewByUserService, getReviewReactionsSummaryService } from "./reviewsService.js"
+import { getGamesAverageRatingsService, createReviewsService, reactReviewService, updateReviewService, findReviewByUserService, getReviewReactionsSummaryService, deleteReviewService, getGameAverageRatingsByIdService } from "./reviewsService.js"
 
 export const createReviewsControllers = async (req, res) => {
     try {
@@ -66,7 +66,7 @@ export const getGamesAverageRatingsController = async (req, res) => {
     }
 }
 
-export const getGameAverageRatingsByIdController = async () => {
+export const getGameAverageRatingsByIdController = async (req, res) => {
     try {
         const { id } = req.params
         const result = await getGameAverageRatingsByIdService(id)

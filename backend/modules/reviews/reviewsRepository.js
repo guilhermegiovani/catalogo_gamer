@@ -39,8 +39,11 @@ export const updateReaction = async (rId, uId, reaction) => {
 
 export const getReviewReactionsSummary = async (rId) => {
     const countReactions = await queryDB(
-        "SELECT COUNT(*) FILTER(WHERE reaction = 'like') AS likes, COUNT(*) FILTER(WHERE reaction = 'dislike') AS dislikes FROM review_reactions WHERE review_id = ?;", [rId]
+        "SELECT COUNT(CASE WHEN reaction = 'like' THEN 1 END) AS likes, COUNT(CASE WHEN reaction = 'dislike' THEN 1 END) AS dislikes FROM review_reactions WHERE review_id = ?", [rId]
     )
+    // const countReactions = await queryDB(
+    //     "SELECT COUNT(*) FILTER(WHERE reaction = 'like') AS likes, COUNT(*) FILTER(WHERE reaction = 'dislike') AS dislikes FROM review_reactions WHERE review_id = ?;", [rId]
+    // ) POSTGRES
 
     return countReactions[0]
 }
@@ -79,14 +82,14 @@ export const getGamesAverageRatings = async () => {
 }
 
 export const getGameAverageRatingsById = async (gameId) => {
-    const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where games_id = ?;", [gameId])
+    const resultsAvgCount = await queryDB("select avg(rating) as avgGrade, count(*) as totReviews from reviews where game_id = ?;", [gameId])
 
     return resultsAvgCount[0]
 }
 
 export const findReviewByUser = async (uId) => {
     const results = await queryDB(
-        "select r.id, r.game_id, r.user_id, g.title, r.rating, r.comment, review_date from reviews as r join games as g on r.game_id = g.id where r.user_id = ?;",
+        "select r.id, r.game_id, r.user_id, g.title, r.rating, r.comment, review_date, edit_date from reviews as r join games as g on r.game_id = g.id where r.user_id = ?;",
         [uId]
     )
 

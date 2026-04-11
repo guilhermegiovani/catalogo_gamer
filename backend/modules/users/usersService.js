@@ -43,7 +43,7 @@ export const createUserService = async (body) => {
 
     return {
         ...infoUser,
-        created_account: format(infoUser.created_account)
+        created_at: format(infoUser.created_at)
     }
 
 }
@@ -61,7 +61,7 @@ export const findUserByIdService = async (uId) => {
 
     if (!user) throw new AppError("User not found!", 404)
 
-    const formattedDate = user.map(u => {
+    const formatDate = (u) => {
         const date = new Date(u.created_account)
 
         const day = String(date.getDate()).padStart(2, '0')
@@ -76,7 +76,9 @@ export const findUserByIdService = async (uId) => {
             created_account: `${day}/${month}/${year} ${hours}:${minutes}`
         }
 
-    })
+    }
+
+    const formattedDate = formatDate(user)
 
     return formattedDate
 }
@@ -190,18 +192,18 @@ export const updateUserService = async (body, file, uId) => {
 
     const getUserData = await repository.findUserById(uId)
 
-    const formattedDate = getUserData.map(user => {
-        const format = (dateString) => {
-            if (!dateString) return null
-            return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
-        }
+    // const formattedDate = getUserData.map(user => {
+        
+        
+    // })
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
+    return {
+        ...getUserData,
+        created_at: format(getUserData.created_at)
+    }
 
-        return {
-            ...user,
-            created_account: format(user.created_account)
-        }
-
-    })
-
-    return formattedDate
+    // return formattedDate
 }

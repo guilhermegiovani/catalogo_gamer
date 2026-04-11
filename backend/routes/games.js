@@ -25,43 +25,43 @@ const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
 export const upload = multer({ storage })
 
 // Criar jogo
-router.post('/', upload.fields([
+router.post('/', authMiddleware, adminMiddleware, upload.fields([
     { name: "img-portrait", maxCount: 1 },
     { name: "img-landscape", maxCount: 1 }
 ]), createGameController)
 
-// Pegar todos os jogos
+// Pegar/pesquisar todos os jogos
 router.get("/", findGamesController)
 
 // Pesquisar jogo
-router.get("/search", async (req, res) => {
-    const conditions = []
-    const values = []
+// router.get("/search", async (req, res) => {
+//     const conditions = []
+//     const values = []
 
-    for (const [cond, value] of Object.entries(req.query)) {
+//     for (const [cond, value] of Object.entries(req.query)) {
 
-        if (value !== undefined && value !== '') {
+//         if (value !== undefined && value !== '') {
 
-            if (cond === 'title') {
-                conditions.push('lower(title) LIKE lower(?)')
-                values.push(`%${value}%`)
-            } else {
-                conditions.push(`lower(${cond}) = lower(?)`)
-                values.push(value)
-            }
+//             if (cond === 'title') {
+//                 conditions.push('lower(title) LIKE lower(?)')
+//                 values.push(`%${value}%`)
+//             } else {
+//                 conditions.push(`lower(${cond}) = lower(?)`)
+//                 values.push(value)
+//             }
 
-        }
+//         }
 
-    }
+//     }
 
-    const whereSQL = conditions.length > 0 ? `where ${conditions.join(' and ')}` : ''
-    const query = `select * from games ${whereSQL};`
+//     const whereSQL = conditions.length > 0 ? `where ${conditions.join(' and ')}` : ''
+//     const query = `select * from games ${whereSQL};`
 
-    const results = await queryDB(query, values)
+//     const results = await queryDB(query, values)
 
-    return res.status(200).json(results)
+//     return res.status(200).json(results)
 
-})
+// })
 
 // Pegar jogo por ID
 router.get("/:id", findGamesByIdController)

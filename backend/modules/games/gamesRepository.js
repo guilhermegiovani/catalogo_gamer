@@ -4,47 +4,59 @@ import { queryDB } from "../../utils/dbQuery.js"
 
 export const createGame = async (title, description, genre, platform, studio, slug) => {
     const results = await queryDB("insert into games(title, description, genre, platform, studio, slug) values (?, ?, ?, ?, ?, ?)", [title, description, genre, platform, studio, slug]);
-    
+
     return results[0].id
 }
 
 export const findGames = async (limit, offset, search) => {
     const conditionsFilter = []
     const conditionsPagination = []
-    
+
     const valuesFilter = []
     const valuesPagination = []
-    
-    if(search) {
-        conditionsFilter.push("where title like ?")
-        
+
+    if (search) {
+        conditionsFilter.push("LOWER(title) like LOWER(?)")
+
         valuesFilter.push(`%${search}%`)
     }
-    
+
+    let query = "select * from games"
+    if (conditionsFilter.length > 0) {
+        query += " WHERE " + conditionsFilter.join(" AND ");
+    }
+
+    query += " LIMIT ? OFFSET ?"
+
     conditionsPagination.push("limit ?", "offset ?")
     valuesPagination.push(limit, offset)
-    
+
     const games = await queryDB(
-        `select * from games ${conditionsFilter.join(" ")} ${conditionsPagination.join(" ")}`,
+        query,
         [...valuesFilter, ...valuesPagination]
     )
-    
-    const count = await queryDB(`select count(*) as total from games ${conditionsFilter.join(" ")}`, valuesFilter)
-    
+
+    let countQuery = ""
+    if (conditionsFilter.length > 0) {
+        countQuery = " WHERE " + conditionsFilter[0];
+    }
+
+    const count = await queryDB(`select count(*) as total from games ${countQuery}`, valuesFilter)
+
     const total = count[0].total
-    
+
     return {
         games,
         total
     }
-    
+
 }
 
 export const findGamesById = async (id) => {
     const game = await queryDB("select * from games where id = ?", [id])
-    
+
     return game[0]
-    
+
 }
 
 export const findGameByTitle = async (title) => {
@@ -73,15 +85,15 @@ export const updateGame = async (id, body) => {
     let slug = null
 
     for (const [key, value] of Object.entries(body)) {
-        if(key === "title") {
-            slug = slugifyy(value, { lower: true, strict: true })
+        if (key === "title") {
+            slug = slugify(value, { lower: true, strict: true })
         }
 
         conditions.push(`${key} = ?`)
         values.push(value)
     }
 
-    if(slug) {
+    if (slug) {
         conditions.push("slug = ?")
         values.push(slug)
     }

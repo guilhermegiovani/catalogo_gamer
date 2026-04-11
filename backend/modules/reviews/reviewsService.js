@@ -26,7 +26,16 @@ export const createReviewsService = async (body, userId) => {
 
     const newReview = await repository.findReviewById(reviewId)
 
-    return newReview
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
+
+    return {
+        ...newReview,
+        review_date: format(newReview.review_date),
+        edit_date: format(newReview.edit_date),
+    }
 }
 
 export const reactReviewService = async (rId, uId, reaction) => {
@@ -34,7 +43,7 @@ export const reactReviewService = async (rId, uId, reaction) => {
         throw new AppError("Review id is required", 400)
     }
 
-    const review = await reviewsRepository.findReviewById(rId)
+    const review = await repository.findReviewById(rId)
     if (!review) throw new AppError("Review not found", 404)
 
     const existing = await repository.findReactionByReviewAndUser(rId, uId)
@@ -53,10 +62,10 @@ export const reactReviewService = async (rId, uId, reaction) => {
 
 export const getReviewReactionsSummaryService = async (rId) => {
     const reviewExists = await repository.findReviewById(rId)
-    if(!reviewExists) throw new AppError("Review not found!", 404)
+    if (!reviewExists) throw new AppError("Review not found!", 404)
 
     const reactions = await repository.getReviewReactionsSummary(rId)
-    if(!reactions) throw new AppError("Error in getting reactions from this review!", 400)
+    if (!reactions) throw new AppError("Error in getting reactions from this review!", 400)
 
     return reactions
 }
@@ -81,48 +90,60 @@ export const getGamesAverageRatingsService = async () => {
 export const getGameAverageRatingsByIdService = async (gameId) => {
     const avgCount = await repository.getGameAverageRatingsById(gameId)
 
-    if (resultsAvgCount.totReviews === 0) throw new AppError("Game not found!", 404)
+    if (avgCount.totReviews === 0) throw new AppError("Game not found!", 404)
 
-    let average = Number(resultsAvgCount.avgGrade)
+    let average = Number(avgCount.avgGrade)
 
     if (!isNaN(average)) {
-        resultsAvgCount.avgGrade = Number(average.toFixed(1))
+        avgCount.avgGrade = Number(average.toFixed(1))
     }
 
     return avgCount
 }
 
 export const findReviewByUserService = async (uId) => {
-    const results = await repository.findReviewByUser(uId)
+    const reviewsUser = await repository.findReviewByUser(uId)
 
-    if (results.length === 0) throw new AppError("This user hasn't rated any games yet!", 404)
-    //return res.status(404).json({ erro: "Este usuário ainda não avaliou nenhum jogo!" })
+    if (reviewsUser.length === 0) throw new AppError("This user hasn't rated any games yet!", 404)
 
-    const formattedDate = results.map(review => {
-        const date = new Date(review.review_date)
+    // const formattedDate = results.map(review => {
+    //     const date = new Date(review.review_date)
 
-        const day = String(date.getDate()).padStart(2, '0')
-        const month = String(date.getMonth() + 1).padStart(2, '0')
-        const year = date.getFullYear()
+    //     const day = String(date.getDate()).padStart(2, '0')
+    //     const month = String(date.getMonth() + 1).padStart(2, '0')
+    //     const year = date.getFullYear()
 
-        const hours = String(date.getHours()).padStart(2, '0')
-        const minutes = String(date.getMinutes()).padStart(2, '0')
+    //     const hours = String(date.getHours()).padStart(2, '0')
+    //     const minutes = String(date.getMinutes()).padStart(2, '0')
 
-        return {
-            ...review,
-            review_date: `${day}/${month}/${year} ${hours}:${minutes}`
-        }
+    //     return {
+    //         ...review,
+    //         review_date: `${day}/${month}/${year} ${hours}:${minutes}`
+    //     }
 
-    })
+    // })
 
-    return formattedDate
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
+
+    const formattedGames = reviewsUser.map((reviewUser) => ({
+        ...reviewUser,
+        review_date: format(reviewUser.review_date),
+        edit_date: format(reviewUser.edit_date)
+    }))
+
+    return formattedGames
 }
 
 export const deleteReviewService = async (reviewId, userId) => {
     const reviewExists = await repository.findReviewById(reviewId)
     if (!reviewExists) throw new AppError("Review not found!", 404)
 
-    if (reviewExists.user_id !== userId) throw new AppError("You are not allowed to delete this review!", 403)
+    console.log(`${reviewExists} / ${userId}`)
+
+    if (reviewExists.userId !== userId) throw new AppError("You are not allowed to delete this review!", 403)
 
     const deletedReview = await repository.deleteReview(reviewId, userId)
 
@@ -163,8 +184,8 @@ export const updateReviewService = async (reviewId, userId, body) => {
     // return updatedReview
     return {
         ...updatedReview,
-        edit_date: format(updatedReview.edit_date),
-        review_date: format(updatedReview.review_date)
+        edit_date: format(updatedReview.edit_date)
+        // review_date: format(updatedReview.review_date)
     }
 
 }

@@ -1,9 +1,4 @@
 import express from 'express'
-import {db} from '../db.js'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import dotenv from "dotenv"
-import { queryDB } from '../utils/dbQuery.js'
 import { loginControllers } from '../modules/login/loginControllers.js'
 
 // dotenv.config()

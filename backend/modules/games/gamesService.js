@@ -2,6 +2,12 @@ import { AppError } from "../../utils/AppError.js"
 import handleUpload from "../../utils/uploadHander.js"
 import * as repository from "./gamesRepository.js"
 import slugify from "slugify"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc.js"
+import timezone from "dayjs/plugin/timezone.js"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 export const createGameService = async (data, files) => {
     const { title, description, genre, platform, studio } = data
@@ -25,7 +31,7 @@ export const createGameService = async (data, files) => {
 
         let img_portrait = "https://res.cloudinary.com/dzeuzrko8/image/upload/v1774879523/padrao-portrait_eiltvn.png"
         let img_landscape = "https://res.cloudinary.com/dzeuzrko8/image/upload/v1774879475/padrao-landscape_n4emxf.png"
-    
+
         if (files.portrait) {
             img_portrait = await handleUpload(
                 files.portrait,
@@ -33,7 +39,7 @@ export const createGameService = async (data, files) => {
                 `game_portrait_${newGameId}`
             )
         }
-    
+
         if (files.landscape) {
             img_landscape = await handleUpload(
                 files.landscape,
@@ -41,7 +47,7 @@ export const createGameService = async (data, files) => {
                 `game_landscape_${newGameId}`
             )
         }
-    
+
         const images = {
             portrait: img_portrait,
             landscape: img_landscape
@@ -55,7 +61,17 @@ export const createGameService = async (data, files) => {
         }
         throw err
     }
-    
+
+
+    const game = await repository.findGamesById(newGameId)
+
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
+
+    game.created_at = format(updatedReview.created_at)
+
     return {
         message: "Game successfully registered!",
         id: newGameId
@@ -83,8 +99,20 @@ export const findGamesService = async (query) => {
     const games = results.games
     const total = results.total
 
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
+
+    const formattedGames = games.map((game) => ({
+        ...game,
+        created_at: format(game.created_at),
+        updated_at: format(game.updated_at)
+    }))
+
+
     return {
-        data: games,
+        data: formattedGames,
         page: pageNumber,
         limit: limitNumber,
         total
@@ -98,7 +126,16 @@ export const findGamesByIdService = async (id) => {
         throw new Error("Game not found!", 404)
     }
 
-    return results
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
+
+    return {
+        ...results,
+        created_at: format(results.created_at),
+        updated_at: format(results.updated_at)
+    }
 }
 
 export const findGamesBySlugService = async (slug) => {
@@ -108,7 +145,16 @@ export const findGamesBySlugService = async (slug) => {
         throw new Error("Game not found!", 404)
     }
 
-    return results
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
+
+    return {
+        ...results,
+        created_at: format(results.created_at),
+        updated_at: format(results.updated_at)
+    }
 }
 
 export const deleteGameService = async (id) => {
@@ -143,5 +189,14 @@ export const updateGameService = async (id, body) => {
 
     const updatedGame = await repository.updateGame(id, body)
 
-    return updatedGame
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
+
+    return {
+        ...updatedGame,
+        created_at: format(updatedGame.created_at),
+        updated_at: format(updatedGame.updated_at)
+    }
 }
