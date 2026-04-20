@@ -130,8 +130,10 @@ export const forgotPasswordService = async (body) => {
 
 export const resetPasswordService = async (body, token) => {
     const { newPassword, confNewPassword } = body
+    console.log(newPassword + "|" + confNewPassword)
 
     const userData = await repository.findUserByToken(token)
+    console.log("USER:" + userData)
     if (!userData) throw new AppError("Token invalid or expired.", 400)
 
     const userId = userData.id
@@ -143,6 +145,7 @@ export const resetPasswordService = async (body, token) => {
     if (newPassword !== confNewPassword) throw new AppError("The passwords don't match.", 400)
 
     const passwordCripto = await bcrypt.hash(newPassword, 10)
+    console.log("SENHA CRIPTO: " + passwordCripto)
 
     const updatePasswordUser = await repository.updatePassword(passwordCripto, userId)
 
