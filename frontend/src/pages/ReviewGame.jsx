@@ -87,14 +87,12 @@ function ReviewGame() {
             setUsers(usersData)
 
             const revId = res.data.reviews.map(r => r.id)
-            revId.map((r) => {
-                const userReact = reactionUserReview(r.id, userId)
-                //reactionsData[r].find(userR => String(userR.user_id) === String(userId))?.reaction
-                //console.log(userReact)
+            revId.map(async (rId) => {
+                const userReact = await reactionUserReview(rId)
 
                 setUserReactions(prev => ({
                     ...prev,
-                    [r]: userReact
+                    [rId]: userReact.data.reaction
                 }))
 
             })
@@ -102,8 +100,8 @@ function ReviewGame() {
             setReactions(reactionsCalc)
 
             const resAvg = await getReviewsAvgs()
-            const avgGame = resAvg.data.find(avg => avg.gameId === gameId)
-            console.log(avgGame)
+            // Produção = gameid / Desenvolvimento = gameId
+            const avgGame = resAvg.data.find(avg => avg.gameid === gameId)
             setAvgGame(avgGame)
             setIsLoadingGame(false)
         } catch (err) {

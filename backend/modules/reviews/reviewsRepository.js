@@ -98,8 +98,6 @@ export const getGamesAverageRatings = async () => {
         "select g.id as gameId, coalesce(avgs.avgGrade, 0) as rating, coalesce(avgs.totReviews, 0) as totReviews from games g left join (select game_id, avg(rating) as avgGrade, count(*) as totReviews from reviews group by game_id) avgs on g.id = avgs.game_id;"
     )
 
-    console.log(avgGames)
-
     return avgGames
 }
 
