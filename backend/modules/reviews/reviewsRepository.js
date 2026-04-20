@@ -68,8 +68,8 @@ export const findReactionByReviewAndUser = async (reviewId, userId) => {
 
 export const findReviewById = async (reviewId) => {
     const review = await queryDB(
-        `SELECT r.id, r.rating, r.comment, r.game_id AS "gameId",
-            u.id AS "userId", u.name, u.nickname AS nickname, r.review_date, r.edit_date
+        `SELECT r.id, r.rating, r.comment, r.game_id AS gameId,
+            u.id AS userId, u.name, u.nickname AS nickname, r.review_date, r.edit_date
      FROM reviews r
      JOIN users u ON r.user_id = u.id
      WHERE r.id = ?;`,

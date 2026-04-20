@@ -46,7 +46,7 @@ function AdminGame() {
 
     const game = gamesAdmin.find(game => game.id === Number(id))
 
-    const avgGame = averages.filter(avg => avg.gameId === Number(id))
+    const avgGame = averages.filter(avg => avg.gameid === Number(id))
 
     if (!isLoading && !game) {
         return <p>Jogo não encontrado</p>
