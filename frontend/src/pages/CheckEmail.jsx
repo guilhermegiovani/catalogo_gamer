@@ -16,6 +16,7 @@ function CheckEmail() {
     const userData = async (emailUser) => {
         try {
             const res = await getUsers()
+            console.log(res)
             const user = res.data.find((u) => u.email === emailUser)
             return user
         } catch (err) {
@@ -31,6 +32,7 @@ function CheckEmail() {
         }
 
         await checkEmailUser(email)
+        console.log("EMAIL:" + email)
 
         const user = await userData(email)
         console.log(user)
