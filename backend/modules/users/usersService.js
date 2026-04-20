@@ -99,7 +99,7 @@ export const forgotPasswordService = async (body) => {
 
     if (!user) throw new AppError("If there is an account associated with that email address, we will send instructions.", 200)
 
-    const userId = user[0].id
+    const userId = user.id
     const token = crypto.randomBytes(32).toString("hex")
     const expires = new Date(Date.now() + 1800 * 1000)
     const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
