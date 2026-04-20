@@ -148,6 +148,8 @@ export const updateReviewService = async (reviewId, userId, body) => {
     const reviewExists = await repository.findReviewById(reviewId)
     if (!reviewExists) throw new AppError("Review not found!", 404)
 
+    console.log(reviewExists)
+
     if (reviewExists.userId !== userId) throw new AppError("You are not allowed to update this review!", 403)
 
     const fieldMap = {
