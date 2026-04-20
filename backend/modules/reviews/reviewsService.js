@@ -92,6 +92,8 @@ export const getGamesAverageRatingsService = async () => {
         }
     })
 
+    console.log(formattedAvgsGames)
+
     return formattedAvgsGames
 }
 
