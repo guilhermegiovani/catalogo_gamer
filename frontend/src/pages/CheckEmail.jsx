@@ -33,6 +33,7 @@ function CheckEmail() {
         await checkEmailUser(email)
 
         const user = await userData(email)
+        console.log(user)
         setTokenResetPassword(user.reset_token)
 
         toast.success("Verifique seu email!", {
