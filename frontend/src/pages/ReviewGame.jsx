@@ -4,10 +4,11 @@ import { useAuth } from "../hooks/useAuth"
 import { Star, PencilIcon, Trash2Icon, ThumbsUp, ThumbsDown } from "lucide-react"
 import Button from "../components/Button"
 import { useEffect, useState } from "react"
-import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, likeReview, reactionsCalcReviews, reactionsReviews } from "../services/routes"
+import { dislikeReview, getGames, getReviewsAvgs, getReviewsByGame, getUser, likeReview, reactionsCalcReviews, reactionsReviews, reactionUserReview } from "../services/routes"
 import ReviewForm from "../components/ReviewForm"
 import toast from "react-hot-toast"
 import Modal from "../components/Modal"
+import dayjs from "dayjs"
 // import toast from "react-hot-toast"
 
 function ReviewGame() {
@@ -18,48 +19,78 @@ function ReviewGame() {
     const [reactions, setReactions] = useState({})
     const [reactionUser, setReactionUser] = useState({})
     const [userReactions, setUserReactions] = useState({})
-    // const [reviewsIds, setReviewsIds] = useState([])
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [revId, setRevId] = useState(0)
     const [revComment, setRevComment] = useState("")
+    const [users, setUsers] = useState({})
 
     // const gameId = Number(id)
+    // async function name() {
+    //     const res = await getReviewsByGame(slug)
+    //     console.log(res)
+
+    // }
+
+    // name()
+    const format = (dateString) => {
+        if (!dateString) return null
+        return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
+    }
 
     const fetchReviews = async () => {
         if (!slug) return
+        // const resAvg = await getReviewsAvgs()
+        // console.log(resAvg)
         try {
             const resGame = await getGames()
-            setGames(resGame.data)
-            console.log(slug)
+            const gamesList = resGame.data.formattedGames
+            setGames(gamesList)
 
-            const gameId = resGame.data.find(g => g.slug === slug)?.id ?? null
+            const gameId = gamesList.find(g => g.slug === slug)?.id ?? null
 
             const res = await getReviewsByGame(slug)
+            //console.log(res)
 
-            setReviewsData(res.data.reviews)
+            const formattedReviews = res.data.reviews.map((rev) => ({
+                ...rev,
+                review_date: format(rev.review_date),
+                edit_date: format(rev.edit_date)
+            }))
 
-            const idRev = res.data.reviews.find(rev => rev.iduser === userId)?.id ?? null
+            setReviewsData(formattedReviews)
+
+            const idRev = res.data.reviews.find(rev => rev.user_id === userId)?.id ?? null
             setRevId(idRev)
 
-            const commentRev = res.data.reviews.find(rev => rev.iduser === userId)?.comment ?? null
+            const commentRev = res.data.reviews.find(rev => rev.user_id === userId)?.comment ?? null
             setRevComment(commentRev)
 
             // setReviewsIds(res.data.reviews.map(r => r.id))
 
             const reactionsCalc = {}
             const reactionsData = {}
+            const usersData = {}
 
             for (let review of res.data.reviews) {
                 const revCalc = await reactionsCalcReviews(review.id)
+                //console.log(revCalc)
                 reactionsCalc[review.id] = revCalc.data
 
                 const rev = await reactionsReviews(review.id)
-                reactionsData[review.id] = rev.data.infoReactions.filter(r => r.review_id === review.id)
+                reactionsData[review.id] = rev.data
+                // rev.data.infoReactions.filter(r => r.review_id === review.id)
+
+                const user = await getUser(review.user_id)
+                usersData[user.data.id] = user.data
             }
+
+            setUsers(usersData)
 
             const revId = res.data.reviews.map(r => r.id)
             revId.map((r) => {
-                const userReact = reactionsData[r].find(userR => String(userR.user_id) === String(userId))?.reaction
+                const userReact = reactionUserReview(r.id, userId)
+                //reactionsData[r].find(userR => String(userR.user_id) === String(userId))?.reaction
+                //console.log(userReact)
 
                 setUserReactions(prev => ({
                     ...prev,
@@ -71,8 +102,9 @@ function ReviewGame() {
             setReactions(reactionsCalc)
 
             const resAvg = await getReviewsAvgs()
-            const avg = resAvg.data.find(avg => avg.gameid === gameId)
-            setAvgGame(avg)
+            const avgGame = resAvg.data.find(avg => avg.gameId === gameId)
+            console.log(avgGame)
+            setAvgGame(avgGame)
             setIsLoadingGame(false)
         } catch (err) {
             console.log(`Erro ao pegar as avaliações do jogo: ${err}`)
@@ -85,7 +117,7 @@ function ReviewGame() {
         try {
             const res = await likeReview(id)
 
-            setReactionUser(res.data.usersReactions)
+            setReactionUser(res.data)
 
             setUserReactions(prev => ({
                 ...prev,
@@ -186,10 +218,10 @@ function ReviewGame() {
                                         "transition-colors"
                                     )}
                                 >
-                                    {rev.nickname !== "" ? (
-                                        <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{rev.nickname}</h3>
+                                    {users[rev.user_id]?.nickname ? (
+                                        <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{users[rev.user_id].nickname}</h3>
                                     ) : (
-                                        <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{rev.name}</h3>
+                                        <h3 className="text-lg xl:text-xl font-semibold mb-1 text-gray-200">{users[rev.user_id]?.name || "Usuário"}</h3>
                                     )
                                     }
 
@@ -236,7 +268,7 @@ function ReviewGame() {
                                                     ? <p>{reactions[rev.id].likesReview}</p>
                                                     : ""
                                                 } */}
-                                                <p>{reactions[rev.id]?.likesReview ?? 0}</p>
+                                                <p>{reactions[rev.id]?.likes ?? 0}</p>
 
                                             </div>
                                             <div className="flex gap-1">
@@ -255,11 +287,11 @@ function ReviewGame() {
                                                     ? <p>{reactions[rev.id].dislikesReview}</p>
                                                     : ""
                                                 } */}
-                                                <p>{reactions[rev.id]?.dislikesReview ?? 0}</p>
+                                                <p>{reactions[rev.id]?.dislikes ?? 0}</p>
                                             </div>
                                         </div>
 
-                                        {Number(rev.iduser) === Number(userId) ?
+                                        {Number(rev.user_id) === Number(userId) ?
                                             <div className="flex gap-3 mt-5">
                                                 <Button
                                                     text={<PencilIcon

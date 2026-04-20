@@ -25,9 +25,8 @@ function NavBar() {
     //     }
     // }
     useEffect(() => {
-        if (userId > 0) {
-            getEditProfilePhoto(userId)
-        }
+        if (!userId) return
+        getEditProfilePhoto(userId)
     }, [userId])
 
     useEffect(() => {

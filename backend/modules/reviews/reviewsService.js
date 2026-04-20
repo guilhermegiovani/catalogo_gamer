@@ -70,6 +70,14 @@ export const getReviewReactionsSummaryService = async (rId) => {
     return reactions
 }
 
+export const getUserReactionService = async (reviewId, userId) => {
+    const result = await repository.findUserReaction(reviewId, userId)
+
+    if (!result) return null
+
+    return result.reaction
+}
+
 export const getGamesAverageRatingsService = async () => {
     const avgGames = await repository.getGamesAverageRatings()
 
@@ -106,23 +114,6 @@ export const findReviewByUserService = async (uId) => {
 
     if (reviewsUser.length === 0) throw new AppError("This user hasn't rated any games yet!", 404)
 
-    // const formattedDate = results.map(review => {
-    //     const date = new Date(review.review_date)
-
-    //     const day = String(date.getDate()).padStart(2, '0')
-    //     const month = String(date.getMonth() + 1).padStart(2, '0')
-    //     const year = date.getFullYear()
-
-    //     const hours = String(date.getHours()).padStart(2, '0')
-    //     const minutes = String(date.getMinutes()).padStart(2, '0')
-
-    //     return {
-    //         ...review,
-    //         review_date: `${day}/${month}/${year} ${hours}:${minutes}`
-    //     }
-
-    // })
-
     const format = (dateString) => {
         if (!dateString) return null
         return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
@@ -151,6 +142,7 @@ export const deleteReviewService = async (reviewId, userId) => {
 }
 
 export const updateReviewService = async (reviewId, userId, body) => {
+    console.log("SERVICE")
     if (Object.keys(body).length === 0) throw new AppError("None field sent for update", 400)
 
     const reviewExists = await repository.findReviewById(reviewId)

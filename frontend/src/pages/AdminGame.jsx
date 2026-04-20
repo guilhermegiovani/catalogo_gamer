@@ -32,19 +32,6 @@ function AdminGame() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     useEffect(() => {
-        // async function getGame() {
-        //     try {
-        //         const res = await getGames()
-        //         setGamesAdmin(res.data)
-
-        //         const resAvg = await getReviewsAvgs()
-        //         setAvgGamesAdmin(resAvg.data)
-        //     } catch (err) {
-        //         console.log(`Erro ao pegar os jogos: ${err}`)
-        //     }
-        // }
-
-        // getGame()
         fetchGame()
     }, [])
 
@@ -59,28 +46,11 @@ function AdminGame() {
 
     const game = gamesAdmin.find(game => game.id === Number(id))
 
-    const avgGame = averages.filter(avg => avg.gameid === Number(id))
+    const avgGame = averages.filter(avg => avg.gameId === Number(id))
 
     if (!isLoading && !game) {
-        // console.log("Jogo não encontrada.")
         return <p>Jogo não encontrado</p>
     }
-
-    // const handleChangeImg = (e) => {
-    //     const selected = e.target.files[0]
-    //     if (selected) {
-    //         setFileImgGame(selected)
-    //         setPreviewImg(URL.createObjectURL(selected))
-    //     }
-    // }
-
-    // const handleChangeImgPaisagem = (e) => {
-    //     const selected = e.target.files[0]
-    //     if (selected) {
-    //         setFileImgGamePaisagem(selected)
-    //         setPreviewImgPaisagem(URL.createObjectURL(selected))
-    //     }
-    // }
 
     const handleSubmitEditGame = async (id) => {
         try {
@@ -106,17 +76,13 @@ function AdminGame() {
 
     }
 
-    // console.log(game.imagem_paisagem)
-    // console.log(game.imagem_url)
-    // console.log(baseURL + game.img_landscape)
-
     return (
         <section className="space-y-5 min-h-screen mt-5 sm:mt-0">
 
             <div className={clsx(
                 "space-y-2"
             )}>
-                <div className="w-full flex flex justify-center sm:justify-start">
+                <div className="w-full flex justify-center sm:justify-start">
                     <img
                         src={baseURL + game.img_landscape}
                         alt={game.titleGame}

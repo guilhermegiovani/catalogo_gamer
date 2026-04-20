@@ -36,7 +36,7 @@ const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
 const upload = multer({ storage })
 
 // Update user
-router.patch("/profile", authMiddleware, upload.single("img-profile"), updateUserController)
+router.patch("/profile/:id", authMiddleware, upload.single("img-profile"), updateUserController)
 
 // Delete user
 router.delete("/:id", authMiddleware, deleteUserController)

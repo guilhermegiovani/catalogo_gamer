@@ -32,6 +32,7 @@ function AdminNewGame() {
 
     const handleChangeImg = (e) => {
         const selected = e.target.files[0]
+        console.log(selected)
         if (selected) {
             setFileImgGame(selected)
             setPreviewImg(URL.createObjectURL(selected))
@@ -40,6 +41,7 @@ function AdminNewGame() {
 
     const handleChangeImgPaisagem = (e) => {
         const selected = e.target.files[0]
+        console.log(selected)
         if (selected) {
             setFileImgGamePaisagem(selected)
             setPreviewImgPaisagem(URL.createObjectURL(selected))
@@ -61,6 +63,10 @@ function AdminNewGame() {
 
             if (fileImgGamePaisagem instanceof File) {
                 formData.append("img-landscape", fileImgGamePaisagem)
+            }
+
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value)
             }
 
             await postGames(formData)
@@ -89,19 +95,19 @@ function AdminNewGame() {
 
                     try {
                         await handleSubmitNewGame()
-                        if(titleGame && descriptionGame && genderGame && platformGame && studioGame) {
+                        if (titleGame && descriptionGame && genderGame && platformGame && studioGame) {
                             toast.success("Jogo criado com sucesso!")
                             await fetchGame()
                         } else {
                             toast.error("Adição de jogo cancelada!")
                         }
 
-                    } catch(err) {
+                    } catch (err) {
                         toast.error("Erro ao criar jogo!")
                         console.log(err)
                     }
 
-                    
+
                     navigate("/admin")
                 }}
                 className={clsx(

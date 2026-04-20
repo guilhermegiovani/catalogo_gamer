@@ -14,7 +14,7 @@ function Home() {
     const getImgsGames = async () => {
         try {
             const res = await getGames()
-            setGamesImgs(res.data)
+            setGamesImgs(res.data.formattedGames)
         } catch (err) {
             console.log(`Erro ao pegar imagens do jogos: ${err}`)
         }

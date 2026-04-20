@@ -6,7 +6,7 @@ import { queryDB } from '../utils/dbQuery.js'
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc.js"
 import timezone from "dayjs/plugin/timezone.js"
-import { createGameController, deleteGameController, findGamesByIdController, findGamesBySlugController, findGamesController, updateGameController } from '../modules/games/gamesControllers.js'
+import { createGameController, deleteGameController, findGamesByIdController, findGamesController, findGamesReviewBySlugController, updateGameController } from '../modules/games/gamesControllers.js'
 
 
 const router = express.Router()
@@ -67,10 +67,13 @@ router.get("/", findGamesController)
 router.get("/:id", findGamesByIdController)
 
 // Pegar reviews do jogo específico
-router.get('/:slug/reviews', findGamesBySlugController)
+router.get('/:slug/reviews', findGamesReviewBySlugController)
 
 // Atualizar Jogo
-router.patch("/:id", authMiddleware, adminMiddleware, updateGameController)
+router.patch("/:id", authMiddleware, adminMiddleware, upload.fields([
+    { name: "img-portrait", maxCount: 1 },
+    { name: "img-landscape", maxCount: 1 }
+]), updateGameController)
 
 // Deletar Jogo
 router.delete("/:id", authMiddleware, adminMiddleware, deleteGameController)

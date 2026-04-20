@@ -21,8 +21,9 @@ function EditProfile() {
     useEffect(() => {
         async function getUserData() {
             try {
+                if (!userId) return
                 const user = await getUser(userId)
-                const dataUser = user.data[0]
+                const dataUser = user.data
 
                 setNewName(dataUser.name)
                 setNewUserName(dataUser.nickname)
@@ -34,7 +35,7 @@ function EditProfile() {
         }
 
         getUserData()
-    }, [])
+    }, [userId])
 
     useEffect(() => {
         return () => {
@@ -50,29 +51,46 @@ function EditProfile() {
         }
     }
 
+    // async function name(id) {
+    //     const formData = new FormData()
+    //     formData.append("name", newName)
+    //     formData.append("nickname", newUserName)
+    //     formData.append("email", newEmail)
+
+    //     if (fileImgPerfil instanceof File) {
+    //         formData.append("img-profile", fileImgPerfil)
+    //     }
+    //     const res = await patchUsers(id, formData)
+    //     console.log(res.data)
+    // }
+    
+
     const handleSubmitEditUser = async (id) => {
-        try {
-            const formData = new FormData()
-            formData.append("name", newName)
-            formData.append("nickname", newUserName)
-            formData.append("email", newEmail)
+        if (!id || id === 0) return
 
-            if (fileImgPerfil instanceof File) {
-                formData.append("img-profile", fileImgPerfil)
-            }
-            
-            const res = await patchUsers(id, formData)
-            
-            if(res.data.userData[0].profile_photo) {
-                // setImgPerfil(res.data.userData[0].profile_photo)
-                getEditProfilePhoto(id)
-                // console.log(id, res.data.userData[0].profile_photo)
-            }
+        const formData = new FormData()
+        formData.append("name", newName)
+        formData.append("nickname", newUserName)
+        formData.append("email", newEmail)
 
-        } catch (err) {
-            console.log(`Erro ao editar perfil: ${err}.`)
+        if (fileImgPerfil instanceof File) {
+            formData.append("img-profile", fileImgPerfil)
         }
 
+        const res = await patchUsers(id, formData)
+        console.log(res.data)
+        
+        if (res.data.profile_photo) {
+            // setImgPerfil(res.data.userData[0].profile_photo)
+            getEditProfilePhoto(id)
+            // console.log(id, res.data.userData[0].profile_photo)
+        }
+
+        //await getUser(id)
+        // try {
+        // } catch (err) {
+        //     console.log(`Erro ao editar perfil: ${err}.`)
+        // }
     }
 
     return (
@@ -183,8 +201,8 @@ function EditProfile() {
                             "cursor-pointer"
                         )}
                         // type="submit"
-                        handleClick={() => {
-                            handleSubmitEditUser(userId).then(() => {
+                        handleClick={async () => {
+                            await handleSubmitEditUser(userId).then(() => {
                                 toast.success("perfil editado com sucesso!")
                                 // if(fileImgPerfil.name !== null && fileImgPerfil.name !== undefined) {
                                 //     setImgPerfil(fileImgPerfil.name)

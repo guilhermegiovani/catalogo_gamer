@@ -15,14 +15,14 @@ export const getUsers = () => {
     return api.get("/users")
 }
 
-// Pegar todos os usuários
+// Pegar usuario especifico
 export const getUser = (id) => {
     return api.get(`/users/${id}`)
 }
 
-// Editar usuários
+// Editar usuário
 export const patchUsers = (id, dados) => {
-    return api.patch(`/users/${id}`, dados, {
+    return api.patch(`/users/profile/${id}`, dados, {
         headers: { "Content-Type": "multipart/form-data" }
     })
 }
@@ -49,6 +49,7 @@ export const loginUser = (dados) => {
 
 // Novo jogo (apenas admin)
 export const postGames = (dados) => {
+    console.log(dados)
     return api.post("/games", dados, {
         headers: { "Content-Type": "multipart/form-data" }
     })
@@ -56,7 +57,6 @@ export const postGames = (dados) => {
 
 // Atualizar dados do jogo (apenas admin)
 export const patchGames = (id, dados) => {
-    console.log(id, dados)
     return api.patch(`/games/${id}`, dados, {
         headers: { "Content-Type": "multipart/form-data" }
     })
@@ -139,10 +139,14 @@ export const dislikeReview = (id) => {
 
 // Calcular todas as reções de uma review específica
 export const reactionsCalcReviews = (id) => {
-    return api.get(`/reviews/${id}/calcreactions`)
+    return api.get(`/reviews/${id}/reactions`)
 }
 
 // Pegar todas as reções de uma review específica
 export const reactionsReviews = (id) => {
     return api.get(`/reviews/${id}/reactions`)
+}
+
+export const reactionUserReview = (id) => {
+    return api.get(`/reviews/${id}/user-reaction`)
 }

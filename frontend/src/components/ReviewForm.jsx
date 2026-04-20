@@ -46,8 +46,10 @@ function ReviewForm({ refreshReviews }) {
             setRating(0)
             setComment("")
             refreshReviews()
+            toast.success("Avaliação postada com sucesso!")
         } catch (err) {
             console.log(`Erro ao avaliar o jogo: ${err}`)
+            toast.error(err.response?.data?.error || "Erro ao enviar avaliação")
         }
     }
 
@@ -80,26 +82,26 @@ function ReviewForm({ refreshReviews }) {
             setComment("")
             setIsEditing(false)
             refreshReviews()
+            toast.success("Avaliação editada com sucesso!")
         } catch (err) {
-            console.log(`Erro ao avaliar o jogo: ${err}`)
+            console.log(`Erro ao editar review: ${err}`)
+            toast.error(err.response?.data?.error || "Erro ao enviar avaliação")
         }
     }
 
     return (
 
         <Form
-        handleSubmit={(e) => {
-            e.preventDefault()
-            if (isEditing === true) {
-                handleSubmitEditReview()
-                toast.success("Avaliação editada com sucesso!")
-            } else {
-                handleSubmitReview()
-                toast.success("Avaliação postada com sucesso!")
-            }
+            handleSubmit={async (e) => {
+                e.preventDefault()
+                if (isEditing === true) {
+                    await handleSubmitEditReview()
+                } else {
+                    await handleSubmitReview()
+                }
 
-        }}
-        className={"space-y-2"}
+            }}
+            className={"space-y-2"}
         >
             <label htmlFor="nota" className="block mb-1 text-lg xl:text-xl font-medium text-gray-200">Nota:</label>
             <div className="flex gap-1">

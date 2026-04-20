@@ -1,4 +1,4 @@
-import { getGamesAverageRatingsService, createReviewsService, reactReviewService, updateReviewService, findReviewByUserService, getReviewReactionsSummaryService, deleteReviewService, getGameAverageRatingsByIdService } from "./reviewsService.js"
+import { getGamesAverageRatingsService, createReviewsService, reactReviewService, updateReviewService, findReviewByUserService, getReviewReactionsSummaryService, deleteReviewService, getGameAverageRatingsByIdService, getUserReactionService } from "./reviewsService.js"
 
 export const createReviewsControllers = async (req, res) => {
     try {
@@ -38,6 +38,17 @@ export const dislikeReviewController = async (req, res) => {
             error: err.message
         })
     }
+}
+
+export const getUserReactionController = async (req, res) => {
+    const reviewId = req.params.id
+    const userId = req.userId
+
+    const reaction = await getUserReactionService(reviewId, userId)
+
+    return res.status(200).json({
+        reaction
+    })
 }
 
 export const getReviewReactionsSummaryController = async (req, res) => {

@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 function Reviews() {
 
     const { games } = useAuth()
+    console.log(games)
 
     return (
         <section className="space-y-6">

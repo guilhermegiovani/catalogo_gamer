@@ -27,7 +27,7 @@ export const createReaction = async (rId, uId, reaction) => {
 export const updateReaction = async (rId, uId, reaction) => {
     await queryDB(
         "update review_reactions set reaction = ? where review_id = ? and user_id = ?;",
-        [rId, uId, reaction]
+        [reaction, rId, uId]
     )
 
     //return result[0]
@@ -48,6 +48,18 @@ export const getReviewReactionsSummary = async (rId) => {
     return countReactions[0]
 }
 
+export const findUserReaction = async (reviewId, userId) => {
+    const query = `
+        SELECT reaction 
+        FROM review_reactions 
+        WHERE review_id = ? AND user_id = ?
+    `
+
+    const [result] = await queryDB(query, [reviewId, userId])
+
+    return result
+}
+
 export const findReactionByReviewAndUser = async (reviewId, userId) => {
     const results = await queryDB("select * from review_reactions where review_id = ? and user_id = ?;", [reviewId, userId])
 
@@ -55,7 +67,7 @@ export const findReactionByReviewAndUser = async (reviewId, userId) => {
 }
 
 export const findReviewById = async (reviewId) => {
-    const createdReview = await queryDB(
+    const review = await queryDB(
         `SELECT r.id, r.rating, r.comment, r.game_id AS gameId,
             u.id AS userId, u.name, u.nickname AS nickname, r.review_date, r.edit_date
      FROM reviews r
@@ -64,7 +76,15 @@ export const findReviewById = async (reviewId) => {
         [reviewId]
     )
 
-    return createdReview[0]
+    return review[0]
+}
+
+export const findReviewByGameId = async (gameId) => {
+    const reviews = await queryDB("select * from reviews where game_id = ?", [gameId])
+    // console.log(reviews)
+    // console.log(gameId)
+
+    return reviews
 }
 
 export const findReviewUserAndGame = async (gameId, userId) => {
@@ -105,10 +125,13 @@ export const deleteReview = async (reviewId, userId) => {
 }
 
 export const updateReview = async (reviewId, userId, fieldMap, body) => {
+    console.log("REPOSITORY")
     const keysReqBody = []
     const valuesReqBody = []
+    console.log(body)
 
     for (const [field, value] of Object.entries(body)) {
+        if(field === "gameId") continue
 
         if (value !== undefined && value !== '') {
             keysReqBody.push(`${fieldMap[field]} = ?`)
@@ -121,6 +144,8 @@ export const updateReview = async (reviewId, userId, fieldMap, body) => {
 
     const fieldsSQL = keysReqBody.join(", ")
 
+    //console.log(keysReqBody)
+
     if (keysReqBody.length === 0) {
         throw new AppError("None field valid for update", 400)
     }
@@ -132,6 +157,8 @@ export const updateReview = async (reviewId, userId, fieldMap, body) => {
     )
 
     // `select r.id, r.rating as rating, r.comment as comment, r.game_id as gameId, r.review_date, r.edit_date from reviews as r where r.id = ? and r.user_id = ?;`, [reviewId, userId]
+
+    console.log("SAIU repository")
 
     return updatedReview[0]
 }

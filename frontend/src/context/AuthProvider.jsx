@@ -58,7 +58,7 @@ export function AuthProvider({ children }) {
                 const decoded = jwtDecode(storedToken)
                 setToken(storedToken)
                 setRoleUser(decoded.role || "")
-                setUserId(decoded.id || 0)
+                setUserId(decoded.id) // || 0
 
             } catch (err) {
                 console.error("Token inválido ou corrompido", err);
@@ -132,7 +132,8 @@ export function AuthProvider({ children }) {
             setToken(token)
 
             // Salvar no localstorage apenas os dados corretos
-            localStorage.setItem("user", JSON.stringify(dados))
+            // localStorage.setItem("user", JSON.stringify(dados))
+            localStorage.setItem("user", JSON.stringify({ email: dados.email, role }))
             localStorage.setItem("userId", userId)
             localStorage.setItem("token", token)
 
@@ -157,7 +158,10 @@ export function AuthProvider({ children }) {
                 }
             }
 
-            getProfilePhoto(userId)
+            if(userId && userId !== 0) {
+                getProfilePhoto(userId)
+            }
+
         } catch (err) {
 
             if (err.response?.status === 404 || err.response?.status === 401) {
@@ -252,8 +256,7 @@ export function AuthProvider({ children }) {
         // console.log(uId, rId)
         // console.log(reviewsData)
         // console.log("-----------------------------------------")
-        const review = reviewsData.find(r => r.iduser === uId)
-        // console.log(review)
+        const review = reviewsData.find(r => r.user_id === uId)
         // console.log("--------------------------------------------------------")
         // const dataRev = { comment: review.comment, rating: review.rating }
         // console.log(dataRev)
@@ -276,7 +279,7 @@ export function AuthProvider({ children }) {
     const fetchGame = async () => {
         try {
             const res = await getGames()
-            setGamesAdmin(res.data)
+            setGamesAdmin(res.data.formattedGames)
 
             const resAvg = await getReviewsAvgs()
             setAverages(resAvg.data)
@@ -286,9 +289,10 @@ export function AuthProvider({ children }) {
     }
 
     const getEditProfilePhoto = async (id) => {
+        if (!id) return 
         try {
             const res = await getUser(id)
-            const userData = res.data[0]
+            const userData = res.data
             setImgPerfil(userData.profile_photo)
 
         } catch (err) {
@@ -300,7 +304,7 @@ export function AuthProvider({ children }) {
     const getProfilePhoto = async (id) => {
         try {
             const res = await getUser(id)
-            const userData = res.data[0]
+            const userData = res.data
             setImgPerfil(userData.profile_photo)
 
             // console.log(userData)

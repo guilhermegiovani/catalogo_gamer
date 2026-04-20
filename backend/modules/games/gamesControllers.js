@@ -1,6 +1,6 @@
 
 import multer from "multer"
-import { createGameService, deleteGameService, findGamesByIdService, findGamesBySlugService, findGamesService, updateGameService } from "./gamesService.js"
+import { createGameService, deleteGameService, findGamesByIdService, findGamesReviewBySlugService, findGamesService, updateGameService } from "./gamesService.js"
 
 // const storage = process.env.NODE_ENV === "development" ? multer.diskStorage({
 //     destination: "uploads/",
@@ -16,13 +16,23 @@ export const createGameController = async (req, res) => {
         const { body } = req
         const files = req.files || {}
 
-        const portrait = files["img-portrait"]?.[0]
-        const landscape = files["img-landscape"]?.[0]
+        // console.log("BODY:", req.body)
+        // console.log("FILES:", req.files)
+
+        let portrait = "https://res.cloudinary.com/dzeuzrko8/image/upload/v1774879523/padrao-portrait_eiltvn.png"
+        let landscape = "https://res.cloudinary.com/dzeuzrko8/image/upload/v1774879475/padrao-landscape_n4emxf.png"
+
+        if(files) {
+            portrait = files?.["img-portrait"]?.[0]
+            landscape = files?.["img-landscape"]?.[0]
+        }
 
         const images = {
             portrait: portrait,
             landscape: landscape
         }
+
+        console.log(images)
 
         const result = await createGameService(body, images)
 
@@ -58,11 +68,11 @@ export const findGamesByIdController = async (req, res) => {
     }
 }
 
-export const findGamesBySlugController = async (req, res) => {
+export const findGamesReviewBySlugController = async (req, res) => {
     try {
-        const result = await findGamesBySlugService(req.params.slug)
+        const result = await findGamesReviewBySlugService(req.params.slug)
 
-        return res.status(200).json({ data: result })
+        return res.status(200).json(result)
     } catch (err) {
         return res.status(err.statusCode || 500).json({
             error: err.message
@@ -85,7 +95,7 @@ export const deleteGameController = async (req, res) => {
 
 export const updateGameController = async (req, res) => {
     try {
-        const results = await updateGameService(req.params.id, req.body)
+        const results = await updateGameService(req.params.id, req.body, req.files)
 
         return res.status(200).json({ data: results, message: "Game updated successfully" })
     } catch (err) {

@@ -24,9 +24,9 @@ function Profile() {
 
     async function fetchUserData() {
         try {
+            if(!userId || userId === 0) return
             const resUser = await getUser(userId)
-            setProfileUser(resUser.data[0])
-            console.log(resUser[0])
+            setProfileUser(resUser.data)
 
             const resFav = await getFavorites()
             setFavUser(resFav.data)

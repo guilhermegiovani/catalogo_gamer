@@ -1,9 +1,14 @@
 import slugify from "slugify"
 import { queryDB } from "../../utils/dbQuery.js"
+import * as repository from "../reviews/reviewsRepository.js"
 
 
 export const createGame = async (title, description, genre, platform, studio, slug) => {
+    console.log("CRIANDO...")
     const results = await queryDB("insert into games(title, description, genre, platform, studio, slug) values (?, ?, ?, ?, ?, ?)", [title, description, genre, platform, studio, slug]);
+
+    console.log("CRIADO...")
+    console.log(results)
 
     return results[0].id
 }
@@ -65,11 +70,15 @@ export const findGameByTitle = async (title) => {
     return results[0]
 }
 
-export const findGamesBySlug = async (slug) => {
+export const findGamesReviewBySlug = async (slug) => {
     const game = await queryDB("select * from games where slug = ?", [slug])
+    const gameId = game[0].id
+    const reviews = await repository.findReviewByGameId(gameId)
 
-    return game[0]
-
+    return {
+        game: game[0],
+        reviews
+    }
 }
 
 export const deleteGame = async (id) => {
@@ -109,7 +118,8 @@ export const updateGame = async (id, body) => {
 }
 
 export const updateGameImages = async (id, images) => {
-    const values = [images.portrait, images.landscape, id]
+    console.log("RECEBIDO NO REPOSITORY:", images)
+    const values = [images.img_portrait, images.img_landscape, id]
 
     const imagesGame = await queryDB("update games set img_portrait = ?, img_landscape = ? WHERE id = ?", values)
 

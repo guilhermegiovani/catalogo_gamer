@@ -46,6 +46,7 @@ function ChangePassword() {
             }
 
             await patchUserPassword(userPassword)
+            toast.success("senha alterada com sucesso!")
 
         } catch (err) {
             console.log(`Erro ao alterar a senha: ${err}.`)
@@ -125,9 +126,6 @@ function ChangePassword() {
                         // type="submit"
                         handleClick={() => {
                             handleChangePassword(userId).then(() => {
-                                if(password && newPassword && confNewPassword) { // não testei
-                                    toast.success("senha alterada com sucesso!")
-                                }
                                 navigate("/profile")
                             }).catch((err) => {
                                 toast.error("Erro ao alterar senha!")

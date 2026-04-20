@@ -89,9 +89,9 @@ export const updateUserPasswordController = async (req, res) => {
 
 export const updateUserController = async (req, res) => {
     try {
-        await updateUserService(req.body, req.file, req.userId)
+        const user = await updateUserService(req.body, req.file, req.userId)
 
-        return res.status(200).json({ message: "User updated successfully." })
+        return res.status(200).json({ message: "User updated successfully.", data: user })
     } catch (err) {
         return res.status(err.statusCode || 500).json({
             error: err.message

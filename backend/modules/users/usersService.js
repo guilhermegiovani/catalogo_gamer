@@ -181,9 +181,11 @@ export const updateUserService = async (body, file, uId) => {
         body.profile_photo = await handleUpload(
             file,
             "users/profilePhoto",
-            `user_photo_${userId}`
+            `user_photo_${uId}`
         )
     }
+
+    console.log(body)
 
     if (Object.keys(body).length === 0) throw new AppError("No fields submitted for update!", 400)
 
@@ -192,10 +194,6 @@ export const updateUserService = async (body, file, uId) => {
 
     const getUserData = await repository.findUserById(uId)
 
-    // const formattedDate = getUserData.map(user => {
-        
-        
-    // })
     const format = (dateString) => {
         if (!dateString) return null
         return dayjs.utc(dateString).tz("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")
@@ -205,5 +203,4 @@ export const updateUserService = async (body, file, uId) => {
         created_at: format(getUserData.created_at)
     }
 
-    // return formattedDate
 }
