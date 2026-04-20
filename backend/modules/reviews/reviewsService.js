@@ -132,9 +132,7 @@ export const deleteReviewService = async (reviewId, userId) => {
     const reviewExists = await repository.findReviewById(reviewId)
     if (!reviewExists) throw new AppError("Review not found!", 404)
 
-    console.log(`${reviewExists} / ${userId}`)
-
-    if (reviewExists.userId !== userId) throw new AppError("You are not allowed to delete this review!", 403)
+    if (reviewExists.userid !== userId) throw new AppError("You are not allowed to delete this review!", 403)
 
     const deletedReview = await repository.deleteReview(reviewId, userId)
 
@@ -142,13 +140,10 @@ export const deleteReviewService = async (reviewId, userId) => {
 }
 
 export const updateReviewService = async (reviewId, userId, body) => {
-    console.log("SERVICE")
     if (Object.keys(body).length === 0) throw new AppError("None field sent for update", 400)
 
     const reviewExists = await repository.findReviewById(reviewId)
     if (!reviewExists) throw new AppError("Review not found!", 404)
-
-    console.log(reviewExists.userid + "|" + userId)
 
     if (reviewExists.userid !== userId) throw new AppError("You are not allowed to update this review!", 403)
 

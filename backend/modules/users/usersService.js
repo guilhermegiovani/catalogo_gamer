@@ -104,9 +104,11 @@ export const forgotPasswordService = async (body) => {
     const expires = new Date(Date.now() + 1800 * 1000)
     const link = `${process.env.FRONTEND_URL}/resetpassword/${token}`
 
+    const results = await repository.forgotPassword(token, expires, userId)
+
+    if (!results) throw new AppError("The token could not be generated.", 400)
+
     try {
-        // <p>Ou copie e cole em outra aba do navegador:</p>
-        // <p>${link}</p>
         await resend.emails.send({
             from: "onboarding@resend.dev",
             to: email,
@@ -120,12 +122,8 @@ export const forgotPasswordService = async (body) => {
             `
         });
     } catch (err) {
-        return res.status(500).json({ erro: "Não foi possível enviar o e-mail" });
+        throw new AppError("The email could not be sent.", 500)
     }
-
-    const results = await repository.forgotPassword(token, expires, userId)
-
-    if (!results) throw new AppError("The token could not be generated.", 400)
 
     return
 }
@@ -190,7 +188,7 @@ export const updateUserService = async (body, file, uId) => {
     if (Object.keys(body).length === 0) throw new AppError("No fields submitted for update!", 400)
 
     const updatedUser = await repository.updateUser(body, uId)
-    if(!updatedUser) throw new AppError("It wasn't possible update user!", 400)
+    if (!updatedUser) throw new AppError("It wasn't possible update user!", 400)
 
     const getUserData = await repository.findUserById(uId)
 
