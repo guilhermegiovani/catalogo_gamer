@@ -14,16 +14,13 @@ export const queryDB = async (query, values = []) => {
         let index = 1
         const pgQuery = query.replace(/\?/g, () => `$${index++}`)
 
-        // !query.trim().toLowerCase().startsWith("select")
-        if(!query.trim().startsWith("select") || !query.trim().startsWith("SELECT")) {
+        if(!query.trim().toLowerCase().startsWith("select")) {
             const pgQueryBase = pgQuery.trim().replace(/;$/, "")
             const pgQueryWithReturn = pgQueryBase + " RETURNING id;"
             const result = await db.query(pgQueryWithReturn, values)
-            // console.log(pgQueryWithReturn)
             return result.rows
         } else {
             const result = await db.query(pgQuery, values)
-            // console.log(pgQuery)
             return result.rows
         }
 
@@ -34,9 +31,3 @@ export const queryDB = async (query, values = []) => {
     }
 
 }
-
-// if(isProd) {
-
-// } else {
-
-// }
