@@ -101,7 +101,7 @@ function ReviewGame() {
 
             const resAvg = await getReviewsAvgs()
             // Produção = gameid / Desenvolvimento = gameId
-            const avgGame = resAvg.data.find(avg => avg.gameid === gameId)
+            const avgGame = resAvg.data.find(avg => avg.gameId === gameId)
             setAvgGame(avgGame)
             setIsLoadingGame(false)
         } catch (err) {

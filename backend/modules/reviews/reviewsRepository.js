@@ -76,8 +76,6 @@ export const findReviewById = async (reviewId) => {
         [reviewId]
     )
 
-    console.log(review[0])
-
     return review[0]
 }
 
