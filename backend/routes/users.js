@@ -12,7 +12,7 @@ router.use(express.json())
 router.post('/', createUserControllers)
 
 // Find users
-router.get("/", authMiddleware, findUsersController)
+router.get("/", findUsersController)
 
 // Find user by id
 router.get("/:id", findUserByIdController)
