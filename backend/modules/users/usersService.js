@@ -132,6 +132,8 @@ export const resetPasswordService = async (body, token) => {
     const { newPassword, confNewPassword } = body
     console.log(newPassword + "|" + confNewPassword)
 
+    console.log("TOKEN: " + token)
+
     const userData = await repository.findUserByToken(token)
     console.log("USER:" + userData)
     if (!userData) throw new AppError("Token invalid or expired.", 400)

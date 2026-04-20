@@ -44,6 +44,8 @@ export const forgotPassword = async (token, expires, userId) => {
 export const findUserByToken = async (token) => {
     const user = await queryDB("select * from users where reset_token = ?;", [token])
 
+    console.log("USER REPO: " + user[0])
+
     return user[0]
 }
 
