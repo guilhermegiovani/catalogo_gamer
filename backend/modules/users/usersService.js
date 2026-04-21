@@ -106,7 +106,7 @@ export const forgotPasswordService = async (body) => {
 
     const results = await repository.forgotPassword(token, expires, userId)
 
-    if (!results) throw new AppError("The token could not be generated.", 400)
+    if (!results || results.length === 0) throw new AppError("The token could not be generated.", 400)
 
     try {
         await resend.emails.send({
@@ -130,13 +130,14 @@ export const forgotPasswordService = async (body) => {
 
 export const resetPasswordService = async (body, token) => {
     const { newPassword, confNewPassword } = body
-    console.log(newPassword + "|" + confNewPassword)
-
-    console.log("TOKEN: " + token)
 
     const userData = await repository.findUserByToken(token)
-    console.log("USER:" + userData)
     if (!userData) throw new AppError("Token invalid or expired.", 400)
+
+    // Verificar se o token expirou
+    if (new Date() > new Date(userData.reset_token_expires)) {
+        throw new AppError("Token expired.", 400)
+    }
 
     const userId = userData.id
 
@@ -147,9 +148,8 @@ export const resetPasswordService = async (body, token) => {
     if (newPassword !== confNewPassword) throw new AppError("The passwords don't match.", 400)
 
     const passwordCripto = await bcrypt.hash(newPassword, 10)
-    console.log("SENHA CRIPTO: " + passwordCripto)
 
-    const updatePasswordUser = await repository.updatePassword(passwordCripto, userId)
+    const updatePasswordUser = await repository.updateUserPassword(passwordCripto, userId)
 
     if (!updatePasswordUser) throw new AppError("It was not possible to update the password.")
 
@@ -174,7 +174,7 @@ export const updateUserPasswordService = async (body, uId) => {
 
     const results = await repository.updateUserPassword(passwordCripto, uId)
 
-    if (!results) throw new AppError("Invalid credentials", 400)
+    if (!results || results.length === 0) throw new AppError("Invalid credentials", 400)
 
     return
 }
@@ -188,12 +188,10 @@ export const updateUserService = async (body, file, uId) => {
         )
     }
 
-    console.log(body)
-
     if (Object.keys(body).length === 0) throw new AppError("No fields submitted for update!", 400)
 
     const updatedUser = await repository.updateUser(body, uId)
-    if (!updatedUser) throw new AppError("It wasn't possible update user!", 400)
+    if (!updatedUser || updatedUser.length === 0) throw new AppError("It wasn't possible update user!", 400)
 
     const getUserData = await repository.findUserById(uId)
 

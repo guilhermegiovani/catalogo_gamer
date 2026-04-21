@@ -1,4 +1,5 @@
 import { queryDB } from "../../utils/dbQuery.js"
+import bcrypt from 'bcryptjs'
 
 export const createUser = async (name, email, password) => {
     const newUser = await queryDB("insert into users(name, email, password) values (?, ?, ?);",
@@ -38,15 +39,13 @@ export const forgotPassword = async (token, expires, userId) => {
         [token, expires, userId]
     )
 
-    return results[0]
+    return results
 }
 
 export const findUserByToken = async (token) => {
     const user = await queryDB("select * from users where reset_token = ?;", [token])
 
-    console.log("USER REPO: " + user)
-
-    return user
+    return user[0] || null
 }
 
 export const updateUserPassword = async (password, uId) => {
@@ -55,7 +54,7 @@ export const updateUserPassword = async (password, uId) => {
         [password, uId]
     )
 
-    return updatedPassword[0]
+    return updatedPassword
 }
 
 export const updateUser = async (body, uId) => {
@@ -83,6 +82,6 @@ export const updateUser = async (body, uId) => {
     const query = `update users set ${fieldsSQL} where id = ?;`
 
     const updatedUser = await queryDB(query, valuesReqBody)
-    
-    return updatedUser[0]
+
+    return updatedUser
 }
