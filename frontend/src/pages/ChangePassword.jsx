@@ -4,7 +4,7 @@ import Button from "../components/Button"
 import Input from "../components/Input"
 import { patchUserPassword } from "../services/routes"
 import { useAuth } from "../hooks/useAuth"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 
@@ -16,28 +16,11 @@ function ChangePassword() {
     const [newPassword, setNewPassword] = useState(null)
     const [confNewPassword, setConfNewPassword] = useState(null)
 
-    // useEffect(() => {
-    //     async function getUserData() {
-    //         try {
-    //             const user = await getUser(userId)
-    //             const dataUser = user.data[0]
-    //         } catch (err) {
-    //             console.log(err)
-    //         }
-    //     }
-
-    //     getUserData()
-    // }, [])
-
     const handleChangePassword = async () => {
         try {
             if(!password || !newPassword || !confNewPassword) {
                 toast.error("Preencha todos os campos")
             }
-
-            console.log(`Atual: ${password}`)
-            console.log(`Nova: ${newPassword}`)
-            console.log(`Confirmar: ${confNewPassword}`)
 
             const userPassword = {
                 currentPassword: password,
@@ -49,6 +32,7 @@ function ChangePassword() {
             toast.success("senha alterada com sucesso!")
 
         } catch (err) {
+            toast.error("Erro ao alterar senha!")
             console.log(`Erro ao alterar a senha: ${err}.`)
         }
 

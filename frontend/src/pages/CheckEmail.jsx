@@ -16,7 +16,6 @@ function CheckEmail() {
     const userData = async (emailUser) => {
         try {
             const res = await getUsers()
-            console.log(res)
             const user = res.data.find((u) => u.email === emailUser)
             return user
         } catch (err) {
@@ -32,19 +31,14 @@ function CheckEmail() {
         }
 
         await checkEmailUser(email)
-        console.log("EMAIL:" + email)
 
         const user = await userData(email)
-        console.log(user)
         setTokenResetPassword(user.reset_token)
 
         toast.success("Verifique seu email!", {
             duration: 5000
         })
 
-        // if (user?.reset_token) {
-        //     navigate(`/resetpassword/${user.reset_token}`)
-        // }
     }
 
     return (
@@ -79,9 +73,6 @@ function CheckEmail() {
                         "px-4 py-2 rounded-md",
                         "text-xs sm:text-sm",
                         "landscape:sm:text-xs landscape:lg:text-base landscape:xl:text-lg"
-                        // "bg-[#2a264f] text-white placeholder:text-gray-400",
-                        // "focus:outline-none focus:ring-2 focus:ring-[#6c63ff]",
-                        // "transition-all duration-200"
                     )}
                 />
 
