@@ -51,20 +51,6 @@ function EditProfile() {
         }
     }
 
-    // async function name(id) {
-    //     const formData = new FormData()
-    //     formData.append("name", newName)
-    //     formData.append("nickname", newUserName)
-    //     formData.append("email", newEmail)
-
-    //     if (fileImgPerfil instanceof File) {
-    //         formData.append("img-profile", fileImgPerfil)
-    //     }
-    //     const res = await patchUsers(id, formData)
-    //     console.log(res.data)
-    // }
-    
-
     const handleSubmitEditUser = async (id) => {
         if (!id || id === 0) return
 
@@ -78,7 +64,6 @@ function EditProfile() {
         }
 
         const res = await patchUsers(id, formData)
-        console.log(res.data)
         
         if (res.data.profile_photo) {
             // setImgPerfil(res.data.userData[0].profile_photo)
